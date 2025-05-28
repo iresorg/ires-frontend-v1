@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IRES Website
 
-## Getting Started
+A public-facing website for Incident Response and Emergency Services (IRES), connecting communities with trained emergency responders for rapid assistance in crisis situations.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Project Structure
+
+```
+ires-frontend-v1/
+├── public/                      # Static assets (favicons, images, etc.)
+│   ├── favicon.ico
+│   ├── logo.png
+│   └── ...
+│
+├── src/
+│   ├── app/                     # Next.js app directory (routing, pages, layouts)
+│   │   ├── layout.tsx           # Root layout (providers, global styles, metadata)
+│   │   ├── page.tsx             # Home page
+│   │   ├── about/               # About page
+│   │   ├── contact/             # Contact page
+│   │   ├── services/            # Services page
+│   │   ├── pricing/             # Pricing page
+│   │   └── responders/          # Call for Responders page
+│   │
+│   ├── components/              # Reusable UI components
+│   │   ├── layout/              # Layout components (PublicLayout, etc.)
+│   │   └── ...                  # Other shared components
+│   │
+│   ├── styles/                  # Global styles
+│   │   └── globals.css          # Tailwind and custom CSS variables
+│   │
+│   └── types/                   # TypeScript types (if any)
+│
+├── .env                         # Environment variables (if needed)
+├── .gitignore                   # Git ignore rules
+├── package.json                 # Project dependencies
+├── tsconfig.json                # TypeScript configuration
+└── README.md                    # Project documentation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup Instructions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Clone the repository**
 
-## Learn More
+   ```bash
+   git clone https://github.com/iresorg/ires-frontend-v1.git
+   cd ires-frontend-v1
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install dependencies**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   yarn install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Start the development server**
 
-## Deploy on Vercel
+   ```bash
+   yarn dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Open your browser**
+   - Visit [http://localhost:3000](http://localhost:3000)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Features
+
+- Modern, responsive public website for IRES
+- Informational pages: Home, About, Services, Pricing, Contact, Call for Responders
+- Accessible, theme-aware (light/dark mode) design
+- SEO-friendly metadata and favicon support
+- Easy to extend with new pages or sections
+
+---
+
+## Tech Stack
+
+- [Next.js 13+ (App Router)](https://nextjs.org/)
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [next-themes](https://github.com/pacocoursey/next-themes) (for dark mode)
+- [Heroicons](https://heroicons.com/) (for icons)
+
+---
+
+## Contributing
+
+1. **Fork the repository**
+2. **Create your feature branch**
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make your changes and commit**
+
+   ```bash
+   git commit -m "feat: add new section to About page"
+   ```
+
+4. **Pull from origin dev before pushing and solve merge conflicts**
+
+    ```bash
+    git pull origin dev
+    ```
+
+5. **Push to your branch**
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. **Create a Pull Request**  
+   - Use a clear title and description
+   - Link related issues if applicable
+
+---
+
+## Branch Naming Convention
+
+- Feature: `feature/short-description`
+- Bugfix: `fix/short-description`
+- Documentation: `docs/short-description`
+- Refactor: `refactor/short-description`
+
+---
+
+## Commit Types
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks
+
+---
+
+## License
+
+This project is licensed under the MIT License.
