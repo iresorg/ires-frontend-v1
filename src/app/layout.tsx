@@ -1,10 +1,13 @@
 'use client'
 
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import LoadingScreen from "@/components/common/LoadingScreen";
+import PublicLayout from "@/components/layout/PublicLayout";
+import CustomCursor from "@/components/ui/CustomCursor";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
 
 export default function RootLayout({
   children,
@@ -13,9 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased bg-white dark:bg-black text-gray-900 dark:text-gray-100`}>
+      <body className={`${poppins.className} antialiased bg-white dark:bg-black text-gray-900 dark:text-gray-100`}>
+        <LoadingScreen />
+        <CustomCursor />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <PublicLayout>
+            {children}
+          </PublicLayout>
         </ThemeProvider>
       </body>
     </html>

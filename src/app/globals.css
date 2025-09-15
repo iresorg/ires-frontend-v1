@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* Base color tokens */
+:root {
+  --primary: #b425da;
+  --primary-100: #4185dd;
+  --secondary: #ffffff0a;
+  --foreground: #ffffff;
+  --divider-color: #ffffff0a;
+  --btn-bg: linear-gradient(90deg, #4185dd 19%, #b425da 86%);
+  --btn-bg-reverse: linear-gradient(90deg, #b425da 19%, #4185dd 86%);
+  --txt-linear: linear-gradient(90deg, #4c8afd 54%, #b425da 81%);
+  --border-linear: linear-gradient(90deg, #4185dd 0%, #601474 100%);
+  --button-linear-border: linear-gradient(90deg, #4185dd 0%, #b425da 100%);
+  --accent-color: #4185dd;
+  --accent-secondary-color: #b425da;
+  --bg-color: #1c1b2b;
+  --gap: 20px;
+}
+
 @theme {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -7,164 +25,121 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
+body {
+  background-color: #1c1b2b;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.1em;
+  color: #d1d1d1;
+  background: #1c1b2b url(/images/section-bg-circle-shape.png);
+  background-repeat: repeat-y;
+  background-position: top center;
+  background-size: 100% auto;
+  cursor: none; /* Hide default cursor */
+}
 
-  .dark {
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 100%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    0deg,
+    var(--accent-color) 0%,
+    var(--accent-secondary-color) 100%
+  );
+}
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+  border-left: 1px solid #ffffff;
+}
+
+/* Text selection */
+::selection {
+  color: #ffffff;
+  background-color: var(--divider-color);
+  filter: invert(1);
+}
+
+/* Gradient border button */
+.btn-default.btn-highlighted {
+  background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box, 
+              linear-gradient(to left, var(--accent-color), var(--accent-secondary-color)) border-box;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-default.btn-highlighted::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -15%;
+  right: 0;
+  width: 0;
+  height: 106%;
+  background: linear-gradient(to left, var(--accent-color) 0%, var(--accent-secondary-color) 100%);
+  transform: skew(45deg);
+  transition: all 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.btn-default.btn-highlighted:hover::before {
+  width: 130%;
+}
+
+/* Loading animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@layer base {
-  * {
-    border-color: var(--border);
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
   }
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  h1 {
-    font-size: var(--text-4xl);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-  h2 {
-    font-size: var(--text-3xl);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-  h3 {
-    font-size: var(--text-2xl);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-  h4 {
-    font-size: var(--text-xl);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-  }
-  p {
-    line-height: 1.75;
-  }
-  p:not(:first-child) {
-    margin-top: 1.5rem;
+  50% {
+    opacity: 1;
   }
 }
 
-@layer components {
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    transition-property: color, background-color, border-color;
-    transition-timing-function: var(--ease-out);
-    transition-duration: 150ms;
-  }
-  .btn:focus-visible {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
-  }
-  .btn:disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-  .btn-primary {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-  }
-  .btn-primary:hover {
-    background-color: color-mix(in srgb, var(--primary) 90%, transparent);
-  }
-  .btn-secondary {
-    background-color: var(--secondary);
-    color: var(--secondary-foreground);
-  }
-  .btn-secondary:hover {
-    background-color: color-mix(in srgb, var(--secondary) 80%, transparent);
-  }
-  .btn-destructive {
-    background-color: var(--destructive);
-    color: var(--destructive-foreground);
-  }
-  .btn-destructive:hover {
-    background-color: color-mix(in srgb, var(--destructive) 90%, transparent);
-  }
-  .btn-outline {
-    border: 1px solid var(--input);
-    background-color: var(--background);
-  }
-  .btn-outline:hover {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
-  }
-  .btn-ghost:hover {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
-  }
-  .btn-link {
-    color: var(--primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
+.animate-spin {
+  animation: spin 2s linear infinite;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .scrollbar-hidden {
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-} 
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.text-color {
+  background: var(--txt-linear);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Hero styling */
+.hero.hero-bg-image::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1c1b2b;
+  opacity: 90%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
