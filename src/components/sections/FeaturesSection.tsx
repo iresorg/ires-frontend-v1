@@ -14,7 +14,7 @@ const features = [
     "Expert cyber responders for all digital threats",
     "We resolve hacking, data breaches & more",
     "Threat detection intelligence the fastest way",
-    "Subscribers or one-time users we've got you!",
+    "Subscribers or one-time users we&apos;ve got you!",
     "Protection, speed, and real human care"
 ]
 
@@ -187,7 +187,7 @@ export default function FeaturesSection() {
                                 className="text-sm lg:text-base leading-relaxed"
                                 variants={itemVariants}
                             >
-                                Cyber attacks don't wait and neither do we. We're the frontline you call when digital threats strike without warning.
+                                Cyber attacks don&apos;t wait and neither do we. We&apos;re the frontline you call when digital threats strike without warning.
                                 Built for speed, trust, and human response, we act the moment danger hits. Every alert matters, every second counts,
                                 every voice is heard. Real Time. Real People. Real Protection.
                             </motion.p>

@@ -12,7 +12,6 @@ export default function SectionTitle({
   logo, 
   logoAlt = "Logo", 
   title, 
-  subtitle, 
   className = "" 
 }: SectionTitleProps) {
   return (
