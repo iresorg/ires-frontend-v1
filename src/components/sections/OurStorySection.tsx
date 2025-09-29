@@ -7,18 +7,46 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import { motion } from "framer-motion";
 
 const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, staggerChildren: 0.2 },
+    transition: { duration: 0.6 },
+  },
+};
+
+const slideInLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, delay: 0.2 },
+  },
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, delay: 0.4 },
   },
 };
 
 export default function OurStorySection() {
   return (
     <div className="relative w-full">
-      {/* Background */}
+      {/* Background shapes */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -32,29 +60,41 @@ export default function OurStorySection() {
           {/* Left Content */}
           <motion.div
             className="lg:col-span-7 space-y-8"
-            variants={containerVariants}
+            variants={slideInLeft}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
             {/* Header */}
-            <SectionTitle
-              logo="/logos/ires-logo.svg"
-              logoAlt="iRES Logo"
-              title="Our Story"
-            />
+            <motion.div variants={itemVariants}>
+              <SectionTitle
+                logo="/logos/ires-logo.svg"
+                logoAlt="iRES Logo"
+                title="Our Story"
+              />
+            </motion.div>
 
             {/* Story Text */}
             <motion.div
-              className="p-6 rounded-xl border border-white/20 bg-black/20 backdrop-blur-sm"
+              className="p-6 rounded-xl border border-[#FFFFFF1A] bg-[#FFFFFF0A] backdrop-blur-sm"
               variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
             >
-              <p className="text-sm lg:text-base text-white leading-relaxed mb-4">
+              <motion.p
+                className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                variants={itemVariants}
+              >
                 The story of iRES begins with a simple truth: most people and
                 businesses don’t realize they are vulnerable until it’s too
                 late.
-              </p>
-              <p className="text-sm lg:text-base text-white leading-relaxed mb-4">
+              </motion.p>
+
+              <motion.p
+                className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                variants={itemVariants}
+              >
                 As founders, we saw it first-hand. Friends, small businesses,
                 even established companies losing sensitive data, financial
                 resources, and trust not because they didn’t care about
@@ -62,41 +102,70 @@ export default function OurStorySection() {
                 cybersecurity had to be more than jargon, more than expensive
                 tools reserved for the privileged few. It had to be human.
                 Accessible. Proactive.
-              </p>
-              <p className="text-sm lg:text-base text-white leading-relaxed mb-4">
+              </motion.p>
+
+              <motion.p
+                className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                variants={itemVariants}
+              >
                 That’s why iRES exists to close the gap between everyday people
                 and complex cybersecurity solutions.
-              </p>
-              <p className="text-sm lg:text-base text-white leading-relaxed mb-4">
+              </motion.p>
+
+              <motion.p
+                className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                variants={itemVariants}
+              >
                 We are building a future where your grandmother can understand
                 the safety of her online banking, where a small business can
                 operate without fear of hackers, where governments and
                 corporations can trust the resilience of their defenses. Our
                 story is not just about technology.
-              </p>
-              <p className="text-sm lg:text-base text-white leading-relaxed">
+              </motion.p>
+
+              <motion.p
+                className="text-sm lg:text-base text-white leading-relaxed"
+                variants={itemVariants}
+              >
                 It’s about protecting dreams, businesses, and people’s lives in
                 the digital space. At iRES, we don’t just fight cyber threats.
                 We fight for you.
-              </p>
+              </motion.p>
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Illustration */}
+          {/* Right Content*/}
           <motion.div
             className="lg:col-span-5 relative w-full flex justify-center"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
-            <Image
-              src="/images/story-illustration.png"
-              alt="iRES Story Illustration"
-              width={500}
-              height={400}
-              className="lg:w-[500px] lg:h-[400px] object-contain"
-            />
+            {/* Ellipse Background */}
+            <motion.div
+              className="absolute inset-0 top-10 -right-20 w-full h-full flex items-center justify-center"
+              variants={itemVariants}
+            >
+              <Image
+                src="/images/ellipse.png"
+                alt="Background ellipse"
+                width={400}
+                height={400}
+                className="w-80 h-80 lg:w-[440px] lg:h-[440px]"
+              />
+            </motion.div>
+
+            {/* Desktop View Image */}
+            <motion.div className="relative z-10" variants={itemVariants}>
+              <Image
+                src="/images/desktopview.png"
+                alt="iRES Story Illustration"
+                width={500}
+                height={500}
+                className="lg:w-[500px] lg:h-[400px] object-contain"
+              />
+            </motion.div>
           </motion.div>
         </div>
       </Section>
@@ -110,9 +179,7 @@ export default function OurStorySection() {
           scale: 1.1,
           boxShadow: "0 0 20px rgba(180, 37, 218, 0.5)",
         }}
-        animate={{
-          rotate: [0, 360],
-        }}
+        animate={{ rotate: [0, 360] }}
         transition={{
           rotate: {
             duration: 8,
@@ -122,9 +189,7 @@ export default function OurStorySection() {
         }}
       >
         <motion.div
-          animate={{
-            rotate: [0, -360],
-          }}
+          animate={{ rotate: [0, -360] }}
           transition={{
             rotate: {
               duration: 8,
