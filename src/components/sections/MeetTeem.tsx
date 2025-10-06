@@ -23,7 +23,7 @@ const teamMembers = [
 
 export default function MeetOurTeamSection() {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 w-full h-full"
@@ -34,7 +34,16 @@ export default function MeetOurTeamSection() {
       />
 
       <Section className="relative z-10 py-16 lg:py-24">
-        {/* CALL*/}
+        {/* Decorative Shape - EXTREME LEFT, aligned with Call Now */}
+        <Image
+          src="/images/grid-cube.png"
+          alt="Decorative Shape"
+          width={140}
+          height={140}
+          className="absolute top-6 left-0 -translate-x-1/3 lg:top-8 z-20 pointer-events-none opacity-80"
+        />
+
+        {/* CALL Button (unchanged) */}
         <div className="absolute top-6 right-6 lg:top-8 lg:right-12 z-40">
           <a
             href="tel:+1234567890"
@@ -45,7 +54,7 @@ export default function MeetOurTeamSection() {
               alt="Call"
               width={18}
               height={18}
-              priority={true}
+              priority
             />
             Call Now
           </a>
@@ -76,7 +85,6 @@ export default function MeetOurTeamSection() {
               viewport={{ once: true }}
               className="relative w-full max-w-[220px] p-[1px] rounded-xl bg-black/20 border border-transparent bg-clip-padding [border-image:linear-gradient(to_right,#4185dd,#b425da)_1]"
             >
-              {/* Inner card */}
               <div className="rounded-xl bg-black/20 backdrop-blur-sm p-6 flex flex-col items-center text-center h-full">
                 <Image
                   src="/images/person.png"
