@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-
+import IndividualHero from '@/components/sections/IndividualHero';
+import ScrollingTicker from '@/components/sections/ScrollingTicker';
+import OurServicesIndividual from '@/components/sections/OurServicesIndividual';
+import WhyNeedUs from '@/components/sections/WhyNeedUS';
+import IndividualCommitment from '@/components/sections/IndividualCommitment';
 export const metadata: Metadata = {
   title: 'Individual Plans - Personal Cybersecurity Protection',
   description: 'Personal cybersecurity incident response plans for individuals. 24/7 protection, identity theft response, and personal data breach assistance.',
@@ -17,15 +21,12 @@ export const metadata: Metadata = {
 
 export default function IndividualPage() {
   return (
-    <div className="min-h-screen pt-32 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-8">Individual Plans</h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Coming soon - Personal cybersecurity incident response plans for individuals.
-          </p>
-        </div>
-      </div>
-    </div>
+<>
+<IndividualHero />
+<ScrollingTicker />
+<OurServicesIndividual />
+<WhyNeedUs />
+<IndividualCommitment />
+</>
   );
 }
