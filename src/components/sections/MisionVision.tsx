@@ -16,7 +16,7 @@ const cardVariants = {
 
 export default function MissionVisionSection() {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 w-full h-full"
@@ -27,7 +27,16 @@ export default function MissionVisionSection() {
       />
 
       <Section className="relative z-10 py-16 lg:py-24">
-        {/* Center the section title */}
+        {/* Decorative Shape */}
+        <Image
+          src="/images/eclipes.png"
+          alt="Decorative Cube"
+          width={120}
+          height={120}
+          className="absolute top-0 right-0 translate-x-1/3 opacity-80 pointer-events-none"
+        />
+
+        {/* Section Title */}
         <div className="flex justify-center">
           <SectionTitle
             logo="/logos/ires-logo.svg"
@@ -36,7 +45,7 @@ export default function MissionVisionSection() {
           />
         </div>
 
-        {/* Cards grid */}
+        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 justify-items-center">
           {/* Mission */}
           <motion.div
@@ -47,7 +56,6 @@ export default function MissionVisionSection() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Logo  */}
             <Image
               src="/logos/ires-logo.svg"
               alt="iRES Logo"
@@ -55,8 +63,6 @@ export default function MissionVisionSection() {
               height={40}
               className="mb-4"
             />
-
-            {/*Mission */}
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-[#4185dd] to-[#b425da] bg-clip-text text-transparent">
                 Mission
@@ -78,7 +84,6 @@ export default function MissionVisionSection() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Logo */}
             <Image
               src="/logos/ires-logo.svg"
               alt="iRES Logo"
@@ -86,8 +91,6 @@ export default function MissionVisionSection() {
               height={40}
               className="mb-4"
             />
-
-            {/* vision*/}
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-[#4185dd] to-[#b425da] bg-clip-text text-transparent">
                 Vision
@@ -100,6 +103,8 @@ export default function MissionVisionSection() {
             </div>
           </motion.div>
         </div>
+
+   
       </Section>
     </div>
   );
