@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import PricingHero from '@/components/sections/PricingHero';
 import ScrollingTicker from "@/components/sections/ScrollingTicker";
 import OurPlans from '@/components/sections/OurPlans';
+import IndividualPlans from '@/components/sections/IndividualPlans';
+import ExploreCommitment from '@/components/sections/ExploreCommitment';
 export const metadata: Metadata = {
   title: 'Pricing Plans - Cybersecurity Emergency Response Plans',
   description: 'Explore iRES cybersecurity incident response pricing plans. Affordable 24/7 protection for individuals, businesses, and enterprises. Compare features and choose your plan.',
@@ -23,6 +25,8 @@ export default function PricingPage() {
 <PricingHero />
 <ScrollingTicker />
 <OurPlans />
+<IndividualPlans />
+<ExploreCommitment />
 </>
   );
 } 

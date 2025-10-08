@@ -18,52 +18,53 @@ export default function OurPlans() {
   const plans = [
     {
       icon: "/images/Shield.png",
-      title: "Business Shield",
-      price: "₦80,000/month",
-      subtitle: "For Small businesses (1–10 staff)",
+      title: "Basic Shield",
+      price: "₦15,000/month",
+      subtitle: "For Everyday phone & social media users",
       features: [
-        "Incident reporting hotline",
-        "Phishing & scam prevention",
-        "Basic ransomware & malware response",
-        "Website & email breach recovery",
-        "2 cyber incident resolution / month",
+        "Incident reporting via phone/email",
+        "Social media account recovery",
+        "Basic scam & fraud advisory",
+        "Personal data privacy checks",
+        "1 cyber incident resolution / month",
         "24–48 hrs response time",
       ],
     },
     {
       icon: "/images/guard.png",
-      title: "Enterprise Guard",
-      price: "₦200,000/month",
-      subtitle: "For Medium-sized businesses (11–50 staff)",
+      title: "Safe Guard",
+      price: "₦30,000/month",
+      subtitle: "For Freelancers, small-scale sellers, influencers",
       features: [
-        "Dedicated account manager",
-        "Network intrusion detection",
-        "Ransomware containment & removal",
-        "DDoS attack mitigation",
-        "Payment system compromise investigation",
-        "Up to 5 incidents resolved / month",
+        "Priority incident handling",
+        "Malware & spyware removal",
+        "Payment fraud investigation",
+        "Social media & email breach recovery",
+        "Data loss prevention tips",
+        "Up to 2 incidents resolved / month",
         "12–24 hrs response time",
       ],
     },
     {
       icon: "/images/fortress.png",
-      title: "Corporate Fortress",
-      price: "₦500,000/month",
-      subtitle: "For Large corporations & critical sectors",
+      title: "Total Lockdown",
+      price: "₦50,000/month",
+      subtitle: "For High-risk individuals, public figures, executives",
       features: [
-        "24/7 SOC (Security Operations Center) support",
-        "Onsite & remote incident response",
-        "Insider threat detection",
-        "Advanced threat hunting & forensics",
-        "Unlimited incidents / month",
-        "SLA: under 4 hrs response time",
+        "24/7 priority access",
+        "Advanced account monitoring",
+        "Comprehensive breach investigation",
+        "Device security optimization",
+        "Data recovery support",
+        "3 incidents resolution / month",
+        "4–6 hrs response time",
       ],
     },
   ];
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Gradient */}
+      {/* Gradient background */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -73,20 +74,13 @@ export default function OurPlans() {
       />
 
       <Section className="relative z-10 py-16 lg:py-24">
-        {/* Decorative Shapes */}
+        {/* Decorative Shape */}
         <Image
-          src="/images/earth.png"
+          src="/images/cube.png"
           alt="Decorative shape"
-          width={130}
-          height={130}
-          className="absolute top-0 left-0 -translate-x-1/3 opacity-70 pointer-events-none"
-        />
-        <Image
-          src="/images/grid-cube.png"
-          alt="Decorative shape"
-          width={150}
-          height={150}
-          className="absolute bottom-0 right-0 translate-x-1/3 opacity-70 pointer-events-none"
+          width={120}
+          height={120}
+          className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 opacity-70 pointer-events-none"
         />
 
         {/* Section Title */}
@@ -94,7 +88,7 @@ export default function OurPlans() {
           <SectionTitle
             logo="/logos/ires-logo.svg"
             logoAlt="iRES Logo"
-            title="Our Plans for Organizations"
+            title="Our Plans for Individuals"
           />
         </div>
 
@@ -112,9 +106,8 @@ export default function OurPlans() {
             >
               <div className="h-full bg-black/20 backdrop-blur-sm rounded-2xl p-8 flex flex-col justify-between">
                 <div>
-                  {/* Header */}
+                  {/* Header with Icon */}
                   <div className="flex items-center gap-2 mb-4">
-                    
                     <Image
                       src={plan.icon}
                       alt={`${plan.title} Icon`}
