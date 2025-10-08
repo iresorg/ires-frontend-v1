@@ -4,6 +4,7 @@ import ScrollingTicker from '@/components/sections/ScrollingTicker';
 import OurServicesIndividual from '@/components/sections/OurServicesIndividual';
 import WhyNeedUs from '@/components/sections/WhyNeedUS';
 import IndividualCommitment from '@/components/sections/IndividualCommitment';
+import GetStartedSection from '@/components/sections/GetStarted';
 export const metadata: Metadata = {
   title: 'Individual Plans - Personal Cybersecurity Protection',
   description: 'Personal cybersecurity incident response plans for individuals. 24/7 protection, identity theft response, and personal data breach assistance.',
@@ -27,6 +28,7 @@ export default function IndividualPage() {
 <OurServicesIndividual />
 <WhyNeedUs />
 <IndividualCommitment />
+<GetStartedSection />
 </>
   );
 }

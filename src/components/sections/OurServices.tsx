@@ -70,7 +70,7 @@ export default function OurServicesForOrganizations() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className={`max-w-sm rounded-md p-[1px] bg-clip-padding border  rounded-full
+                className={`max-w-sm rounded-md p-[1px] bg-clip-padding border 
                   [border-image:linear-gradient(to_right,#4185dd,#b425da)_1]
                   border-t-4 border-t-[#601474]
                   ${i === 1 ? "ml-32" : ""} ${i === 2 ? "ml-48" : ""}`}
