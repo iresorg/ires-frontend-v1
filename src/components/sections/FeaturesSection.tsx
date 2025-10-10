@@ -122,7 +122,7 @@ export default function FeaturesSection() {
                 }}
             />
 
-            <Section className="relative z-10 py-16 lg:py-24">
+            <Section className="relative z-10 py-12 lg:py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                     {/* Left Content */}
                     <motion.div
@@ -251,7 +251,7 @@ export default function FeaturesSection() {
                             className="flex items-center gap-4"
                             variants={itemVariants}
                         >
-                            <Button href="/about" className="px-12 py-2 text-lg">
+                            <Button href="/about" className="px-12 text-lg rounded-lg">
                                 About Us
                             </Button>
 
