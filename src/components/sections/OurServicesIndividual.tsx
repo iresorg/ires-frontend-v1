@@ -13,7 +13,7 @@ const fadeUp = {
   },
 };
 
-export default function OurServicesForOrganizations() {
+export default function OurServicesForIndividuals() {
   return (
     <section className="relative w-full py-16 lg:py-24 overflow-hidden">
       {/* Background overlay */}
@@ -53,15 +53,15 @@ export default function OurServicesForOrganizations() {
             {[
               {
                 title: "Quick, Simple Protection",
-                text: "Zero tech stress. Our system is built for everyone, secure your accounts, devices, and personal info.",
+                text: "Zero tech stress. Our system is built for everyone — secure your accounts, devices, and personal info effortlessly.",
               },
               {
                 title: "Proactive Threat Defense",
-                text: "Put a call through, we detect, respond and resolve to all your threats and attacks.",
+                text: "Put a call through we detect, respond, and resolve threats instantly to protect you in real time.",
               },
               {
                 title: "End-to-End Support",
-                text: "From onboarding, to 24/7 support and protection available to you anytime anywhere, your incident is our priority.",
+                text: "From onboarding to 24/7 protection, we’re always here. Your incident is our priority, anytime, anywhere.",
               },
             ].map((service, i) => (
               <motion.div
@@ -70,11 +70,10 @@ export default function OurServicesForOrganizations() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className={`max-w-sm rounded-md p-[1px] bg-clip-padding border 
-                  border-t-4 border-t-[#601474]
-                  ${i === 1 ? "ml-32" : ""} ${i === 2 ? "ml-48" : ""}`}
+                className={`w-full max-w-sm p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]
+                ${i === 1 ? "ml-32" : ""} ${i === 2 ? "ml-48" : ""}`}
               >
-                <div className="backdrop-blur-sm p-5">
+                <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-5">
                   <h3 className="text-base font-semibold mb-2 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                     {service.title}
                   </h3>
@@ -85,7 +84,7 @@ export default function OurServicesForOrganizations() {
               </motion.div>
             ))}
 
-            {/*  Play Button  */}
+            {/* Play Button */}
             <motion.button
               className="absolute -bottom-12 left-1 w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: "var(--accent-secondary-color)" }}
@@ -140,7 +139,7 @@ export default function OurServicesForOrganizations() {
               />
             </motion.div>
 
-            {/* Foreground image  */}
+            {/* Foreground Image */}
             <motion.div className="relative z-10" variants={fadeUp}>
               <Image
                 src="/images/hot cyber.png"
@@ -151,6 +150,19 @@ export default function OurServicesForOrganizations() {
               />
             </motion.div>
           </motion.div>
+        </div>
+
+        {/* Call Now Button */}
+        <div className="absolute -bottom-10 right-8">
+          <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#4185dd] to-[#b425da] text-white text-sm font-medium shadow-lg cursor-pointer">
+            <Image
+              src="/images/call.png"
+              alt="Call Icon"
+              width={18}
+              height={18}
+            />
+            Call Now
+          </button>
         </div>
       </div>
     </section>

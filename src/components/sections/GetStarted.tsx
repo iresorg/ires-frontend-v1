@@ -43,8 +43,7 @@ export default function GetStartedSection() {
         }}
       />
 
-      {/* Decorative Shapes */}
-     
+      {/* Decorative Shape */}
       <Image
         src="/images/cube.png"
         alt="Decorative sphere"
@@ -64,69 +63,65 @@ export default function GetStartedSection() {
           />
         </div>
 
-        {/* Main Content  */}
-        <div className="relative flex justify-center items-center">
-          {/* Gradient bordered main box */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="relative mx-auto rounded-xl p-[1px] 
-            [border-image:linear-gradient(to_right,#4185DD,#601474)_1] 
-            border border-transparent max-w-5xl w-full"
-          >
-            <div className="bg-[#0E0E11]/80 backdrop-blur-md p-6 md:p-10 text-center">
-              {/* Subtitle */}
-              <motion.p
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="text-gray-300 max-w-2xl mx-auto text-sm md:text-base mb-12"
-              >
-                Don’t wait until it’s too late. Whether you’re tech-savvy or
-                just getting started, our plans fit your lifestyle.
-              </motion.p>
+        {/* Outer Gradient Border Box */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="relative mx-auto p-[2px] rounded-[24px] bg-gradient-to-r from-[#4185DD] to-[#601474] max-w-5xl w-full"
+        >
+          {/* Inner (solid) content */}
+          <div className="rounded-[22px] bg-[#0E0E11] p-6 md:p-10 text-center">
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="text-gray-300 max-w-2xl mx-auto text-sm md:text-base mb-12"
+            >
+              Don’t wait until it’s too late. Whether you’re tech-savvy<br/> or just
+              getting started, our plans fit your lifestyle.
+            </motion.p>
 
-              {/* Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
-                {cards.map((card, i) => (
-                  <motion.div
-                    key={i}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    className="[border-image:linear-gradient(to_right,#4185DD,#601474)_1] 
-                    border border-transparent max-w-5xl rounded-xl p-6 bg-[#13131A]/80 
-                    backdrop-blur-sm text-center transition-all duration-300 hover:scale-[1.02]"
-                  >
-                    <h3 className="text-white font-semibold text-base md:text-lg mb-2">
+            {/* Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
+              {cards.map((card, i) => (
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="relative w-full p-[2px] rounded-[20px] bg-gradient-to-r from-[#4185DD] to-[#601474] transition-all duration-300 hover:scale-[1.02]"
+                >
+                  {/* Inner card */}
+                  <div className="rounded-[18px] bg-[#13131A] p-6 h-full backdrop-blur-sm text-center">
+                    <h3 className="text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] font-semibold text-base md:text-lg mb-2">
                       {card.title}
                     </h3>
                     <p className="text-white text-xs mb-4">{card.text}</p>
                     <button className="px-6 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer">
                       {card.btnText}
                     </button>
-                  </motion.div>
-                ))}
-              </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-
-          {/* Call Now Button */}
-          <div className="absolute top-1/2 -translate-y-1/2 right-[-4rem] lg:right-[-4rem]">
-            <button className="flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white text-sm font-medium shadow-lg cursor-pointer">
-              <Image
-                src="/images/call.png"
-                alt="Call Icon"
-                width={18}
-                height={18}
-              />
-              Call Now
-            </button>
           </div>
+        </motion.div>
+
+        {/* Call Now Button */}
+        <div className="absolute top-1/2 -translate-y-1/2 right-[-2rem] lg:right-[-2rem]">
+          <button className="flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white text-sm font-medium shadow-lg cursor-pointer">
+            <Image
+              src="/images/call.png"
+              alt="Call Icon"
+              width={18}
+              height={18}
+            />
+            Call Now
+          </button>
         </div>
       </div>
     </section>

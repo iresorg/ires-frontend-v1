@@ -34,7 +34,7 @@ export default function MeetOurTeamSection() {
       />
 
       <Section className="relative z-10 py-16 lg:py-24">
-        {/* Decorative Shape - EXTREME LEFT, aligned with Call Now */}
+        {/* Decorative Shape */}
         <Image
           src="/images/grid-cube.png"
           alt="Decorative Shape"
@@ -43,7 +43,7 @@ export default function MeetOurTeamSection() {
           className="absolute top-6 left-0 -translate-x-1/3 lg:top-8 z-20 pointer-events-none opacity-80"
         />
 
-        {/* CALL Button (unchanged) */}
+        {/* CALL Button */}
         <div className="absolute top-6 right-6 lg:top-8 lg:right-12 z-40">
           <a
             href="tel:+1234567890"
@@ -83,9 +83,9 @@ export default function MeetOurTeamSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[220px] p-[1px] rounded-xl bg-black/20 border border-transparent bg-clip-padding [border-image:linear-gradient(to_right,#4185dd,#b425da)_1]"
+              className="relative w-full max-w-[220px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
             >
-              <div className="rounded-xl bg-black/20 backdrop-blur-sm p-6 flex flex-col items-center text-center h-full">
+              <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6 flex flex-col items-center text-center h-full">
                 <Image
                   src="/images/person.png"
                   alt={member.role}

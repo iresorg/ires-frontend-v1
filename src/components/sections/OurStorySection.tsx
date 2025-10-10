@@ -74,67 +74,69 @@ export default function OurStorySection() {
               />
             </motion.div>
 
-            {/* Story Text */}
+            {/* Story Text Box */}
             <motion.div
-              className="p-6 rounded-xl border border-[#FFFFFF1A] bg-[#FFFFFF0A] backdrop-blur-sm"
+              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <motion.p
-                className="text-sm lg:text-base text-white leading-relaxed mb-4"
-                variants={itemVariants}
-              >
-                The story of iRES begins with a simple truth: most people and
-                businesses don’t realize they are vulnerable until it’s too
-                late.
-              </motion.p>
+              <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6">
+                <motion.p
+                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  variants={itemVariants}
+                >
+                  The story of iRES begins with a simple truth: most people and
+                  businesses don’t realize they are vulnerable until it’s too
+                  late.
+                </motion.p>
 
-              <motion.p
-                className="text-sm lg:text-base text-white leading-relaxed mb-4"
-                variants={itemVariants}
-              >
-                As founders, we saw it first-hand. Friends, small businesses,
-                even established companies losing sensitive data, financial
-                resources, and trust not because they didn’t care about
-                security, but because they didn’t know where to begin. We knew
-                cybersecurity had to be more than jargon, more than expensive
-                tools reserved for the privileged few. It had to be human.
-                Accessible. Proactive.
-              </motion.p>
+                <motion.p
+                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  variants={itemVariants}
+                >
+                  As founders, we saw it first-hand. Friends, small businesses,
+                  even established companies losing sensitive data, financial
+                  resources, and trust not because they didn’t care about
+                  security, but because they didn’t know where to begin. We knew
+                  cybersecurity had to be more than jargon, more than expensive
+                  tools reserved for the privileged few. It had to be human.
+                  Accessible. Proactive.
+                </motion.p>
 
-              <motion.p
-                className="text-sm lg:text-base text-white leading-relaxed mb-4"
-                variants={itemVariants}
-              >
-                That’s why iRES exists to close the gap between everyday people
-                and complex cybersecurity solutions.
-              </motion.p>
+                <motion.p
+                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  variants={itemVariants}
+                >
+                  That’s why iRES exists — to close the gap between everyday
+                  people and complex cybersecurity solutions.
+                </motion.p>
 
-              <motion.p
-                className="text-sm lg:text-base text-white leading-relaxed mb-4"
-                variants={itemVariants}
-              >
-                We are building a future where your grandmother can understand
-                the safety of her online banking, where a small business can
-                operate without fear of hackers, where governments and
-                corporations can trust the resilience of their defenses. Our
-                story is not just about technology.
-              </motion.p>
+                <motion.p
+                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  variants={itemVariants}
+                >
+                  We are building a future where your grandmother can understand
+                  the safety of her online banking, where a small business can
+                  operate without fear of hackers, where governments and
+                  corporations can trust the resilience of their defenses. Our
+                  story is not just about technology.
+                </motion.p>
 
-              <motion.p
-                className="text-sm lg:text-base text-white leading-relaxed"
-                variants={itemVariants}
-              >
-                It’s about protecting dreams, businesses, and people’s lives in
-                the digital space. At iRES, we don’t just fight cyber threats.
-                We fight for you.
-              </motion.p>
+                <motion.p
+                  className="text-sm lg:text-base text-white leading-relaxed"
+                  variants={itemVariants}
+                >
+                  It’s about protecting dreams, businesses, and people’s lives
+                  in the digital space. At iRES, we don’t just fight cyber
+                  threats — we fight for you.
+                </motion.p>
+              </div>
             </motion.div>
           </motion.div>
 
-          {/* Right Content*/}
+          {/* Right Content */}
           <motion.div
             className="lg:col-span-5 relative w-full flex justify-center"
             variants={slideInRight}
@@ -170,7 +172,7 @@ export default function OurStorySection() {
         </div>
       </Section>
 
-      {/* Floating Play Button */}
+      {/* Play Button */}
       <motion.button
         className="absolute bottom-8 left-8 w-12 h-12 rounded-full flex items-center justify-center z-20"
         style={{ background: "var(--accent-secondary-color)" }}

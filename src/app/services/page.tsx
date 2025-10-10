@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
-
+import ServiceHero from '@/components/sections/ServiceHero';
+import ScrollingTicker from '@/components/sections/ScrollingTicker';
+import Service from '@/components/sections/Service';
+import ToUse from '@/components/sections/ToUse';
 export const metadata: Metadata = {
   title: 'Our Services - Cybersecurity Emergency Response Services',
   description: 'Comprehensive cybersecurity services including incident response, threat detection, data breach response, malware removal, and 24/7 security monitoring.',
@@ -17,15 +20,12 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen pt-32 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-8">Our Services</h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Coming soon - Comprehensive cybersecurity services and emergency response solutions.
-          </p>
-        </div>
-      </div>
-    </div>
+ <>
+ <ServiceHero />
+ <ScrollingTicker />
+  <Service />
+  <ToUse />
+ </>
+   
   );
 }

@@ -14,10 +14,10 @@ const cardVariants = {
   }),
 };
 
-export default function WhyChooseUs() {
+export default function WhyYChooseUs() {
   const reasons = [
     {
-      title: "Every Click Matters and Hackers Know Thatr",
+      title: "Every Click Matters and Hackers Know That",
       text: "Every action online leaves a trace, and cybercriminals are constantly looking for vulnerabilities. We protect you from being an easy target, with our tips and cyber education.",
     },
     {
@@ -25,11 +25,11 @@ export default function WhyChooseUs() {
       text: "A single stolen password or compromised account can lead to identity theft. We use advanced encryption and secure storage to keep your accounts locked down tight.",
     },
     {
-      title: "Phishing is On a Rise",
+      title: "Phishing is On the Rise",
       text: "Scammers hide behind legit-looking emails and texts. We teach you to spot red flags and filter out suspicious messages before you click.",
     },
     {
-      title: "Public Wi-Fi isn’t safe",
+      title: "Public Wi-Fi isn’t Safe",
       text: "Free hotspots are playgrounds for hackers. We shield your activity with secure VPN tech so no one can snoop on your data.",
     },
     {
@@ -73,9 +73,9 @@ export default function WhyChooseUs() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[360px] rounded-lg overflow-hidden border border-transparent [border-image:linear-gradient(to_right,#4185DD,#B425DA)_1]"
+              className="relative w-full max-w-[360px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
             >
-              <div className="h-full bg-[#0D0D0F]/80 backdrop-blur-sm p-6 border-t-4 border-[#601474] rounded-t-lg">
+              <div className="h-full rounded-[1rem] bg-[#0D0D0F]/90 backdrop-blur-sm p-6">
                 <h3 className="text-base font-semibold mb-3 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent leading-snug">
                   {reason.title}
                 </h3>
@@ -87,7 +87,7 @@ export default function WhyChooseUs() {
           ))}
         </div>
 
-        {/* Decorative Shapes  */}
+        {/* Decorative Shapes */}
         <Image
           src="/images/grid-cube.png"
           alt="Decorative cube"
@@ -100,7 +100,7 @@ export default function WhyChooseUs() {
           alt="Decorative sphere"
           width={130}
           height={130}
-          className="absolute top-0 right-0 translate-x-[50px] translate-y-[-40px] opacity-80 pointer-events-none "
+          className="absolute top-0 right-0 translate-x-[50px] translate-y-[-40px] opacity-80 pointer-events-none"
         />
       </Section>
     </div>

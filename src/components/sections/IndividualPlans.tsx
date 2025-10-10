@@ -78,8 +78,8 @@ export default function OurPlans() {
         <Image
           src="/images/cube.png"
           alt="Decorative shape"
-          width={120}
-          height={120}
+          width={100}
+          height={100}
           className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 opacity-70 pointer-events-none"
         />
 
@@ -102,9 +102,11 @@ export default function OurPlans() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="w-full max-w-[360px] p-[1px] rounded-2xl border border-transparent bg-clip-padding [border-image:linear-gradient(to_right,#4185dd,#b425da)_1] hover:shadow-[0_0_20px_rgba(180,37,218,0.2)] transition-all"
+              className={`w-full max-w-[360px] p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA] 
+                ${i === 1 ? "ml-16 md:ml-20" : ""} 
+                ${i === 2 ? "ml-32 md:ml-40" : ""}`}
             >
-              <div className="h-full bg-black/20 backdrop-blur-sm rounded-2xl p-8 flex flex-col justify-between">
+              <div className="h-full bg-[#0E0E11]/90 backdrop-blur-md rounded-2xl p-8 flex flex-col justify-between">
                 <div>
                   {/* Header with Icon */}
                   <div className="flex items-center gap-2 mb-4">
@@ -115,13 +117,13 @@ export default function OurPlans() {
                       height={26}
                       className="object-contain"
                     />
-                    <h3 className="text-lg font-semibold bg-gradient-to-r from-[#4185dd] to-[#b425da] bg-clip-text text-transparent">
+                    <h3 className="text-lg font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                       {plan.title}
                     </h3>
                   </div>
 
                   {/* Price & Subtitle */}
-                  <p className="bg-gradient-to-r from-[#4185dd] to-[#b425da] bg-clip-text text-transparent text-xl font-semibold mb-1">
+                  <p className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-xl font-semibold mb-1">
                     <i>{plan.price}</i>
                   </p>
                   <p className="text-[#b3b3b3] text-sm mb-6">{plan.subtitle}</p>
@@ -150,7 +152,7 @@ export default function OurPlans() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-8 px-5 py-2.5 rounded-full text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] shadow-lg"
+                  className="mt-8 px-5 py-2.5 rounded-full text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] shadow-lg cursor-pointer"
                 >
                   Choose Plan
                 </motion.button>

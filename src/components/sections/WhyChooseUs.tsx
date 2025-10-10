@@ -18,10 +18,10 @@ export default function WhyChooseUs() {
   const reasons = [
     {
       title: "The Threat Landscape Is Moving Faster Than Ever",
-      text: "Cyber threats are evolving fast, and attackers won’t wait. Your organization needs security that’s always ahead, we bring cutting-edge tools, real-time intelligence, and relentless innovation to keep you untouchable.",
+      text: "Cyber threats are evolving fast, and attackers won’t wait. Your organization needs security that’s always ahead — we bring cutting-edge tools, real-time intelligence, and relentless innovation to keep you untouchable.",
     },
     {
-      title: "Your Reputation Is Priceless We Keep It Untarnished",
+      title: "Your Reputation Is Priceless — We Keep It Untarnished",
       text: "One slip can cost millions and break trust instantly. We protect your brand like it’s our own, so your name stays golden and customers stay loyal.",
     },
     {
@@ -34,7 +34,7 @@ export default function WhyChooseUs() {
     },
     {
       title: "What Makes Us Different",
-      text: "We plug into your world like we’ve always been there. We bring tech and intelligence most can’t access. Security isn’t a side job for us, it’s our obsession.",
+      text: "We plug into your world like we’ve always been there. We bring tech and intelligence most can’t access. Security isn’t a side job for us — it’s our obsession.",
     },
     {
       title: "Bottom Line",
@@ -73,9 +73,9 @@ export default function WhyChooseUs() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[360px] rounded-lg overflow-hidden border border-transparent [border-image:linear-gradient(to_right,#4185DD,#B425DA)_1]"
+              className="relative w-full max-w-[360px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
             >
-              <div className="h-full bg-[#0D0D0F]/80 backdrop-blur-sm p-6 border-t-4 border-[#601474] rounded-t-lg">
+              <div className="h-full rounded-[1rem] bg-[#0D0D0F]/90 backdrop-blur-sm p-6">
                 <h3 className="text-base font-semibold mb-3 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent leading-snug">
                   {reason.title}
                 </h3>
@@ -87,7 +87,7 @@ export default function WhyChooseUs() {
           ))}
         </div>
 
-        {/* Decorative Shapes  */}
+        {/* Decorative Shapes */}
         <Image
           src="/images/grid-cube.png"
           alt="Decorative cube"
@@ -100,7 +100,7 @@ export default function WhyChooseUs() {
           alt="Decorative sphere"
           width={130}
           height={130}
-          className="absolute top-0 right-0 translate-x-[50px] translate-y-[-40px] opacity-80 pointer-events-none "
+          className="absolute top-0 right-0 translate-x-[50px] translate-y-[-40px] opacity-80 pointer-events-none"
         />
       </Section>
     </div>

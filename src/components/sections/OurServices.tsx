@@ -70,12 +70,10 @@ export default function OurServicesForOrganizations() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className={`max-w-sm rounded-md p-[1px] bg-clip-padding border 
-                  [border-image:linear-gradient(to_right,#4185dd,#b425da)_1]
-                  border-t-4 border-t-[#601474]
-                  ${i === 1 ? "ml-32" : ""} ${i === 2 ? "ml-48" : ""}`}
+                className={`w-full max-w-sm p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]
+                ${i === 1 ? "ml-32" : ""} ${i === 2 ? "ml-48" : ""}`}
               >
-                <div className="backdrop-blur-sm p-5">
+                <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-5">
                   <h3 className="text-base font-semibold mb-2 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                     {service.title}
                   </h3>
@@ -86,7 +84,7 @@ export default function OurServicesForOrganizations() {
               </motion.div>
             ))}
 
-            {/*  Play Button  */}
+            {/* Play Button */}
             <motion.button
               className="absolute -bottom-12 left-1 w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: "var(--accent-secondary-color)" }}
@@ -141,7 +139,7 @@ export default function OurServicesForOrganizations() {
               />
             </motion.div>
 
-            {/* Foreground image  */}
+            {/* Foreground image */}
             <motion.div className="relative z-10" variants={fadeUp}>
               <Image
                 src="/images/ourservice.png"

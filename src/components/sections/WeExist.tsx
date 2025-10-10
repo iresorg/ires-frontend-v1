@@ -27,7 +27,7 @@ export default function WhyWeExistSection() {
       />
 
       <Section className="relative z-10 py-16 lg:py-24">
-        {/* Title*/}
+        {/* Title */}
         <div className="flex items-center justify-center space-x-3">
           <Image
             src="/logos/ires-logo.svg"
@@ -44,10 +44,10 @@ export default function WhyWeExistSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mx-auto mt-12 w-full max-w-4xl rounded-xl p-[1px] border border-transparent [border-image:linear-gradient(to_right,#4185dd,#b425da)_1]"
+          className="mx-auto mt-12 w-full max-w-4xl p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
         >
-          <div className="relative flex items-center justify-center w-full h-[260px] md:h-[340px] lg:h-[420px] rounded-xl bg-black/10 backdrop-blur-sm">
-            {/* Play button  */}
+          <div className="relative flex items-center justify-center w-full h-[260px] md:h-[340px] lg:h-[420px] rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md">
+            {/* Play button */}
             <motion.button
               className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[#4185dd] to-[#b425da] shadow-lg"
               whileHover={{ scale: 1.1 }}

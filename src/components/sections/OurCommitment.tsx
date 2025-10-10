@@ -64,27 +64,34 @@ export default function OurCommitment() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              tabIndex={0}
-              className="border border-[#ffffff24] rounded-xl overflow-hidden bg-[#0E0E11]/80 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]"
+              className="relative w-full max-w-[360px] transition-transform duration-300 hover:scale-[1.02]"
             >
-              {/* Image */}
-              <div className="relative w-full h-[200px]">
-                <Image
-                  src={item.img}
-                  alt={item.title}
-                  fill
-                  className="object-cover rounded-t-xl"
-                />
-              </div>
+              {/* Outer gradient border */}
+              <div className="p-[2px] rounded-[22px] bg-gradient-to-r from-[#4185DD] to-[#B425DA] h-full">
+                {/* Inner content */}
+                <div className="rounded-[20px] overflow-hidden bg-[#0E0E11]/85 backdrop-blur-sm shadow-md flex flex-col h-full">
+                  {/* Image */}
+                  <div className="relative w-full h-[200px] rounded-t-[20px] overflow-hidden">
+                    <Image
+                      src={item.img}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
 
-              {/* Text */}
-              <div className="p-6 flex flex-col gap-2 text-center">
-                <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA]">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-white/90 leading-relaxed">
-                  {item.text}
-                </p>
+                  {/* Text */}
+                  <div className="p-6 flex flex-col flex-grow justify-between text-center">
+                    <div>
+                      <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-white/90 leading-relaxed">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -100,7 +107,7 @@ export default function OurCommitment() {
           </button>
         </div>
 
-        {/* call button */}
+        {/* Call button */}
         <div className="absolute top-16 right-8">
           <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white text-sm font-medium shadow-lg hover:opacity-90 transition cursor-pointer">
             <Image
