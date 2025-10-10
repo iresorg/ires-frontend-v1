@@ -3,6 +3,7 @@ import ServiceHero from '@/components/sections/ServiceHero';
 import ScrollingTicker from '@/components/sections/ScrollingTicker';
 import Service from '@/components/sections/Service';
 import ToUse from '@/components/sections/ToUse';
+import ContactUsSection from "@/components/sections/ContactUsSection";
 export const metadata: Metadata = {
   title: 'Our Services - Cybersecurity Emergency Response Services',
   description: 'Comprehensive cybersecurity services including incident response, threat detection, data breach response, malware removal, and 24/7 security monitoring.',
@@ -25,6 +26,7 @@ export default function ServicesPage() {
  <ScrollingTicker />
   <Service />
   <ToUse />
+  <ContactUsSection />
  </>
    
   );
