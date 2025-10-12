@@ -26,7 +26,7 @@ export default function ToUseServices() {
     },
     {
       title: "Call Hotline",
-      text: "Put a call through our hotline for all your cyber emergencies — we’re available 24/7.",
+      text: "Put a call through our hotline for all your cyber emergencies we’re available 24/7.",
       button: "Call Now",
     },
     {
@@ -72,7 +72,7 @@ export default function ToUseServices() {
             <span className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
               To Use
             </span>
-            <span className="text-white">Our Services</span>
+            <span className="text-white"> Our Services</span>
           </h2>
         </motion.div>
 
