@@ -1,17 +1,26 @@
-"use client"
+"use client";
 
-import Header from './Header'
+import { usePathname } from "next/navigation";
+import Header from "./Header";
 import Footer from "@/components/layout/Footer";
 
-export default function PublicLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <>
-            <Header />
+export default function PublicLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
 
-            {/* Main content */}
-            <main className="">{children}</main>
+  // Hide Header and Footer on signup routes
+  const hideHeaderAndFooter = pathname.startsWith("/signup");
 
-            <Footer />
-        </>
-    )
-} 
+  return (
+    <>
+      {!hideHeaderAndFooter && <Header />}
+
+      <main>{children}</main>
+
+      {!hideHeaderAndFooter && <Footer />}
+    </>
+  );
+}
