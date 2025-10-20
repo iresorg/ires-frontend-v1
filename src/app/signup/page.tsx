@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function SignupPage() {
+export default function WelcomeSignupPage() {
   return (
     <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
@@ -92,7 +92,7 @@ export default function SignupPage() {
           >
             <div className="flex flex-col items-center justify-center gap-4">
               <Image
-                src="/images/individual-icon.png"
+                src="/images/organization-icon.png"
                 alt="Organization"
                 width={30}
                 height={30}
@@ -105,7 +105,7 @@ export default function SignupPage() {
         </div>
 
         {/* Footer */}
-        <p className="mt-16 text-sm text-white/70">
+        <p className="mt-16 text-sm text-white">
           Copyright © 2025 iRES. All Rights Reserved.
         </p>
       </motion.div>
