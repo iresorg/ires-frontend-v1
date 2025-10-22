@@ -36,7 +36,12 @@ export default function WelcomeSignupPage() {
         aria-label="Close"
         className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full flex items-center justify-center"
       >
-        <Image src="/images/cancel-icon.png" alt="Close" width={30} height={30} />
+        <Image
+          src="/images/cancel-icon.png"
+          alt="Close"
+          width={30}
+          height={30}
+        />
       </Link>
 
       {/* Main content */}
@@ -80,7 +85,7 @@ export default function WelcomeSignupPage() {
                 height={30}
               />
               <span className="text-white text-xl font-semibold tracking-wider">
-           Individual
+                Individual
               </span>
             </div>
           </Link>
