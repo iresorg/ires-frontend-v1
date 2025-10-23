@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function PasswordInput() {
+export default function ConfirmPasswordInput() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -11,10 +11,10 @@ export default function PasswordInput() {
       {/* Lock icon */}
       <Image src="/images/locker.png" alt="Lock" width={20} height={20} />
 
-      {/* Password field */}
+
       <input
-        type={showPassword ? "text" : "password"} 
-        placeholder="Password"
+        type={showPassword ? "text" : "password"}
+        placeholder="Password Confirmation"
         className="bg-transparent w-full text-white placeholder-white/60 outline-none"
       />
 
@@ -25,7 +25,7 @@ export default function PasswordInput() {
         width={18}
         height={18}
         className="cursor-pointer transition-opacity hover:opacity-80"
-        onClick={() => setShowPassword(!showPassword)} 
+        onClick={() => setShowPassword(!showPassword)}
       />
     </div>
   );

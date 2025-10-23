@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import CountrySelection from "@/components/sections/CountrySelection";
-// import PasswordInput from "@/components/sections/PasswordInput";
+import PasswordInput from "@/components/sections/PasswordInput";
+import ConfirmPasswordInput from "@/components/sections/ConfirmPassword";
 export default function IndividualSignup() {
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
@@ -24,7 +26,7 @@ export default function IndividualSignup() {
             width={55}
             height={55}
           />
-          <Link href="/" className="w-6 h-6">
+          <Link href="/signup" className="w-6 h-6">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -33,12 +35,27 @@ export default function IndividualSignup() {
             />
           </Link>
         </div>
-
         {/* Title */}
-        <h2 className="text-2xl font-bold mb-1  bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+        <motion.h2
+          className="text-2xl font-bold mb-1 bg-clip-text text-transparent"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+            backgroundSize: "200% auto",
+          }}
+          animate={{
+            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+          }}
+          transition={{
+            backgroundPosition: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          }}
+        >
           Sign up
-        </h2>
-
+        </motion.h2>
         <p className="text-white text-sm mb-6">
           Enter your details below to create an account and get started
         </p>
@@ -75,64 +92,51 @@ export default function IndividualSignup() {
           </div>
 
           {/* Phone */}
-            <CountrySelection />
+          <CountrySelection />
           {/* Password */}
-          <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-            <Image
-              src="/images/locker.png"
-              alt="Lock"
-              width={20}
-              height={20}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="bg-transparent w-full text-white placeholder-white/60 outline-none"
-            />
-            <Image
-              src="/images/eye-closed.png"
-              alt="Hide"
-              width={18}
-              height={18}
-            />
-          </div>
-            {/* <PasswordInput /> */}
-
+          <PasswordInput />
           {/* Password Confirmation */}
-          <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-            <Image
-              src="/images/locker.png"
-              alt="Lock"
-              width={20}
-              height={20}
-            />
-            <input
-              type="password"
-              placeholder="Password Confirmation"
-              className="bg-transparent w-full text-white placeholder-white/60 outline-none"
-            />
-            <Image
-              src="/images/eye-closed.png"
-              alt="Hide"
-              width={18}
-              height={18}
-            />
-          </div>
-
+          <ConfirmPasswordInput />
           {/* Button */}
           <button
             type="submit"
-            className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all"
+            className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            Sign up →
+            Sign up
+            <Image
+              src="/images/arrow-right.png"
+              alt="Arrow"
+              width={16}
+              height={16}
+              className="inline-block"
+            />
           </button>
         </form>
 
         {/* Footer */}
         <p className="mt-4 text-center text-sm text-white/80">
           Already have an account?{" "}
-          <Link href="/login" className="text-[#4185DD] hover:underline">
-            Log in
+          <Link href="/login" className="hover:underline">
+            <motion.span
+              className="font-semibold bg-clip-text text-transparent inline-block"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                backgroundSize: "200% auto",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{
+                backgroundPosition: {
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              Log in
+            </motion.span>
           </Link>
         </p>
       </div>
