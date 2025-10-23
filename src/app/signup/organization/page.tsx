@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function OrganizationSignup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   return (
     <div className="relative w-full h-screen flex items-center justify-center overflow-hidden text-white">
       {/* Background image*/}
@@ -73,19 +76,32 @@ export default function OrganizationSignup() {
         <form className="space-y-4 text-sm">
           {/* Company Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Company Name |"
-              className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-              <option hidden>Business Type</option>
-              <option>Others</option>
-            </select>
-            <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-              <option hidden>Company Size</option>
-              <option>Others</option>
-            </select>
+            <div>
+              <input
+                type="text"
+                placeholder="Company Name |"
+                className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+            <div>
+              <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                <option hidden>Business Type</option>
+                <option>Others</option>
+              </select>
+              <Image
+                src="/images/drop_down.svg"
+                alt="Arrow Dropdown"
+                width={20}
+                height={20}
+                className="absolute top-28 right-75 pointer-events-none"
+              />
+            </div>
+            <div>
+              <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option hidden>Company Size</option>
+                <option>Others</option>
+              </select>
+            </div>
           </div>
 
           {/* Location Input */}
@@ -109,7 +125,7 @@ export default function OrganizationSignup() {
               <input
                 type="text"
                 placeholder="(Street / area / lga address) |"
-                className="w-full mt-3 bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full mt-3 bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
           </div>
@@ -125,17 +141,17 @@ export default function OrganizationSignup() {
               <input
                 type="text"
                 placeholder="Full Name |"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="text"
                 placeholder="Job Title"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="email"
                 placeholder="Email |"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -181,7 +197,9 @@ export default function OrganizationSignup() {
           </div>
 
           {/* Logo and Password */}
-          <h3 className="text-left">Upload your company logo</h3>
+          <h3 className="text-gray-300 text-sm mb-2 text-left">
+            Upload your company logo
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
             <div>
               <div className="flex flex-col items-center bg-gray-700/40 rounded-lg px-4 py-2">
@@ -193,8 +211,10 @@ export default function OrganizationSignup() {
                 />
                 <label htmlFor="dropzone-file">
                   <p>
-                    <span className="font-semibold italic underline">Click to upload</span> or
-                    drag and drop{" "}
+                    <span className="font-semibold italic underline decoration-blue-500 decoration-4">
+                      Click to upload
+                    </span>{" "}
+                    or drag and drop{" "}
                   </p>
                   <p className="text-xs text-gray-500">Max file size: 15MB</p>
                   <input id="dropzone-file" type="file" className="hidden" />
@@ -213,16 +233,26 @@ export default function OrganizationSignup() {
                   className="mr-2"
                 />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create Password |"
                   className="bg-transparent w-full text-gray-200 outline-none"
                 />
-                <Image
-                  src="/images/mdi_eye.svg"
-                  alt="Eye Icon"
-                  width={20}
-                  height={20}
-                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <Image
+                    src={
+                      showPassword
+                        ? "/images/mdi_eye.svg"
+                        : "/images/mdi_eye.svg"
+                    }
+                    alt="Toggle password visibility"
+                    width={20}
+                    height={20}
+                  />
+                </button>
               </div>
 
               <div className="w-full flex flex-row items-center bg-gray-700/40 rounded-lg px-4 py-2">
@@ -234,16 +264,28 @@ export default function OrganizationSignup() {
                   className="mr-2"
                 />
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password |"
                   className="bg-transparent w-full text-gray-200 outline-none"
                 />
-                <Image
-                  src="/images/mdi_eye.svg"
-                  alt="Eye Icon"
-                  width={20}
-                  height={20}
-                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={
+                    showConfirmPassword ? "Hide password" : "Show password"
+                  }
+                >
+                  <Image
+                    src={
+                      showConfirmPassword
+                        ? "/images/mdi_eye.svg"
+                        : "/images/mdi_eye.svg"
+                    }
+                    alt="Toggle password visibility"
+                    width={20}
+                    height={20}
+                  />
+                </button>
               </div>
               <p className="text-xs">
                 (Keep your account safe, tight and unique by using combination
@@ -251,11 +293,12 @@ export default function OrganizationSignup() {
               </p>
             </div>
           </div>
-          <br /><br />
+          <br />
+          <br />
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mb-2  transition-colors"
+            className="w-full bg-gradient-to-r from-blue-400 to-purple-600 hover:opacity-70 transition text-white font-semibold py-3 rounded-lg mb-2  transition-colors"
           >
             Sign up
           </button>
