@@ -83,7 +83,7 @@ export default function OrganizationSignup() {
                 className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
-            <div>
+            <div className="relative">
               <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                 <option hidden>Business Type</option>
                 <option>Others</option>
@@ -93,14 +93,21 @@ export default function OrganizationSignup() {
                 alt="Arrow Dropdown"
                 width={20}
                 height={20}
-                className="absolute top-28 right-75 pointer-events-none"
+                className="absolute top-3 right-3 pointer-events-none"
               />
             </div>
-            <div>
-              <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <div className="relative">
+              <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                 <option hidden>Company Size</option>
                 <option>Others</option>
               </select>
+              <Image
+                src="/images/drop_down.svg"
+                alt="Arrow Dropdown"
+                width={20}
+                height={20}
+                className="absolute top-3 right-3 pointer-events-none"
+              />
             </div>
           </div>
 
@@ -110,23 +117,52 @@ export default function OrganizationSignup() {
               Company Location
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <option hidden>City</option>
-                <option>Maitama</option>
-              </select>
-              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <option hidden>State</option>
-                <option>Abuja</option>
-              </select>
-              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <option hidden>Country</option>
-                <option>Nigeria</option>
-              </select>
-              <input
-                type="text"
-                placeholder="(Street / area / lga address) |"
-                className="w-full mt-3 bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
+              <div className="relative">
+                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                  <option hidden>City</option>
+                  <option>Maitama</option>
+                </select>
+                <Image
+                  src="/images/drop_down.svg"
+                  alt="Arrow Dropdown"
+                  width={20}
+                  height={20}
+                  className="absolute top-3 right-3 pointer-events-none"
+                />
+              </div>
+              <div className="relative">
+                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                  <option hidden>State</option>
+                  <option>Abuja</option>
+                </select>
+                <Image
+                    src="/images/drop_down.svg"
+                    alt="Arrow Dropdown"
+                    width={20}
+                    height={20}
+                    className="absolute top-3 right-3 pointer-events-none"
+                  />
+              </div>
+              <div className="relative">
+                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                  <option hidden>Country</option>
+                  <option>Nigeria</option>
+                </select>
+                <Image
+                    src="/images/drop_down.svg"
+                    alt="Arrow Dropdown"
+                    width={20}
+                    height={20}
+                    className="absolute top-3 right-3 pointer-events-none"
+                  />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="(Street / area / lga address) |"
+                  className="w-full mt-3 bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
             </div>
           </div>
 
