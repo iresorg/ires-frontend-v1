@@ -48,11 +48,11 @@ export default function OrganizationSignup() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center px-6 border border-white/20 rounded-2xl py-5 max-w-5xl w-full"
+        className="text-center px-6 border border-white/20 rounded-2xl py-5 max-w-5xl w-full max-h-[97vh] overflow-y-auto"
       >
         {/* Title */}
         <h1
-          className="text-3xl md:text-3xl font-semibold tracking-wide mb-4"
+          className="text-3xl md:text-2xl font-semibold tracking-wide mb-1"
           style={{
             backgroundImage:
               "linear-gradient(90deg, #4185DD 0%, #B425DA 50%, #FF7FB1 100%)",
@@ -65,12 +65,12 @@ export default function OrganizationSignup() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-white/80 text-base md:text-md mb-10 max-w-lg mx-auto">
+        <p className="text-white/80 text-base md:text-md mb-3 max-w-lg mx-auto">
           Enter your details below to create an account and get started
         </p>
 
         {/* Signup Form */}
-        <form className="space-y-4 text-sm overflow-y-auto">
+        <form className="space-y-4 text-sm">
           {/* Company Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
@@ -188,18 +188,17 @@ export default function OrganizationSignup() {
                 <Image
                   src="/images/upload.svg"
                   alt="Upload Icon"
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
                 />
-                <p>
-                  <a href="http://">Click to upload</a> or drag and drop
-                </p>
-                <input
-                  id="file-upload"
-                  type="file"
-                  name="file-upload"
-                  className="sr-only"
-                />
+                <label htmlFor="dropzone-file">
+                  <p>
+                    <span className="font-semibold italic underline">Click to upload</span> or
+                    drag and drop{" "}
+                  </p>
+                  <p className="text-xs text-gray-500">Max file size: 15MB</p>
+                  <input id="dropzone-file" type="file" className="hidden" />
+                </label>
               </div>
             </div>
 
@@ -246,19 +245,30 @@ export default function OrganizationSignup() {
                   height={20}
                 />
               </div>
+              <p className="text-xs">
+                (Keep your account safe, tight and unique by using combination
+                of uppercase & lowercase letters, symbols and numbers)
+              </p>
             </div>
           </div>
+          <br /><br />
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mt-6 transition-colors"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mb-2  transition-colors"
           >
             Sign up
           </button>
         </form>
+        <p className="mb-2 ">
+          Already have an account?
+          <Link href="/login" className="text-purple-400 hover:underline ml-1">
+            Login
+          </Link>
+        </p>
 
         {/* Footer */}
-        <p className="mt-16 text-sm text-white/70">
+        <p className="mt-5 text-sm text-white/70">
           Copyright © 2025 iRES. All Rights Reserved.
         </p>
       </motion.div>
