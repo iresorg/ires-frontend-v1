@@ -48,21 +48,11 @@ export default function OrganizationSignup() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center px-6"
+        className="text-center px-6 border border-white/20 rounded-2xl py-5 max-w-5xl w-full"
       >
-        {/* Icon */}
-        <div className="flex justify-center mb-6">
-          <Image
-            src="/images/organization-icon.png"
-            alt="Organization Icon"
-            width={60}
-            height={60}
-          />
-        </div>
-
         {/* Title */}
         <h1
-          className="text-5xl md:text-6xl font-extrabold tracking-wide mb-4"
+          className="text-3xl md:text-3xl font-semibold tracking-wide mb-4"
           style={{
             backgroundImage:
               "linear-gradient(90deg, #4185DD 0%, #B425DA 50%, #FF7FB1 100%)",
@@ -71,22 +61,201 @@ export default function OrganizationSignup() {
             color: "transparent",
           }}
         >
-          COMING SOON
+          Sign Up
         </h1>
 
         {/* Subtitle */}
-        <p className="text-white/80 text-base md:text-lg mb-10 max-w-md mx-auto">
-          The organization sign-up page is currently being built. Stay tuned 
-          we’re almost ready to launch!
+        <p className="text-white/80 text-base md:text-md mb-10 max-w-lg mx-auto">
+          Enter your details below to create an account and get started
         </p>
 
-        {/* Button to go back */}
-        <Link
-          href="/signup"
-          className="inline-block px-8 py-3 rounded-xl text-white font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition-all"
-        >
-          Go Back
-        </Link>
+        {/* Signup Form */}
+        <form className="space-y-4 text-sm overflow-y-auto">
+          {/* Company Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Company Name |"
+              className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <option hidden>Business Type</option>
+              <option>Others</option>
+            </select>
+            <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <option hidden>Company Size</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          {/* Location Input */}
+          <div>
+            <h3 className="text-gray-300 text-sm mb-2 text-left">
+              Company Location
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option hidden>City</option>
+                <option>Maitama</option>
+              </select>
+              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option hidden>State</option>
+                <option>Abuja</option>
+              </select>
+              <select className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option hidden>Country</option>
+                <option>Nigeria</option>
+              </select>
+              <input
+                type="text"
+                placeholder="(Street / area / lga address) |"
+                className="w-full mt-3 bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+          </div>
+
+          {/* Primary Contact Person */}
+          <div>
+            <div>
+              <h3 className="text-gray-300 text-left text-sm mb-2">
+                Primary Contact Person
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input
+                type="text"
+                placeholder="Full Name |"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <input
+                type="text"
+                placeholder="Job Title"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <input
+                type="email"
+                placeholder="Email |"
+                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+
+            {/*Company Email & Telephone*/}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+              <div className="flex items-center bg-gray-700/40 rounded-lg px-4 py-2">
+                <Image
+                  src="/images/comp_email.svg"
+                  alt="Company Email"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                />
+                <input
+                  type="email"
+                  placeholder="Company Email"
+                  className="bg-transparent w-full text-gray-200 outline-none"
+                />
+              </div>
+              {/* Telephone Input */}
+              <div className="flex items-center bg-gray-700/40 rounded-lg px-4 py-2">
+                <div className="flex flex-row items-center mr-4">
+                  <Image
+                    src="/images/9ja_flag.svg"
+                    alt="Nigerian Flag"
+                    width={20}
+                    height={20}
+                  />
+                  <Image
+                    src="/images/drop_down.svg"
+                    alt="Arrow Dropdown"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+                <input
+                  type="tel"
+                  placeholder="+234 910 000 0000"
+                  className="bg-transparent w-full text-gray-200 outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Logo and Password */}
+          <h3 className="text-left">Upload your company logo</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+            <div>
+              <div className="flex flex-col items-center bg-gray-700/40 rounded-lg px-4 py-2">
+                <Image
+                  src="/images/upload.svg"
+                  alt="Upload Icon"
+                  width={40}
+                  height={40}
+                />
+                <p>
+                  <a href="http://">Click to upload</a> or drag and drop
+                </p>
+                <input
+                  id="file-upload"
+                  type="file"
+                  name="file-upload"
+                  className="sr-only"
+                />
+              </div>
+            </div>
+
+            {/* Password Input */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="w-full flex flex-row items-center bg-gray-700/40 rounded-lg px-4 py-2">
+                <Image
+                  src="/images/pw_lock.svg"
+                  alt="Password Lock Icon"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                />
+                <input
+                  type="password"
+                  placeholder="Create Password |"
+                  className="bg-transparent w-full text-gray-200 outline-none"
+                />
+                <Image
+                  src="/images/mdi_eye.svg"
+                  alt="Eye Icon"
+                  width={20}
+                  height={20}
+                />
+              </div>
+
+              <div className="w-full flex flex-row items-center bg-gray-700/40 rounded-lg px-4 py-2">
+                <Image
+                  src="/images/pw_lock.svg"
+                  alt="Password Lock Icon"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                />
+                <input
+                  type="password"
+                  placeholder="Confirm Password |"
+                  className="bg-transparent w-full text-gray-200 outline-none"
+                />
+                <Image
+                  src="/images/mdi_eye.svg"
+                  alt="Eye Icon"
+                  width={20}
+                  height={20}
+                />
+              </div>
+            </div>
+          </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mt-6 transition-colors"
+          >
+            Sign up
+          </button>
+        </form>
 
         {/* Footer */}
         <p className="mt-16 text-sm text-white/70">
