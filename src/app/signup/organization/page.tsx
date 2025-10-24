@@ -47,11 +47,12 @@ export default function OrganizationSignup() {
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
       {/* Signup Card */}
       <div
-        className="relative z-10 w-[800px] p-4 rounded-2xl  bg-transparent"
+        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent"
         style={{
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
           borderStyle: "solid",
+          borderRadius: "16px",
         }}
       >
         {/* Logo */}
