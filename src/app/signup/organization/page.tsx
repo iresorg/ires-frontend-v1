@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import CountrySelection from "@/components/sections/CountrySelection";
 import PasswordInput from "@/components/sections/PasswordInput";
 import ConfirmPasswordInput from "@/components/sections/ConfirmPassword";
