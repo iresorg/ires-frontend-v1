@@ -148,3 +148,46 @@ body {
   height: 100%;
   z-index: 1;
 }
+
+
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-textfield-decoration-button {
+  display: none !important;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-sign-in-button {
+  display: none !important;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+
+input[type="password"] {
+  -webkit-appearance: none;
+  appearance: none;
+  caret-color: auto; 
+}
+
+
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+  padding-right: 2.5rem;
+}
+
+
+.password-input-wrapper {
+  position: relative;
+}
+.password-input-wrapper .password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
