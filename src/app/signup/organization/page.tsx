@@ -4,78 +4,70 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import CountrySelection from "@/components/sections/CountrySelection";
+import PasswordInput from "@/components/sections/PasswordInput";
+import ConfirmPasswordInput from "@/components/sections/ConfirmPassword";
 
 export default function OrganizationSignup() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden text-white">
-      {/* Background image*/}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/images/welcome-signup.png"
-          alt="Background"
-          fill
-          className="object-cover opacity-30"
-          priority
-        />
-      </div>
-
-      {/* Logo */}
-      <div className="absolute top-6 left-8 z-20">
-        <Image
-          src="/logos/ires-logo.svg"
-          alt="iRES Logo"
-          width={80}
-          height={80}
-          className="h-10 w-auto"
-        />
-      </div>
-
-      {/* Close icon */}
-      <Link
-        href="/signup"
-        aria-label="Close"
-        className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full flex items-center justify-center"
+    <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+      {/* Signup Card */}
+      <div
+        className="relative z-10 w-[800px] p-4 rounded-2xl  bg-transparent"
+        style={{
+          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
+          borderWidth: "1px",
+          borderStyle: "solid",
+        }}
       >
-        <Image
-          src="/images/cancel-icon.png"
-          alt="Close"
-          width={30}
-          height={30}
-        />
-      </Link>
+        {/* Logo */}
+        <div className="flex justify-between items-start mb-3">
+          <Image
+            src="/logos/ires-logo.svg"
+            alt="iRES Logo"
+            width={55}
+            height={55}
+          />
+          {/* Close icon */}
+          <Link href="/signup" aria-label="Close" className="w-6 h-6">
+            <Image
+              src="/images/cancel-icon.png"
+              alt="Close"
+              width={24}
+              height={24}
+            />
+          </Link>
+        </div>
 
-      {/* Main content */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center px-6 border border-white/20 rounded-2xl py-5 max-w-5xl w-full max-h-[97vh] overflow-y-auto"
-      >
-        {/* Title */}
-        <h1
-          className="text-3xl md:text-2xl font-semibold tracking-wide mb-1"
+        {/* Main content */}
+        <motion.h2
+          className="text-2xl font-bold mb-1 bg-clip-text text-transparent text-center -mt-5"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, #4185DD 0%, #B425DA 50%, #FF7FB1 100%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
+              "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+            backgroundSize: "200% auto",
+          }}
+          animate={{
+            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+          }}
+          transition={{
+            backgroundPosition: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
           }}
         >
-          Sign Up
-        </h1>
-
-        {/* Subtitle */}
-        <p className="text-white/80 text-base md:text-md mb-3 max-w-lg mx-auto">
+          Sign up
+        </motion.h2>
+        <p className="text-white text-center text-sm mb-4">
           Enter your details below to create an account and get started
         </p>
 
         {/* Signup Form */}
-        <form className="space-y-4 text-sm">
+        <form className="space-y-2 text-xs">
           {/* Company Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div>
               <input
                 type="text"
@@ -93,7 +85,7 @@ export default function OrganizationSignup() {
                 alt="Arrow Dropdown"
                 width={20}
                 height={20}
-                className="absolute top-3 right-3 pointer-events-none"
+                className="absolute top-2 right-3 pointer-events-none"
               />
             </div>
             <div className="relative">
@@ -106,17 +98,17 @@ export default function OrganizationSignup() {
                 alt="Arrow Dropdown"
                 width={20}
                 height={20}
-                className="absolute top-3 right-3 pointer-events-none"
+                className="absolute top-2 right-3 pointer-events-none"
               />
             </div>
           </div>
 
           {/* Location Input */}
           <div>
-            <h3 className="text-gray-300 text-sm mb-2 text-left">
+            <h5 className="text-gray-300 text-sm mb-2 text-left">
               Company Location
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            </h5>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               <div className="relative">
                 <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                   <option hidden>City</option>
@@ -127,7 +119,7 @@ export default function OrganizationSignup() {
                   alt="Arrow Dropdown"
                   width={20}
                   height={20}
-                  className="absolute top-3 right-3 pointer-events-none"
+                  className="absolute top-2 right-3 pointer-events-none"
                 />
               </div>
               <div className="relative">
@@ -136,12 +128,12 @@ export default function OrganizationSignup() {
                   <option>Abuja</option>
                 </select>
                 <Image
-                    src="/images/drop_down.svg"
-                    alt="Arrow Dropdown"
-                    width={20}
-                    height={20}
-                    className="absolute top-3 right-3 pointer-events-none"
-                  />
+                  src="/images/drop_down.svg"
+                  alt="Arrow Dropdown"
+                  width={20}
+                  height={20}
+                  className="absolute top-2 right-3 pointer-events-none"
+                />
               </div>
               <div className="relative">
                 <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
@@ -149,12 +141,12 @@ export default function OrganizationSignup() {
                   <option>Nigeria</option>
                 </select>
                 <Image
-                    src="/images/drop_down.svg"
-                    alt="Arrow Dropdown"
-                    width={20}
-                    height={20}
-                    className="absolute top-3 right-3 pointer-events-none"
-                  />
+                  src="/images/drop_down.svg"
+                  alt="Arrow Dropdown"
+                  width={20}
+                  height={20}
+                  className="absolute top-2 right-3 pointer-events-none"
+                />
               </div>
               <div>
                 <input
@@ -173,7 +165,7 @@ export default function OrganizationSignup() {
                 Primary Contact Person
               </h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
                 placeholder="Full Name |"
@@ -192,7 +184,7 @@ export default function OrganizationSignup() {
             </div>
 
             {/*Company Email & Telephone*/}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
               <div className="flex items-center bg-gray-700/40 rounded-lg px-4 py-2">
                 <Image
                   src="/images/comp_email.svg"
@@ -208,120 +200,72 @@ export default function OrganizationSignup() {
                 />
               </div>
               {/* Telephone Input */}
-              <div className="flex items-center bg-gray-700/40 rounded-lg px-4 py-2">
-                <div className="flex flex-row items-center mr-4">
-                  <Image
-                    src="/images/9ja_flag.svg"
-                    alt="Nigerian Flag"
-                    width={20}
-                    height={20}
-                  />
-                  <Image
-                    src="/images/drop_down.svg"
-                    alt="Arrow Dropdown"
-                    width={20}
-                    height={20}
-                  />
-                </div>
-                <input
-                  type="tel"
-                  placeholder="+234 910 000 0000"
-                  className="bg-transparent w-full text-gray-200 outline-none"
-                />
+              <div>
+                {/* Phone */}
+                <CountrySelection />
               </div>
             </div>
           </div>
 
           {/* Logo and Password */}
-          <h3 className="text-gray-300 text-sm mb-2 text-left">
-            Upload your company logo
-          </h3>
+          <div className="flex flex-row justify-between items-start mt-2 mb-2">
+            <h3 className="text-gray-300 text-sm text-left">
+              Upload your company logo
+            </h3>
+            <motion.span
+              className="font-semibold bg-clip-text text-transparent inline-block"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                backgroundSize: "200% auto",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{
+                backgroundPosition: {
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              .  .  .
+            </motion.span>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
             <div>
               <div className="flex flex-col items-center bg-gray-700/40 rounded-lg px-4 py-2">
                 <Image
                   src="/images/upload.svg"
                   alt="Upload Icon"
-                  width={50}
-                  height={50}
+                  width={70}
+                  height={70}
                 />
-                <label htmlFor="dropzone-file">
+                <label htmlFor="dropzone-file" className="space-y-3">
                   <p>
                     <span className="font-semibold italic underline decoration-blue-500 decoration-4">
                       Click to upload
                     </span>{" "}
                     or drag and drop{" "}
                   </p>
-                  <p className="text-xs text-gray-500">Max file size: 15MB</p>
+                  <p className="text-xs text-gray-500 text-center">
+                    Max file size: 15MB
+                  </p>
                   <input id="dropzone-file" type="file" className="hidden" />
                 </label>
               </div>
             </div>
 
-            {/* Password Input */}
+            {/* Password Section */}
             <div className="flex flex-col items-center space-y-2">
-              <div className="w-full flex flex-row items-center bg-gray-700/40 rounded-lg px-4 py-2">
-                <Image
-                  src="/images/pw_lock.svg"
-                  alt="Password Lock Icon"
-                  width={20}
-                  height={20}
-                  className="mr-2"
-                />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create Password |"
-                  className="bg-transparent w-full text-gray-200 outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  <Image
-                    src={
-                      showPassword
-                        ? "/images/mdi_eye.svg"
-                        : "/images/mdi_eye.svg"
-                    }
-                    alt="Toggle password visibility"
-                    width={20}
-                    height={20}
-                  />
-                </button>
+              {/* Password Input */}
+              <div className="w-full">
+                <PasswordInput />
               </div>
-
-              <div className="w-full flex flex-row items-center bg-gray-700/40 rounded-lg px-4 py-2">
-                <Image
-                  src="/images/pw_lock.svg"
-                  alt="Password Lock Icon"
-                  width={20}
-                  height={20}
-                  className="mr-2"
-                />
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm Password |"
-                  className="bg-transparent w-full text-gray-200 outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
-                >
-                  <Image
-                    src={
-                      showConfirmPassword
-                        ? "/images/mdi_eye.svg"
-                        : "/images/mdi_eye.svg"
-                    }
-                    alt="Toggle password visibility"
-                    width={20}
-                    height={20}
-                  />
-                </button>
+              {/* Password Confirmation */}
+              <div className="w-full">
+                <ConfirmPasswordInput />
               </div>
               <p className="text-xs">
                 (Keep your account safe, tight and unique by using combination
@@ -330,27 +274,44 @@ export default function OrganizationSignup() {
             </div>
           </div>
           <br />
-          <br />
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-400 to-purple-600 hover:opacity-70 transition text-white font-semibold py-3 rounded-lg mb-2  transition-colors"
-          >
-            Sign up
-          </button>
+          {/* Button */}
+          <Link href="/signup/verify-email">
+            <button
+              type="submit"
+              className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              Sign up
+            </button>
+          </Link>
         </form>
-        <p className="mb-2 ">
+        {/* Footer */}
+        <p className="mt-4 text-center text-sm text-white/80">
           Already have an account?
-          <Link href="/login" className="text-purple-400 hover:underline ml-1">
-            Login
+          <Link href="/login" className="hover:underline">
+            <motion.span
+              className="font-semibold bg-clip-text text-transparent inline-block"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                backgroundSize: "200% auto",
+              }}
+              animate={{
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{
+                backgroundPosition: {
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              Log in
+            </motion.span>
           </Link>
         </p>
-
-        {/* Footer */}
-        <p className="mt-5 text-sm text-white/70">
-          Copyright © 2025 iRES. All Rights Reserved.
-        </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
