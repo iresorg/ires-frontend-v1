@@ -52,7 +52,6 @@ export default function OrganizationSignup() {
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
           borderStyle: "solid",
-          borderRadius: "16px",
         }}
       >
         {/* Logo */}
