@@ -6,8 +6,43 @@ import Link from "next/link";
 import CountrySelection from "@/components/sections/CountrySelection";
 import PasswordInput from "@/components/sections/PasswordInput";
 import ConfirmPasswordInput from "@/components/sections/ConfirmPassword";
+import { useState, ChangeEvent, DragEvent } from "react";
 
 export default function OrganizationSignup() {
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleFileChange = (file: File) => {
+    if (file) {
+      setFileName(file.name);
+    }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileChange(e.target.files[0]);
+    }
+  };
+
+  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileChange(e.dataTransfer.files[0]);
+      e.dataTransfer.clearData();
+    }
+  };
+
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
       {/* Signup Card */}
@@ -211,7 +246,7 @@ export default function OrganizationSignup() {
             <h3 className="text-gray-300 text-sm text-left">
               Upload your company logo
             </h3>
-            <motion.span
+            <motion.p
               className="font-semibold bg-clip-text text-transparent inline-block"
               style={{
                 backgroundImage:
@@ -230,11 +265,19 @@ export default function OrganizationSignup() {
               }}
             >
               .  .  .
-            </motion.span>
+            </motion.p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-            <div>
-              <div className="flex flex-col items-center bg-gray-700/40 rounded-lg px-4 py-2">
+            <div
+              className={`bg-gray-700/40 rounded-lg px-4 py-2 ${
+                isDragging ? "border-2 border-dashed border-blue-500" : ""
+              }`}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="flex flex-col items-center">
                 <Image
                   src="/images/upload.svg"
                   alt="Upload Icon"
@@ -242,16 +285,27 @@ export default function OrganizationSignup() {
                   height={70}
                 />
                 <label htmlFor="dropzone-file" className="space-y-3">
-                  <p>
-                    <span className="font-semibold italic underline decoration-blue-500 decoration-4">
-                      Click to upload
-                    </span>{" "}
-                    or drag and drop{" "}
-                  </p>
+                  {fileName ? (
+                    <p className="text-sm text-gray-300 text-center">
+                      {fileName}
+                    </p>
+                  ) : (
+                    <p>
+                      <span className="font-semibold italic underline decoration-blue-500 decoration-4">
+                        Click to upload
+                      </span>{" "}
+                      or drag and drop{" "}
+                    </p>
+                  )}
                   <p className="text-xs text-gray-500 text-center">
                     Max file size: 15MB
                   </p>
-                  <input id="dropzone-file" type="file" className="hidden" />
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    onChange={handleInputChange}
+                  />
                 </label>
               </div>
             </div>
