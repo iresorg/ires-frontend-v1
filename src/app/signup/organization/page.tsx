@@ -269,9 +269,7 @@ export default function OrganizationSignup() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
             <div
-              className={`bg-gray-700/40 rounded-lg px-4 py-2 ${
-                isDragging ? "border-2 border-dashed border-blue-500" : ""
-              }`}
+              className="bg-gray-700/40 rounded-lg border-[2px] border-blue-500 border-dashed"
               onDragEnter={handleDragEnter}
               onDragOver={handleDragEnter}
               onDragLeave={handleDragLeave}
