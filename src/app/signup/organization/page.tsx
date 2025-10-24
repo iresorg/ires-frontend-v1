@@ -320,7 +320,7 @@ export default function OrganizationSignup() {
               <div className="w-full">
                 <ConfirmPasswordInput />
               </div>
-              <p className="text-xs">
+              <p className="text-[11px]">
                 (Keep your account safe, tight and unique by using combination
                 of uppercase & lowercase letters, symbols and numbers)
               </p>
