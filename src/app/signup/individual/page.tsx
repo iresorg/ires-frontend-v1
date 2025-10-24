@@ -98,24 +98,26 @@ export default function IndividualSignup() {
           {/* Password Confirmation */}
           <ConfirmPasswordInput />
           {/* Button */}
-          <button
-            type="submit"
-            className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
-          >
-            Sign up
-            <Image
-              src="/images/arrow-right.png"
-              alt="Arrow"
-              width={16}
-              height={16}
-              className="inline-block"
-            />
-          </button>
+          <Link href="/signup/verify-email">
+            <button
+              type="submit"
+              className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              Sign up
+              <Image
+                src="/images/arrow-right.png"
+                alt="Arrow"
+                width={16}
+                height={16}
+                className="inline-block"
+              />
+            </button>
+          </Link>
         </form>
 
         {/* Footer */}
         <p className="mt-4 text-center text-sm text-white/80">
-          Already have an account?{" "}
+          Already have an account?
           <Link href="/login" className="hover:underline">
             <motion.span
               className="font-semibold bg-clip-text text-transparent inline-block"
