@@ -11,12 +11,13 @@ export default function PublicLayout({
 }) {
   const pathname = usePathname();
 
-  // Hide Header and Footer on signup and login routes
+  // Hide Header and Footer 
   const hideHeaderAndFooter =
-   pathname.startsWith("/signup") ||
-  pathname.startsWith("/login") ||
-  pathname.startsWith("/forgot-password");
-
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/forgot-password") ||
+    pathname.startsWith("/create-password") ||
+    pathname.startsWith("/welcome");
 
   return (
     <>
