@@ -9,15 +9,17 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const pathnameRaw = usePathname();
+  const pathname = pathnameRaw ?? "";
 
-  // Hide Header and Footer 
+  // Hide Header and Footer
   const hideHeaderAndFooter =
     pathname.startsWith("/signup") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/forgot-password") ||
     pathname.startsWith("/create-password") ||
-    pathname.startsWith("/welcome");
+    pathname.startsWith("/welcome") ||
+    pathname.startsWith("/dashboard");
 
   return (
     <>
