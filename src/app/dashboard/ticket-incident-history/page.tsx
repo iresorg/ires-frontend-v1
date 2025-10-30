@@ -48,25 +48,25 @@ export default function TicketIncidentHistory() {
         <table className="w-full text-left table-auto border-collapse">
           <thead>
             <tr className="border-b-1 border-gray-100/20 text-gray-300">
-              <th className="py-3 font-medium">Ticket ID</th>
-              <th className="py-3 font-medium">Status</th>
-              <th className="py-3 font-medium">Date</th>
-              <th className="py-3 font-medium">Timestamp</th>
-              <th className="py-3 font-medium text-center">Actions</th>
+              <th className="px-4 py-3 font-medium">Ticket ID</th>
+              <th className="pl-10 px-4 py-3 font-medium">Status</th>
+              <th className="pl-10 px-4 py-3 font-medium">Date</th>
+              <th className="pl-10 px-4 py-3 font-medium">Timestamp</th>
+              <th className="pl-10 px-4 py-3 font-medium">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {tickets.map((ticket, idx) => (
               <tr
                 key={idx}
-                className="py-3 border-b-1 border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
+                className="border-b-1 border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
               >
-                <td className="py-3">{ticket.id}</td>
-                <td className="py-3">{ticket.status}</td>
-                <td className="py-3">{ticket.date}</td>
-                <td className="py-3">{ticket.timestamp}</td>
-                <td className="py-3">
-                  <Link href="/#" className="flex justify-center">
+                <td className="px-4 py-3 ">{ticket.id}</td>
+                <td className="pl-10 px-4 py-3">{ticket.status}</td>
+                <td className="pl-10 px-4 py-3">{ticket.date}</td>
+                <td className="pl-10 px-4 py-3">{ticket.timestamp}</td>
+                <td className="px-4 py-3">
+                  <Link href="/#">
                     <button className="text-sm bg-neutral-800 hover:bg-neutral-700 transition px-3 py-3 rounded-md">
                       More Details
                     </button>
@@ -108,6 +108,7 @@ export default function TicketIncidentHistory() {
                 {num}
               </button>
             ))}
+            <p>....</p>
           </div>
           <Link href="/#">
             <button className="flex flex-row disabled:opacity-40">
