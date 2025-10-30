@@ -116,8 +116,8 @@ export default function TicketIncidentHistory() {
               <Image
                 src="/images/arrow-right-vector.svg"
                 alt="Next"
-                width={20}
-                height={20}
+                width={15}
+                height={15}
                 className="ml-2"
               />
             </button>
