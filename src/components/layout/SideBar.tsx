@@ -1,13 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
-  { name: "Overview", icon: "/images/overview.png" },
-  { name: "Subscription Plans", icon: "/images/renewal.png" },
-  { name: "Transaction History", icon: "/images/transaction.png" },
-  { name: "Ticket Incident History", icon: "/images/ticket.png" },
+  { name: "Overview", icon: "/images/overview.png", href: "/dashboard" },
+  {
+    name: "Subscription Plans",
+    icon: "/images/renewal.png",
+    href: "/dashboard/subscription-plans",
+  },
+  {
+    name: "Transaction History",
+    icon: "/images/transaction.png",
+    href: "/dashboard/transaction-history",
+  },
+  {
+    name: "Ticket Incident History",
+    icon: "/images/ticket.png",
+    href: "/dashboard/ticket-incident-history",
+  },
 ];
 
 const supportItems = [
@@ -16,7 +29,7 @@ const supportItems = [
 ];
 
 export default function Sidebar() {
-  const [active, setActive] = useState("Overview");
+  const pathname = usePathname();
 
   return (
     <aside className="w-64 h-full bg-[#383754] flex flex-col justify-between py-6 px-4 border-r border-white/5">
@@ -34,11 +47,12 @@ export default function Sidebar() {
         {/* Menu Items */}
         <nav className="space-y-2">
           {menuItems.map((item) => {
-            const isActive = active === item.name;
+            const isActive = pathname === item.href;
+
             return (
-              <button
+              <Link
                 key={item.name}
-                onClick={() => setActive(item.name)}
+                href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   isActive
                     ? "bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA]"
@@ -53,7 +67,7 @@ export default function Sidebar() {
                   className="opacity-90"
                 />
                 {item.name}
-              </button>
+              </Link>
             );
           })}
         </nav>
