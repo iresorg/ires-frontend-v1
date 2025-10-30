@@ -43,7 +43,7 @@ export default function TicketIncidentHistory() {
 
   return (
     <DashboardLayout>
-      <div className="overflow-auto mt-6">
+      <div className="overflow-auto mt-2">
         {/* Table */}
         <table className="w-full text-left table-auto border-collapse">
           <thead>
