@@ -59,12 +59,12 @@ export default function TicketIncidentHistory() {
             {tickets.map((ticket, idx) => (
               <tr
                 key={idx}
-                className="py-3 border-b-1 border-gray-100/20 hover:bg-neutral-900/50 transition"
+                className="py-3 border-b-1 border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
               >
-                <td className="py-3 text-white">{ticket.id}</td>
-                <td className="py-3 text-white">{ticket.status}</td>
-                <td className="py-3 text-white">{ticket.date}</td>
-                <td className="py-3 text-white">{ticket.timestamp}</td>
+                <td className="py-3">{ticket.id}</td>
+                <td className="py-3">{ticket.status}</td>
+                <td className="py-3">{ticket.date}</td>
+                <td className="py-3">{ticket.timestamp}</td>
                 <td className="py-3">
                   <Link href="/#" className="flex justify-center">
                     <button className="text-sm bg-neutral-800 hover:bg-neutral-700 transition px-3 py-3 rounded-md">
