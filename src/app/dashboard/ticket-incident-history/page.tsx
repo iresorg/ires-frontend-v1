@@ -112,14 +112,14 @@ export default function TicketIncidentHistory() {
           </div>
           <Link href="/#">
             <button className="flex flex-row disabled:opacity-40">
+              <p>Next</p>
               <Image
                 src="/images/arrow-right-vector.svg"
                 alt="Next"
                 width={20}
                 height={20}
-                className="mr-2"
+                className="ml-2"
               />
-              <p>Next</p>
             </button>
           </Link>
         </div>
