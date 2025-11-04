@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth";
+import { removeCookie } from "@/lib/api";
 import Sidebar from "./SideBar";
 import Navbar from "./Navbar";
 
@@ -8,6 +12,27 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { isAuthenticated, clearUser } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      // Clear user data and cookies
+      clearUser();
+      removeCookie("auth_token");
+      removeCookie("refresh_token");
+
+      // Redirect to home page
+      router.push("/");
+    }
+  }, [isAuthenticated, clearUser, router]);
+
+  // Don't render layout if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="flex h-screen bg-[#0E0E1A] text-white">
       {/* Sidebar */}

@@ -1,14 +1,46 @@
 "use client";
 
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
+import { authService } from "@/services/auth";
+import type { AxiosError } from "axios";
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [accountId, setAccountId] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
   const [timer, setTimer] = useState(60);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Read query params from URL
+  useEffect(() => {
+    // Try useSearchParams first
+    const paramsAccountId = searchParams.get("accountId");
+    const paramsEmail = searchParams.get("email");
+
+    // Fallback to window.location if useSearchParams doesn't work
+    if (!paramsAccountId || !paramsEmail) {
+      if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search);
+        setAccountId(urlParams.get("accountId") || "");
+        setEmail(urlParams.get("email") || "");
+      }
+    } else {
+      setAccountId(paramsAccountId || "");
+      setEmail(paramsEmail || "");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -17,22 +49,86 @@ export default function VerifyEmail() {
     }
   }, [timer]);
 
-  const handleVerify = () => {
-    const success = Math.random() > 0.5;
+  const handleOtpChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
 
-  
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").slice(0, 6);
+    const newOtp = [...otp];
+    for (let i = 0; i < pastedData.length && i < 6; i++) {
+      newOtp[i] = pastedData[i];
+    }
+    setOtp(newOtp);
+    // Focus the last filled input or the last input
+    const lastIndex = Math.min(pastedData.length - 1, 5);
+    inputRefs.current[lastIndex]?.focus();
+  };
+
+  const handleVerify = async () => {
+    const otpString = otp.join("");
+    if (otpString.length !== 6) {
+      setErrorMessage("Please enter the complete 6-digit code");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+      return;
+    }
+
+    // Get fresh params from URL in case state hasn't updated
+    const currentAccountId = accountId || (typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("accountId") : "");
+    const currentEmail = email || (typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("email") : "");
+
+    if (!currentAccountId || !currentEmail) {
+      setErrorMessage("Missing account information. Please try registering again.");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+      return;
+    }
+
+    setIsVerifying(true);
     setShowSuccess(false);
     setShowError(false);
 
-    setTimeout(() => {
-      if (success) setShowSuccess(true);
-      else setShowError(true);
-    }, 400); 
+    try {
+      console.log("Verifying email with:", { accountId: currentAccountId, email: currentEmail, otp: otpString });
 
-    setTimeout(() => {
-      setShowSuccess(false);
-      setShowError(false);
-    }, 4000);
+      const result = await authService.verifyEmail({
+        accountId: currentAccountId,
+        email: currentEmail,
+        otp: otpString,
+      });
+
+      if (result.verified) {
+        setShowSuccess(true);
+        // Redirect to login page immediately after successful verification
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const errorMsg = axiosError.response?.data?.message || "Invalid or expired OTP. Please try again.";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   return (
@@ -124,7 +220,7 @@ export default function VerifyEmail() {
             </div>
 
             <p className="text-white text-sm mb-4">
-              Looks like you entered an invalid code
+              {errorMessage || "Looks like you entered an invalid code"}
             </p>
 
             <motion.button
@@ -187,16 +283,23 @@ export default function VerifyEmail() {
         </motion.h2>
 
         <p className="text-white text-sm text-center mb-6">
-          Kindly enter the 6-digit code we sent to example@gmail.com
+          Kindly enter the 6-digit code we sent to {email || "your email"}
         </p>
 
         {/* Code inputs */}
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="flex justify-center gap-3 mb-6" onPaste={handlePaste}>
           {[...Array(6)].map((_, i) => (
             <input
               key={i}
+              ref={(el) => {
+                inputRefs.current[i] = el;
+              }}
               type="text"
+              inputMode="numeric"
               maxLength={1}
+              value={otp[i]}
+              onChange={(e) => handleOtpChange(i, e.target.value.replace(/\D/g, ""))}
+              onKeyDown={(e) => handleKeyDown(i, e)}
               className="w-12 h-12 text-center text-white text-xl bg-white/10 rounded-md outline-none focus:ring-2 focus:ring-[#4185DD]"
             />
           ))}
@@ -255,11 +358,24 @@ export default function VerifyEmail() {
         <button
           onClick={handleVerify}
           type="button"
-          className="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer"
+          disabled={isVerifying || otp.join("").length !== 6}
+          className="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Verify Email
+          {isVerifying ? "Verifying..." : "Verify Email"}
         </button>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmail() {
+  return (
+    <Suspense fallback={
+      <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }

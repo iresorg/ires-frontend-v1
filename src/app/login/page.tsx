@@ -4,12 +4,75 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { loginSchema, type LoginFormData } from "@/validation/auth";
+import { authService } from "@/services/auth";
+import { useAuthStore } from "@/store/auth";
+import type { AxiosError } from "axios";
+import ErrorToast from "@/components/sections/ErrorToast";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    setIsSubmitting(true);
+    setShowError(false);
+
+    try {
+      await authService.login({
+        email: data.email,
+        password: data.password,
+      });
+
+      // Get user from store (set by auth service after login)
+      const currentUser = useAuthStore.getState().user;
+
+      // Redirect based on user role
+      if (currentUser) {
+        if (currentUser.role === "individual") {
+          router.push("/dashboard/subscription-plans");
+        } else if (currentUser.role === "organization") {
+          router.push("/welcome");
+        } else {
+          // Fallback to welcome for unknown roles
+          router.push("/welcome");
+        }
+      } else {
+        // Fallback to welcome if user not loaded yet
+        router.push("/welcome");
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const errorMsg = axiosError.response?.data?.message || "Login failed. Please try again.";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+      {/* Error Toast */}
+      {showError && (
+        <ErrorToast onClose={() => setShowError(false)} message={errorMessage} />
+      )}
+
       {/* Login card */}
       <div
         className="relative z-10 w-[480px] p-8 rounded-2xl bg-transparent"
@@ -65,51 +128,62 @@ export default function LoginPage() {
         </p>
 
         {/* Form */}
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           {/* Email input */}
-          <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-            <Image
-              src="/images/email-icon.png"
-              alt="Email"
-              width={18}
-              height={18}
-            />
-            <input
-              type="email"
-              placeholder="Email address"
-              className="bg-transparent w-full text-white placeholder-white/60 outline-none"
-            />
+          <div>
+            <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
+              <Image
+                src="/images/email-icon.png"
+                alt="Email"
+                width={18}
+                height={18}
+              />
+              <input
+                type="email"
+                placeholder="Email address"
+                {...register("email")}
+                className="bg-transparent w-full text-white placeholder-white/60 outline-none"
+              />
+            </div>
+            {errors.email && (
+              <p className="text-red-400 text-xs mt-1 ml-4">{errors.email.message}</p>
+            )}
           </div>
 
           {/* Password input */}
-          <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-            <Image src="/images/locker.png" alt="Lock" width={20} height={20} />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="bg-transparent w-full text-white placeholder-white/60 outline-none"
-            />
-            <Image
-              src={
-                showPassword ? "/images/eye-opened.png" : "/images/eye-closed.png"
-              }
-              alt="Toggle Password"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            />
+          <div>
+            <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
+              <Image src="/images/locker.png" alt="Lock" width={20} height={20} />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                {...register("password")}
+                className="bg-transparent w-full text-white placeholder-white/60 outline-none"
+              />
+              <Image
+                src={
+                  showPassword ? "/images/eye-opened.png" : "/images/eye-closed.png"
+                }
+                alt="Toggle Password"
+                width={20}
+                height={20}
+                className="cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            </div>
+            {errors.password && (
+              <p className="text-red-400 text-xs mt-1 ml-4">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Login button */}
-          <Link href="/welcome">
           <button
             type="submit"
-            className="mt-2 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer"
+            disabled={isSubmitting}
+            className="mt-2 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Log in
+            {isSubmitting ? "Logging in..." : "Log in"}
           </button>
-          </Link>
         </form>
 
         {/* Footer */}

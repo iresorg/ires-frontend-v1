@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-export default function SuccessToast({ onClose }: { onClose?: () => void }) {
+export default function SuccessToast({ 
+  onClose, 
+  message = "Sign up Successful" 
+}: { 
+  onClose?: () => void;
+  message?: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -15 }}
@@ -34,7 +40,7 @@ export default function SuccessToast({ onClose }: { onClose?: () => void }) {
       {/* Title Row */}
       <div className="flex items-center gap-2 mb-1">
         <p className="text-white font-semibold text-sm tracking-wide">
-          Sign up Successful
+          Success
         </p>
         <Image
           src="/images/shield-checkmark.png"
@@ -45,14 +51,9 @@ export default function SuccessToast({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Message */}
-      <h3
-        className="text-white font-bold text-xl tracking-wider "
-        style={{
-          fontFamily: "'Mancondo', serif", 
-        }}
-      >
-        WELCOME TO iRES
-      </h3>
+      <p className="text-white text-sm mt-1">
+        {message}
+      </p>
     </motion.div>
   );
 }

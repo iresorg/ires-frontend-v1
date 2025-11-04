@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-export default function ErrorToast({ onClose }: { onClose?: () => void }) {
+export default function ErrorToast({ 
+  onClose, 
+  message = "Something went wrong. Please try again." 
+}: { 
+  onClose?: () => void;
+  message?: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -15 }}
@@ -40,13 +46,13 @@ export default function ErrorToast({ onClose }: { onClose?: () => void }) {
           height={22}
         />
         <p className="text-white font-semibold text-sm">
-          Something went wrong!
+          Error
         </p>
       </div>
 
       {/* Message */}
       <p className="text-white/80 text-sm leading-snug max-w-xs">
-        Kindly refill your details and sign up again
+        {message}
       </p>
     </motion.div>
   );
