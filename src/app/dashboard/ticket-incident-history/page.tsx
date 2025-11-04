@@ -66,8 +66,8 @@ export default function TicketIncidentHistory() {
                 <td className="pl-10 px-4 py-3">{ticket.date}</td>
                 <td className="pl-10 px-4 py-3">{ticket.timestamp}</td>
                 <td className="px-4 py-3">
-                  <Link href="/#">
-                    <button className="text-sm bg-neutral-800 hover:bg-neutral-700 transition px-3 py-3 rounded-md">
+                  <Link href={`/dashboard/ticket-incident-history/${ticket.id}`}>
+                    <button className="text-sm bg-neutral-800 hover:bg-neutral-700 transition px-3 py-3 rounded-md cursor-pointer">
                       More Details
                     </button>
                   </Link>

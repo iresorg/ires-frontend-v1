@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import EmailSentToast from "@/components/sections/EmailToast";
 
 export default function ForgotPassword() {
   const [emailSent, setEmailSent] = useState(false);
@@ -14,23 +15,26 @@ export default function ForgotPassword() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-
-    // Simulate email sending
     setEmailSent(true);
   };
 
-  // Automatically redirect after showing the success message
   useEffect(() => {
     if (emailSent) {
       const timer = setTimeout(() => {
         router.push("/create-password");
-      }, 3000); // redirect after 3 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [emailSent, router]);
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+      {/* Toast */}
+      <AnimatePresence>
+        {emailSent && <EmailSentToast onClose={() => setEmailSent(false)} />}
+      </AnimatePresence>
+
+      {/* Card */}
       <div
         className="relative z-10 w-[450px] p-8 rounded-2xl bg-transparent"
         style={{
@@ -39,7 +43,7 @@ export default function ForgotPassword() {
           borderStyle: "solid",
         }}
       >
-        {/* Logo and Close */}
+        {/* Logo / Close */}
         <div className="flex justify-between items-start mb-5">
           <Image
             src="/logos/ires-logo.svg"
@@ -51,8 +55,8 @@ export default function ForgotPassword() {
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
-              width={24}
-              height={24}
+              width={25}
+              height={25}
             />
           </Link>
         </div>
@@ -79,55 +83,35 @@ export default function ForgotPassword() {
           Forgot Password
         </motion.h2>
 
-        {/* Conditional content */}
-        {!emailSent ? (
-          <>
-            <p className="text-white/80 text-center text-sm mb-6">
-              Enter your registered email
-            </p>
+        <p className="text-white/80 text-center text-sm mb-6">
+          Enter your registered email
+        </p>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* Email input */}
-              <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-                <Image
-                  src="/images/email-icon.png"
-                  alt="Email"
-                  width={18}
-                  height={18}
-                />
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-transparent w-full text-white placeholder-white/60 outline-none"
-                />
-              </div>
-
-              {/* Send button */}
-              <button
-                type="submit"
-                className="mt-2 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer"
-              >
-                Send
-              </button>
-            </form>
-          </>
-        ) : (
-          <div className="text-center flex flex-col items-center justify-center py-10">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
             <Image
-              src="/images/mail-sent.png"
-              alt="Mail sent"
-              width={60}
-              height={60}
-              className="mb-5"
+              src="/images/email-icon.png"
+              alt="Email"
+              width={18}
+              height={18}
             />
-            <p className="text-white/90 text-sm leading-relaxed font-bold">
-              Kindly check your mail, we’ve sent you
-              <br /> a password reset email
-            </p>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-transparent w-full text-white placeholder-white/60 outline-none"
+            />
           </div>
-        )}
+
+          <button
+            type="submit"
+            className="mt-2 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer"
+          >
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );
