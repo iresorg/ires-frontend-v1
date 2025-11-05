@@ -47,7 +47,7 @@ export default function OrganizationSignup() {
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
       {/* Signup Card */}
       <div
-        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent"
+        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-50 mb-2  "
         style={{
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
@@ -55,7 +55,7 @@ export default function OrganizationSignup() {
         }}
       >
         {/* Logo */}
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-start  ">
           <Image
             src="/logos/ires-logo.svg"
             alt="iRES Logo"
@@ -119,22 +119,37 @@ export default function OrganizationSignup() {
                 alt="Arrow Dropdown"
                 width={20}
                 height={20}
-                className="absolute top-2 right-3 pointer-events-none"
+                className="absolute top-2 right-3 cursor-pointer"
               />
             </div>
-            <div className="relative">
-              <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
-                <option hidden>Company Size</option>
-                <option>Others</option>
-              </select>
-              <Image
-                src="/images/drop_down.svg"
-                alt="Arrow Dropdown"
-                width={20}
-                height={20}
-                className="absolute top-2 right-3 pointer-events-none"
-              />
-            </div>
+           
+              <div className="relative">
+                <label
+                  htmlFor="company-size"
+                  className="block text-gray-300 text-[10px] mt-2 mb-1"
+                >
+                  (Numbers of employees?)
+                </label>
+                <select
+                  id="company-size"
+                  className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none"
+                >
+                  <option hidden>Company Size</option>
+                  <option>1–10 employees</option>
+                  <option>11–50 employees</option>
+                  <option>51–200 employees</option>
+                  <option>201–500 employees</option>
+                  <option>500+ employees</option>
+                </select>
+                <Image
+                  src="/images/drop_down.svg"
+                  alt="Arrow Dropdown"
+                  width={20}
+                  height={20}
+                  className="absolute top-9 right-3 cursor-pointer"
+                />
+              </div>
+           
           </div>
 
           {/* Location Input */}
@@ -264,7 +279,7 @@ export default function OrganizationSignup() {
                 },
               }}
             >
-              .  .  .
+              . . .
             </motion.p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
@@ -339,7 +354,7 @@ export default function OrganizationSignup() {
         {/* Footer */}
         <p className="mt-4 text-center text-sm text-white/80">
           Already have an account?
-          <Link href="/login" className="hover:underline">
+          <Link href="/welcome" className="hover:underline">
             <motion.span
               className="font-semibold bg-clip-text text-transparent inline-block"
               style={{

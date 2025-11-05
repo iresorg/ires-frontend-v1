@@ -165,7 +165,7 @@ function VerifyEmailContent() {
 
             <div className="flex items-center gap-2 mb-2">
               <Image
-                src="/images/shield-checkmark.png"
+                src="/images/badge.png"
                 alt="Success Icon"
                 width={24}
                 height={24}
