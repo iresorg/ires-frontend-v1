@@ -4,50 +4,71 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import CountrySelection from "@/components/sections/CountrySelection";
-import PasswordInput from "@/components/sections/PasswordInput";
-import ConfirmPasswordInput from "@/components/sections/ConfirmPassword";
 import { useState, ChangeEvent, DragEvent } from "react";
-
+import { useRouter } from "next/navigation"; 
 export default function OrganizationSignup() {
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+ const router = useRouter();
 
-  const handleFileChange = (file: File) => {
-    if (file) {
-      setFileName(file.name);
-    }
-  };
+ const [fileName, setFileName] = useState<string | null>(null);
+ const [isDragging, setIsDragging] = useState(false);
+ const [showPassword, setShowPassword] = useState(false);
+ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+ const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      handleFileChange(e.target.files[0]);
-    }
-  };
+ const handleFileChange = (file: File) => {
+   if (file) {
+     setFileName(file.name);
+   }
+ };
 
-  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+   if (e.target.files && e.target.files.length > 0) {
+     handleFileChange(e.target.files[0]);
+   }
+ };
 
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
+ const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+   e.preventDefault();
+   setIsDragging(true);
+ };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileChange(e.dataTransfer.files[0]);
-      e.dataTransfer.clearData();
-    }
-  };
+ const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+   e.preventDefault();
+   setIsDragging(false);
+ };
+
+ const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+   e.preventDefault();
+   setIsDragging(false);
+   if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+     handleFileChange(e.dataTransfer.files[0]);
+     e.dataTransfer.clearData();
+   }
+ };
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+   e.preventDefault();
+   setIsSubmitting(true);
+   try {
+     // Simulate API call
+     await new Promise((resolve) => setTimeout(resolve, 2000));
+
+     console.log("Organization signed up!");
+
+    
+     router.push("/welcome");
+   } catch (error) {
+     console.error("Signup failed", error);
+   } finally {
+     setIsSubmitting(false);
+   }
+ };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
       {/* Signup Card */}
       <div
-        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-50 mb-2  "
+        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-50 mb-2"
         style={{
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
@@ -55,14 +76,13 @@ export default function OrganizationSignup() {
         }}
       >
         {/* Logo */}
-        <div className="flex justify-between items-start  ">
+        <div className="flex justify-between items-start">
           <Image
             src="/logos/ires-logo.svg"
             alt="iRES Logo"
             width={55}
             height={55}
           />
-          {/* Close icon */}
           <Link href="/signup" aria-label="Close" className="w-6 h-6">
             <Image
               src="/images/cancel-icon.png"
@@ -99,7 +119,7 @@ export default function OrganizationSignup() {
         </p>
 
         {/* Signup Form */}
-        <form className="space-y-2 text-xs">
+        <form className="space-y-2 text-xs" onSubmit={handleSubmit}>
           {/* Company Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div>
@@ -119,47 +139,49 @@ export default function OrganizationSignup() {
                 alt="Arrow Dropdown"
                 width={20}
                 height={20}
-                className="absolute top-2 right-3 cursor-pointer"
+                className="absolute top-2 right-3 pointer-events-none"
               />
             </div>
-           
-              <div className="relative">
-                <label
-                  htmlFor="company-size"
-                  className="block text-gray-300 text-[10px] mt-2 mb-1"
-                >
-                  (Numbers of employees?)
-                </label>
-                <select
-                  id="company-size"
-                  className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none"
-                >
-                  <option hidden>Company Size</option>
-                  <option>1–10 employees</option>
-                  <option>11–50 employees</option>
-                  <option>51–200 employees</option>
-                  <option>201–500 employees</option>
-                  <option>500+ employees</option>
-                </select>
-                <Image
-                  src="/images/drop_down.svg"
-                  alt="Arrow Dropdown"
-                  width={20}
-                  height={20}
-                  className="absolute top-9 right-3 cursor-pointer"
-                />
-              </div>
-           
+
+            <div className="relative">
+              <label
+                htmlFor="company-size"
+                className="block text-gray-500 text-[10px] mt-2 mb-2"
+              >
+                (Numbers of employees?)
+              </label>
+              <select
+                id="company-size"
+                className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none"
+              >
+                <option hidden>Company Size</option>
+                <option>1–10 employees</option>
+                <option>11–50 employees</option>
+                <option>51–200 employees</option>
+                <option>201–500 employees</option>
+                <option>500+ employees</option>
+              </select>
+              <Image
+                src="/images/drop_down.svg"
+                alt="Arrow Dropdown"
+                width={20}
+                height={20}
+                className="absolute top-9 right-3 pointer-events-none"
+              />
+            </div>
           </div>
 
           {/* Location Input */}
           <div>
-            <h5 className="text-gray-300 text-sm mb-2 text-left">
+            <label
+              htmlFor="company-Location"
+              className="block text-gray-500 text-[12px] mt-2 mb-2"
+            >
               Company Location
-            </h5>
+            </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               <div className="relative">
-                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                   <option hidden>City</option>
                   <option>Maitama</option>
                 </select>
@@ -172,7 +194,7 @@ export default function OrganizationSignup() {
                 />
               </div>
               <div className="relative">
-                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                   <option hidden>State</option>
                   <option>Abuja</option>
                 </select>
@@ -185,7 +207,7 @@ export default function OrganizationSignup() {
                 />
               </div>
               <div className="relative">
-                <select className="w-full bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
+                <select className="w-full bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none">
                   <option hidden>Country</option>
                   <option>Nigeria</option>
                 </select>
@@ -210,25 +232,25 @@ export default function OrganizationSignup() {
           {/* Primary Contact Person */}
           <div>
             <div>
-              <h3 className="text-gray-300 text-left text-sm mb-2">
+              <label className="block text-gray-500 mt-2 mb-2">
                 Primary Contact Person
-              </h3>
+              </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
                 placeholder="Full Name |"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="text"
                 placeholder="Job Title"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
               <input
                 type="email"
                 placeholder="Email |"
-                className="bg-gray-700/40 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-700/40 text-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -245,46 +267,33 @@ export default function OrganizationSignup() {
                 <input
                   type="email"
                   placeholder="Company Email"
-                  className="bg-transparent w-full text-gray-200 outline-none"
+                  className="bg-transparent w-full text-gray-500 outline-none"
                 />
               </div>
               {/* Telephone Input */}
               <div>
-                {/* Phone */}
                 <CountrySelection />
               </div>
             </div>
           </div>
 
           {/* Logo and Password */}
-          <div className="flex flex-row justify-between items-start mt-2 mb-2">
-            <h3 className="text-gray-300 text-sm text-left">
-              Upload your company logo
-            </h3>
-            <motion.p
-              className="font-semibold bg-clip-text text-transparent inline-block"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
-              }}
-            >
-              . . .
-            </motion.p>
-          </div>
+          <label
+            htmlFor="company-logo"
+            className="block text-gray-500 text-md mt-2 mb-2"
+          >
+            Upload your company logo
+          </label>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
             <div
-              className="bg-gray-700/40 rounded-lg border-[2px] border-blue-500 border-dashed"
+              className="bg-gray-700/40 rounded-lg border-[2px] border-dashed"
+              style={{
+                borderImage:
+                  "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
+                borderImageSlice: 1,
+                borderStyle: isDragging ? "dashed" : "solid",
+              }}
               onDragEnter={handleDragEnter}
               onDragOver={handleDragEnter}
               onDragLeave={handleDragLeave}
@@ -327,34 +336,87 @@ export default function OrganizationSignup() {
             <div className="flex flex-col items-center space-y-2">
               {/* Password Input */}
               <div className="w-full">
-                <PasswordInput />
+                <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
+                  <Image
+                    src="/images/locker.png"
+                    alt="Lock"
+                    width={20}
+                    height={20}
+                  />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="bg-transparent w-full text-white placeholder-white/60 outline-none"
+                  />
+                  <Image
+                    src={
+                      showPassword
+                        ? "/images/eye-opened.png"
+                        : "/images/eye-closed.png"
+                    }
+                    alt="Toggle password visibility"
+                    width={18}
+                    height={18}
+                    className="cursor-pointer transition-opacity hover:opacity-80"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                </div>
               </div>
-              {/* Password Confirmation */}
+
+              {/* Confirm Password Input */}
               <div className="w-full">
-                <ConfirmPasswordInput />
+                <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
+                  <Image
+                    src="/images/locker.png"
+                    alt="Lock"
+                    width={20}
+                    height={20}
+                  />
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm Password"
+                    className="bg-transparent w-full text-white placeholder-white/60 outline-none"
+                  />
+                  <Image
+                    src={
+                      showConfirmPassword
+                        ? "/images/eye-opened.png"
+                        : "/images/eye-closed.png"
+                    }
+                    alt="Toggle password visibility"
+                    width={18}
+                    height={18}
+                    className="cursor-pointer transition-opacity hover:opacity-80"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  />
+                </div>
               </div>
-              <p className="text-[11px]">
-                (Keep your account safe, tight and unique by using combination
+
+              <p className="text-[8px] text-gray-500 text-center leading-snug">
+                (Keep your account safe, tight and unique by using a combination
                 of uppercase & lowercase letters, symbols and numbers)
               </p>
             </div>
           </div>
-          <br />
+
           {/* Submit Button */}
-          {/* Button */}
-          <Link href="/signup/verify-email">
-            <button
-              type="submit"
-              className="mt-3 w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              Sign up
-            </button>
-          </Link>
+          <div className="flex justify-center">
+           
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-6 w-[60%] py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Signing up..." : "Sign up"}
+              </button>
+        
+          </div>
         </form>
+
         {/* Footer */}
         <p className="mt-4 text-center text-sm text-white/80">
           Already have an account?
-          <Link href="/welcome" className="hover:underline">
+          <Link href="/login" className="hover:underline">
             <motion.span
               className="font-semibold bg-clip-text text-transparent inline-block"
               style={{
