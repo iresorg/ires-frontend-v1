@@ -16,22 +16,15 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is authenticated
     if (!isAuthenticated) {
-      // Clear user data and cookies
       clearUser();
       removeCookie("auth_token");
       removeCookie("refresh_token");
-
-      // Redirect to home page
       router.push("/");
     }
   }, [isAuthenticated, clearUser, router]);
 
-  // Don't render layout if not authenticated
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
 
   return (
     <div className="flex h-screen bg-[#0E0E1A] text-white">
@@ -40,10 +33,7 @@ export default function DashboardLayout({
 
       {/* Main content area */}
       <div className="flex flex-col flex-1">
-        {/* Top Navbar */}
         <Navbar />
-
-        {/* Page content */}
         <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>

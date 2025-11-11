@@ -43,21 +43,20 @@ export default function LoginPage() {
 
       // Redirect based on user role
       if (currentUser) {
-        if (currentUser.role === "individual") {
-          router.push("/dashboard/subscription-plans");
-        } else if (currentUser.role === "organization") {
-          router.push("/welcome");
+        if (currentUser.role === "organization") {
+          router.push("/organization");
         } else {
-          // Fallback to welcome for unknown roles
-          router.push("/welcome");
+          // Default for "individual" or unknown roles
+          router.push("/dashboard");
         }
       } else {
-        // Fallback to welcome if user not loaded yet
-        router.push("/welcome");
+        // fallback
+        router.push("/dashboard");
       }
     } catch (error) {
       const axiosError = error as AxiosError<{ message?: string }>;
-      const errorMsg = axiosError.response?.data?.message || "Login failed. Please try again.";
+      const errorMsg =
+        axiosError.response?.data?.message || "Login failed. Please try again.";
       setErrorMessage(errorMsg);
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);
@@ -70,7 +69,10 @@ export default function LoginPage() {
     <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
       {/* Error Toast */}
       {showError && (
-        <ErrorToast onClose={() => setShowError(false)} message={errorMessage} />
+        <ErrorToast
+          onClose={() => setShowError(false)}
+          message={errorMessage}
+        />
       )}
 
       {/* Login card */}
@@ -108,9 +110,7 @@ export default function LoginPage() {
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
             backgroundSize: "200% auto",
           }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
+          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
           transition={{
             backgroundPosition: {
               duration: 3,
@@ -146,14 +146,21 @@ export default function LoginPage() {
               />
             </div>
             {errors.email && (
-              <p className="text-red-400 text-xs mt-1 ml-4">{errors.email.message}</p>
+              <p className="text-red-400 text-xs mt-1 ml-4">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
           {/* Password input */}
           <div>
             <div className="flex items-center bg-white/10 rounded-lg px-4 py-3 gap-3">
-              <Image src="/images/locker.png" alt="Lock" width={20} height={20} />
+              <Image
+                src="/images/locker.png"
+                alt="Lock"
+                width={20}
+                height={20}
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -162,7 +169,9 @@ export default function LoginPage() {
               />
               <Image
                 src={
-                  showPassword ? "/images/eye-opened.png" : "/images/eye-closed.png"
+                  showPassword
+                    ? "/images/eye-opened.png"
+                    : "/images/eye-closed.png"
                 }
                 alt="Toggle Password"
                 width={20}
@@ -172,7 +181,9 @@ export default function LoginPage() {
               />
             </div>
             {errors.password && (
-              <p className="text-red-400 text-xs mt-1 ml-4">{errors.password.message}</p>
+              <p className="text-red-400 text-xs mt-1 ml-4">
+                {errors.password.message}
+              </p>
             )}
           </div>
 

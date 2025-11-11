@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -42,7 +42,7 @@ export default function TicketIncidentHistory() {
   ];
 
   return (
-    <DashboardLayout>
+
       <div className="overflow-auto mt-2">
         {/* Table */}
         <table className="w-full text-left table-auto border-collapse">
@@ -124,6 +124,6 @@ export default function TicketIncidentHistory() {
           </Link>
         </div>
       </div>
-    </DashboardLayout>
+
   );
 }
