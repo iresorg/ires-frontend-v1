@@ -72,15 +72,24 @@ export default function AboutUsHero() {
 
   return (
     <div
-      className="hero hero-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden"
+      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
-        background: "url(/images/hero-aboutus.png)",
+        background: "url(/images/hero-bg.jpg)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
         backgroundSize: "cover",
       }}
     >
+      {/* Background video */}
+      <video
+        className="hero-bg-video absolute inset-0 h-full w-full object-cover"
+        src="/video/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
       {/* Content */}
       <div className="relative z-[2] flex h-full items-center">
         <Section>
@@ -144,11 +153,12 @@ export default function AboutUsHero() {
                 variants={containerVariants}
                 transition={{ delay: 0.2 }}
               >
-                Explore Our Affordable and Tailored Pricing Plans<br/> Tired of
-                complex cybersecurity that does not fit your needs or your
-                budget? iRES<br/> puts you back in control. Choose a plan that is the
-                perfect fit, because when it<br/> comes to your security, one size
-                doesn’t fit all.
+                Explore Our Affordable and Tailored Pricing Plans
+                <br /> Tired of complex cybersecurity that does not fit your
+                needs or your budget? iRES
+                <br /> puts you back in control. Choose a plan that is the
+                perfect fit, because when it
+                <br /> comes to your security, one size doesn’t fit all.
               </motion.p>
 
               {/* Actions */}

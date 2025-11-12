@@ -72,16 +72,24 @@ export default function AboutUsHero() {
 
   return (
     <div
-      className="hero hero-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden"
+      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
-        background: "url(/images/hero-aboutus.png)",
+        background: "url(/images/hero-bg.jpg)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
         backgroundSize: "cover",
       }}
     >
- 
+      {/* Background video */}
+      <video
+        className="hero-bg-video absolute inset-0 h-full w-full object-cover"
+        src="/video/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
 
       {/* Content */}
       <div className="relative z-[2] flex h-full items-center">
@@ -147,7 +155,8 @@ export default function AboutUsHero() {
                 transition={{ delay: 0.2 }}
               >
                 Experience fast security response like never before with
-                cutting-edge<br/> technology to keep you safe. <br />
+                cutting-edge
+                <br /> technology to keep you safe. <br />
                 This is iRES - Real Time, Real People, Real Protection.
               </motion.p>
 

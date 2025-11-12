@@ -90,7 +90,7 @@ export default function OurServices() {
                     <p className="text-white text-sm font-medium mb-4 min-h-[48px]">
                       {service}
                     </p>
-                    <button className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition">
+                    <button className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer">
                       More Info
                     </button>
                   </div>

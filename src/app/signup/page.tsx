@@ -7,8 +7,18 @@ import { motion } from "framer-motion";
 export default function WelcomeSignupPage() {
   return (
     <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
+      {/* 🎥 Background video */}
+      <video
+        className="absolute inset-0 -z-10 w-full h-full object-cover"
+        src="/video/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+
+      {/* Fall background */}
+      <div className="absolute inset-0 -z-20">
         <Image
           src="/images/welcome-signup.png"
           alt="Background"
@@ -16,10 +26,12 @@ export default function WelcomeSignupPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0" />
       </div>
 
-      {/* Logo  */}
+      {/* Overlay for contrast */}
+      <div className="absolute inset-0 bg-[#1C1B2B]/90 -z-10" />
+
+      {/* Logo */}
       <div className="absolute top-6 left-8 z-20">
         <Image
           src="/logos/ires-logo.svg"
@@ -30,7 +42,7 @@ export default function WelcomeSignupPage() {
         />
       </div>
 
-      {/* Close icon  */}
+      {/* Close icon */}
       <Link
         href="/"
         aria-label="Close"
@@ -75,7 +87,7 @@ export default function WelcomeSignupPage() {
           {/* Individual */}
           <Link
             href="/signup/individual"
-            className="relative w-64 h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD]  transition-all"
+            className="relative w-64 h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD] transition-all"
           >
             <div className="flex flex-col items-center justify-center gap-4">
               <Image
@@ -93,17 +105,17 @@ export default function WelcomeSignupPage() {
           {/* Organization */}
           <Link
             href="/signup/organization"
-            className="relative w-64 h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD]  transition-all"
+            className="relative w-64 h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD] transition-all"
           >
             <div className="flex flex-col items-center justify-center gap-4">
               <Image
                 src="/images/organization-icon.png"
-                alt="Organization"
+                alt="organization"
                 width={30}
                 height={30}
               />
               <span className="text-white text-xl font-semibold tracking-wider">
-                ORGANIZATION
+                Organization
               </span>
             </div>
           </Link>
