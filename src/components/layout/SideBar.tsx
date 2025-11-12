@@ -17,6 +17,11 @@ export default function Sidebar() {
       href: "/dashboard/subscription-plans",
     },
     {
+      name: "Subscription Success",
+      icon: "/images/renew-subscription.png",
+      href: "/dashboard/subscription-success",
+    },
+    {
       name: "Transaction History",
       icon: "/images/transaction.png",
       href: "/dashboard/transaction-history",
@@ -35,7 +40,12 @@ export default function Sidebar() {
       icon: "/images/renewal.png",
       href: "/organization/subscription-plans",
     },
-    
+    {
+      name: "Subscription Success",
+      icon: "/images/renew-subscription.png",
+      href: "/organization/subscription-success",
+    },
+
     {
       name: "Transaction History",
       icon: "/images/transaction.png",
