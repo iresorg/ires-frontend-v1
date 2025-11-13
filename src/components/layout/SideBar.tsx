@@ -88,11 +88,10 @@ export default function Sidebar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-all ${
-                  isActive
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-all ${isActive
                     ? "bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA]"
                     : "text-white/70 hover:text-white hover:bg-white/10"
-                }`}
+                  }`}
               >
                 <Image
                   src={item.icon}

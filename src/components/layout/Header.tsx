@@ -1,14 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Section from '@/components/ui/Section';
+import { useAuthStore } from '@/store/auth';
+import { removeCookie } from '@/lib/api';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { user, isAuthenticated, clearUser, fetchUser } = useAuthStore();
+
+  // Fetch user profile when component mounts if authenticated but user is null
+  useEffect(() => {
+    const token = typeof document !== "undefined" ? document.cookie.includes("auth_token") : false;
+    if (token && !user && isAuthenticated) {
+      fetchUser();
+    }
+  }, [user, isAuthenticated, fetchUser]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    };
+
+    if (showUserDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -29,6 +61,61 @@ export default function Header() {
     { label: 'Explore Plans', href: '/pricing' },
     { label: 'Our Services', href: '/services' },
   ];
+
+  const handleLogout = () => {
+    clearUser();
+    removeCookie("auth_token");
+    removeCookie("refresh_token");
+    setShowUserDropdown(false);
+    router.push("/");
+  };
+
+  // Get user display name based on role
+  const getUserDisplayName = () => {
+    if (!user) return "User";
+
+    if (user.role === "organization" && user.organizationProfile) {
+      return user.organizationProfile.organizationName;
+    }
+
+    if (user.role === "individual" && user.individualProfile) {
+      return `${user.individualProfile.firstName} ${user.individualProfile.lastName}`;
+    }
+
+    // Fallback to email username
+    return user.email.split("@")[0] || "User";
+  };
+
+  // Get profile picture URL
+  const getProfilePicture = () => {
+    if (!user) return "/images/avatar.png";
+
+    if (user.role === "individual" && user.individualProfile?.profilePicture) {
+      try {
+        const parsed = JSON.parse(user.individualProfile.profilePicture);
+        return parsed.url || "/images/avatar.png";
+      } catch {
+        return "/images/avatar.png";
+      }
+    }
+
+    if (user.role === "organization" && user.organizationProfile?.logoUrl) {
+      try {
+        const parsed = JSON.parse(user.organizationProfile.logoUrl);
+        return parsed.url || "/images/avatar.png";
+      } catch {
+        return "/images/avatar.png";
+      }
+    }
+
+    return "/images/avatar.png";
+  };
+
+  // Get dashboard route based on role
+  const getDashboardRoute = () => {
+    if (!user) return "/dashboard";
+    return user.role === "organization" ? "/dashboard/organization" : "/dashboard";
+  };
 
   return (
     <header
@@ -88,11 +175,72 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Desktop CTA Button */}
-            <div className="hidden lg:block">
-              <Button href="/signup" className='rounded-4xl'>
-                Sign Up
-              </Button>
+            {/* Desktop CTA Button or User Profile */}
+            <div className="hidden lg:flex items-center gap-3">
+              {isAuthenticated && user ? (
+                <div className="relative" ref={dropdownRef}>
+                  <div
+                    className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-full transition-colors hover:bg-white/10"
+                    style={{
+                      background: isScrolled ? 'transparent' : 'var(--secondary)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                    }}
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  >
+                    <Image
+                      src={getProfilePicture()}
+                      alt="Profile"
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover"
+                    />
+                    <span className="text-sm font-medium text-white">
+                      {getUserDisplayName()}
+                    </span>
+                    <Image
+                      src="/images/white-dropdown.png"
+                      alt="Dropdown"
+                      width={14}
+                      height={14}
+                      className={`transition-transform ${showUserDropdown ? "rotate-180" : ""}`}
+                    />
+                  </div>
+
+                  {/* Dropdown Menu */}
+                  {showUserDropdown && (
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-[#1C1C2E] rounded-lg border border-white/10 shadow-lg z-50">
+                      <div className="p-2">
+                        <Link
+                          href={getDashboardRoute()}
+                          onClick={() => setShowUserDropdown(false)}
+                          className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
+                        >
+                          Dashboard
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md hover:text-red-400 transition-colors mt-1"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-base font-medium px-4 py-2 text-white hover:text-white/80 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Button href="/signup" className='rounded-4xl'>
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -180,11 +328,54 @@ export default function Header() {
                 >
                   Our Services
                 </Link>
-                <div className="pt-2 w-full">
-                  <Button href="/signup" onClick={() => setIsMobileMenuOpen(false)} className='!w-full'>
-                    Sign Up
-                  </Button>
-                </div>
+                {isAuthenticated && user ? (
+                  <div className="pt-2 space-y-2">
+                    <div className="flex items-center gap-2 px-4 py-2">
+                      <Image
+                        src={getProfilePicture()}
+                        alt="Profile"
+                        width={32}
+                        height={32}
+                        className="rounded-full object-cover"
+                      />
+                      <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
+                        {getUserDisplayName()}
+                      </span>
+                    </div>
+                    <Link
+                      href={getDashboardRoute()}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left text-sm font-medium px-4 py-2 rounded-lg transition-colors hover:text-red-400"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="pt-2 space-y-2 w-full">
+                    <Link
+                      href="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      Login
+                    </Link>
+                    <Button href="/signup" onClick={() => setIsMobileMenuOpen(false)} className='!w-full'>
+                      Sign Up
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )}

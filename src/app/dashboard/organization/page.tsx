@@ -1,29 +1,31 @@
 "use client";
 
-import MetricsGrid from "@/components/sections/MetricsGrid";
+import OrganizationMetricsGrid from "@/components/sections/OrganizationMetricsGrid";
 import ThreatMap from "@/components/sections/ThreatMap";
 import AttackerTTPs from "@/components/sections/AttackerTTPs";
-// import EmergingThreats from "@/components/sections/EmergingThreats";
+import EmergingThreats from "@/components/sections/EmergingThreats";
 import IncidentChart from "@/components/sections/IncidentChart";
-// import IndividualRisks from "@/components/sections/IndividualRisks";
+import OrganizationRisks from "@/components/sections/OrganizationRisks";
 
 export default function OrganizationDashboardPage() {
   return (
-    <div className="min-h-screen  text-white p-6">
-      <MetricsGrid />
+    <div className="min-h-screen text-white">
+      {/* Metrics Grid */}
+      <OrganizationMetricsGrid />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* Main Dashboard Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-6">
           <ThreatMap />
           <AttackerTTPs />
-          {/* <EmergingThreats /> */}
+          <EmergingThreats />
         </div>
 
         {/* Right Column */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-6">
           <IncidentChart />
-          {/* <IndividualRisks /> */}
+          <OrganizationRisks />
         </div>
       </div>
     </div>

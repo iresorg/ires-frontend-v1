@@ -44,7 +44,7 @@ export default function LoginPage() {
       // Redirect based on user role
       if (currentUser) {
         if (currentUser.role === "organization") {
-          router.push("/organization");
+          router.push("/dashboard/organization");
         } else {
           // Default for "individual" or unknown roles
           router.push("/dashboard");

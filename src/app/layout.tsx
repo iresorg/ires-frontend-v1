@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import LoadingScreen from "@/components/common/LoadingScreen";
 import PublicLayout from "@/components/layout/PublicLayout";
 import CustomCursor from "@/components/ui/CustomCursor";
+import AuthProvider from "@/components/providers/AuthProvider";
 import "./globals.css";
 import type { Metadata } from 'next';
 
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-      url: 'https://iresorg.com',
+    url: 'https://iresorg.com',
     siteName: 'iRES - Cybersecurity Emergency Response',
     title: 'iRES - 24/7 Cybersecurity Incident Response Emergency System',
     description: 'Real Time. Real People. Real Protection. Expert cybersecurity incident response available 24/7 for rapid emergency response to digital threats.',
@@ -68,7 +69,7 @@ export const metadata: Metadata = {
     yandex: 'your-yandex-verification-code',
   },
   alternates: {
-      canonical: 'https://iresorg.com',
+    canonical: 'https://iresorg.com',
   },
   category: 'cybersecurity',
 };
@@ -84,9 +85,11 @@ export default function RootLayout({
         <LoadingScreen />
         <CustomCursor />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <PublicLayout>
-            {children}
-          </PublicLayout>
+          <AuthProvider>
+            <PublicLayout>
+              {children}
+            </PublicLayout>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

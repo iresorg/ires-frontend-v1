@@ -9,19 +9,21 @@ import IndividualRisks from "@/components/sections/IndividualRisks";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen  text-white p-6">
+    <div className="min-h-screen text-white">
+      {/* Metrics Grid */}
       <MetricsGrid />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* Main Dashboard Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-6">
           <ThreatMap />
           <AttackerTTPs />
           <EmergingThreats />
         </div>
 
         {/* Right Column */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-6">
           <IncidentChart />
           <IndividualRisks />
         </div>

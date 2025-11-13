@@ -106,7 +106,6 @@ function VerifyEmailContent() {
     setShowError(false);
 
     try {
-      console.log("Verifying email with:", { accountId: currentAccountId, email: currentEmail, otp: otpString });
 
       const result = await authService.verifyEmail({
         accountId: currentAccountId,
