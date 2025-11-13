@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { organizationRegistrationSchema, type OrganizationRegistrationFormData } from "@/validation/auth";
 import { authService } from "@/services/auth";
 import type { AxiosError } from "axios";
-import ErrorToast from "@/components/sections/ErrorToast";
+// import ErrorToast from "@/components/sections/ErrorToast";
 import CustomSelect from "@/components/ui/CustomSelect";
 
 const countries = [
