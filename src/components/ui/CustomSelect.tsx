@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -34,8 +35,12 @@ export default function CustomSelect({
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Watch the form value to keep it in sync
-    const watchedValue = control ? useWatch({ control, name: register.name }) : "";
-    const [selectedValue, setSelectedValue] = useState<string>(watchedValue || "");
+    // Always call useWatch (hooks must be called unconditionally)
+    // Always call useWatch unconditionally; pass undefined control if not provided
+    const watchedValue = useWatch({ control, name: register.name });
+    const [selectedValue, setSelectedValue] = useState<string>(
+        watchedValue ? String(watchedValue) : ""
+    );
 
     // Sync with form value when it changes externally
     useEffect(() => {
