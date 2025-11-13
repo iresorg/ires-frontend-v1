@@ -65,10 +65,33 @@ export default function OrganizationSignup() {
  };
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center">
+      {/*  Background Video */}
+      <video
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
+        src="/video/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+
+      {/*  Fallback Image */}
+      <Image
+        src="/images/welcome-signup.png"
+        alt="Background"
+        fill
+        className="object-cover z-[-3]"
+        priority
+      />
+
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+
+   
       {/* Signup Card */}
       <div
-        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-50 mb-2"
+        className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-20 mb-2"
         style={{
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
@@ -401,15 +424,13 @@ export default function OrganizationSignup() {
 
           {/* Submit Button */}
           <div className="flex justify-center">
-           
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="mt-6 w-[60%] py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Signing up..." : "Sign up"}
-              </button>
-        
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-6 w-[60%] py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Signing up..." : "Sign up"}
+            </button>
           </div>
         </form>
 

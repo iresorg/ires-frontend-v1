@@ -81,7 +81,28 @@ export default function IndividualSignup() {
   };
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+   <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center">
+        {/*  Background Video */}
+        <video
+          className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
+          src="/video/hero-video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+  
+        {/*  Fallback Image */}
+        <Image
+          src="/images/welcome-signup.png"
+          alt="Background"
+          fill
+          className="object-cover z-[-3]"
+          priority
+        />
+  
+        {/* Overlay */}
+        <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
       {/* Toasts */}
       {toastType === "success" && (
         <SuccessToast onClose={() => setToastType(null)} message={toastMessage} />
