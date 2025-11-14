@@ -551,7 +551,7 @@ export default function OrganizationSignup() {
                     </p>
                   ) : (
                     <p>
-                      <span className="font-semibold italic underline decoration-blue-500 decoration-4">
+                      <span className="font-semibold italic underline decoration-blue-500 decoration-4 cursor-pointer">
                         Click to upload
                       </span>{" "}
                       or drag and drop{" "}
