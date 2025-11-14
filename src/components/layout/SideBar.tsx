@@ -17,11 +17,6 @@ export default function Sidebar() {
       href: "/dashboard/subscription-plans",
     },
     {
-      name: "Subscription Success",
-      icon: "/images/renew-subscription.png",
-      href: "/dashboard/subscription-success",
-    },
-    {
       name: "Transaction History",
       icon: "/images/transaction.png",
       href: "/dashboard/transaction-history",
@@ -38,23 +33,17 @@ export default function Sidebar() {
     {
       name: "Subscription Plans",
       icon: "/images/renewal.png",
-      href: "/organization/subscription-plans",
+      href: "/dashboard/organization/subscription-plans",
     },
-    {
-      name: "Subscription Success",
-      icon: "/images/renew-subscription.png",
-      href: "/organization/subscription-success",
-    },
-
     {
       name: "Transaction History",
       icon: "/images/transaction.png",
-      href: "/organization/transaction-history",
+      href: "/dashboard/organization/transaction-history",
     },
     {
       name: "Ticket Incident History",
       icon: "/images/ticket.png",
-      href: "/organization/ticket-incident-history",
+      href: "/dashboard/organization/ticket-incident-history",
     },
   ];
 
@@ -69,7 +58,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 h-full bg-[#383754] flex flex-col py-6 px-4 border-r border-white/5">
       {/* Top Section (Logo + Menu) */}
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col grow">
         {/* Logo */}
         <div className="flex items-center mb-8 pl-2">
           <Image

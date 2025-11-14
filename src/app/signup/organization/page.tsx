@@ -28,8 +28,6 @@ export default function OrganizationSignup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [toastType, setToastType] = useState<"success" | "error" | null>(null);
-  const [toastMessage, setToastMessage] = useState<string>("");
 
   // Phone number states
   const [companyCountry, setCompanyCountry] = useState(countries[0]);
@@ -111,7 +109,6 @@ export default function OrganizationSignup() {
 
   const onSubmit = async (data: OrganizationRegistrationFormData) => {
     setIsSubmitting(true);
-    setToastType(null);
     try {
       // Combine country code with phone numbers
       const phoneNumber = `${companyCountry.code}${data.phoneNumber}`;
@@ -156,9 +153,7 @@ export default function OrganizationSignup() {
     } catch (error) {
       const axiosError = error as AxiosError<{ message?: string }>;
       const errorMessage = axiosError.response?.data?.message || "Registration failed. Please try again.";
-      setToastMessage(errorMessage);
-      setToastType("error");
-      setTimeout(() => setToastType(null), 5000);
+      console.error("Registration error:", errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -188,7 +183,7 @@ export default function OrganizationSignup() {
       {/* Overlay */}
       <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
 
-   
+
       {/* Signup Card */}
       <div
         className="relative z-10 w-[800px] p-4 rounded-2xl bg-transparent mt-20 mb-2"

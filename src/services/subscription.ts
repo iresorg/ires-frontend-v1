@@ -60,6 +60,24 @@ export interface CancelSubscriptionResponse {
   };
 }
 
+export interface Transaction {
+  id: string;
+  transactionReference: string;
+  date: string;
+  amount: string;
+  currency: string;
+  status: "success" | "pending" | "failed";
+  plan: {
+    id: string;
+    name: string;
+  } | null;
+  paymentMethod: string;
+}
+
+export interface TransactionsResponse {
+  data: Transaction[];
+}
+
 export const subscriptionService = {
   // Get subscription status for current user
   getSubscriptionStatus: async (): Promise<SubscriptionStatusResponse> => {
@@ -100,5 +118,13 @@ export const subscriptionService = {
       data
     );
     return response.data;
+  },
+
+  // Get transaction history
+  getTransactions: async (): Promise<Transaction[]> => {
+    const response = await api.get<TransactionsResponse>(
+      "/subscriptions/transactions"
+    );
+    return response.data.data;
   },
 };

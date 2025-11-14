@@ -3,24 +3,33 @@ import { create } from "zustand";
 import type {
   SubscriptionPlan,
   SubscriptionStatus,
+  InitializeSubscriptionRequest,
+  InitializeSubscriptionResponse,
+  Transaction,
 } from "@/services/subscription";
 import { subscriptionService } from "@/services/subscription";
 
 interface SubscriptionState {
   subscription: SubscriptionStatus | null;
   plans: SubscriptionPlan[];
+  transactions: Transaction[];
   isLoading: boolean;
   error: string | null;
   setSubscription: (subscription: SubscriptionStatus | null) => void;
   setPlans: (plans: SubscriptionPlan[]) => void;
   fetchSubscriptionStatus: () => Promise<void>;
   fetchPlans: (accountType?: "individual" | "organization") => Promise<void>;
+  fetchTransactions: () => Promise<void>;
+  initializeSubscription: (
+    data: InitializeSubscriptionRequest
+  ) => Promise<InitializeSubscriptionResponse>;
   clearSubscription: () => void;
 }
 
 export const useSubscriptionStore = create<SubscriptionState>((set) => ({
   subscription: null,
   plans: [],
+  transactions: [],
   isLoading: false,
   error: null,
 
@@ -61,7 +70,39 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
     }
   },
 
+  fetchTransactions: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const transactions = await subscriptionService.getTransactions();
+      set({ transactions, isLoading: false });
+    } catch (error: any) {
+      console.error("Failed to fetch transactions:", error);
+      set({
+        transactions: [],
+        isLoading: false,
+        error: error?.response?.data?.message || "Failed to fetch transactions",
+      });
+    }
+  },
+
+  initializeSubscription: async (data: InitializeSubscriptionRequest) => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await subscriptionService.initializeSubscription(data);
+      set({ isLoading: false });
+      return response;
+    } catch (error: any) {
+      console.error("Failed to initialize subscription:", error);
+      set({
+        isLoading: false,
+        error:
+          error?.response?.data?.message || "Failed to initialize subscription",
+      });
+      throw error;
+    }
+  },
+
   clearSubscription: () => {
-    set({ subscription: null, plans: [], error: null });
+    set({ subscription: null, plans: [], transactions: [], error: null });
   },
 }));

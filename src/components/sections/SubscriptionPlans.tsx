@@ -20,10 +20,10 @@ const getPlanIcon = (tier: number) => {
   }
 };
 
-// Format amount from kobo to naira
+// Format amount to naira (backend stores amount in units that need to be divided by 100)
 const formatPrice = (amount: string): string => {
-  const amountInKobo = parseInt(amount, 10);
-  const amountInNaira = amountInKobo / 100;
+  const amountInSmallestUnit = parseInt(amount, 10);
+  const amountInNaira = amountInSmallestUnit / 100;
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
@@ -87,9 +87,10 @@ const PlanCardSkeleton = () => {
 
 export default function SubscriptionPlansPage() {
   const { user } = useAuthStore();
-  const { subscription, plans, isLoading, fetchSubscriptionStatus, fetchPlans } =
+  const { subscription, plans, isLoading, fetchSubscriptionStatus, fetchPlans, initializeSubscription } =
     useSubscriptionStore();
   const [currentPlanId, setCurrentPlanId] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState<string | null>(null);
   const hasFetchedRef = useRef(false);
   const lastUserRoleRef = useRef<string | null>(null);
 
@@ -194,7 +195,7 @@ export default function SubscriptionPlansPage() {
                     bg-[#0B0B13]/90 border border-transparent 
                     bg-clip-padding 
                     before:absolute before:inset-0 before:rounded-md 
-                    before:p-[1px] before:bg-gradient-to-r before:from-[#4185DD] before:to-[#B425DA] 
+                    before:p-px before:bg-linear-to-r before:from-[#4185DD] before:to-[#B425DA] 
                     before:-z-10 shadow-[0_0_10px_rgba(180,37,218,0.4)]"
           >
             Current Plan
@@ -229,7 +230,7 @@ export default function SubscriptionPlansPage() {
                     className="flex items-center gap-2 px-4 py-2 rounded-full relative
                    bg-[#141327]
                    before:absolute before:inset-0 before:rounded-full
-                   before:p-[1px] before:bg-gradient-to-r before:from-[#B425DA] before:to-[#4185DD]
+                   before:p-px before:bg-linear-to-r before:from-[#B425DA] before:to-[#4185DD]
                    before:-z-10"
                   >
                     <Image
@@ -241,7 +242,7 @@ export default function SubscriptionPlansPage() {
                     />
 
                     <h3
-                      className="font-semibold text-sm bg-gradient-to-r from-[#70A4FF] to-[#601474]
+                      className="font-semibold text-sm bg-linear-to-r from-[#70A4FF] to-[#601474]
                      bg-clip-text text-transparent drop-shadow-[0_0_6px_rgba(226,120,255,0.6)]"
                     >
                       {plan.name}
@@ -250,7 +251,7 @@ export default function SubscriptionPlansPage() {
                 </div>
 
                 {/* Price */}
-                <p className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-xl font-semibold mt-3 italic">
+                <p className="bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-xl font-semibold mt-3 italic">
                   <motion.span
                     className="font-semibold bg-clip-text text-transparent inline-block"
                     style={{
@@ -295,7 +296,7 @@ export default function SubscriptionPlansPage() {
                 {showExpiryAndRenew ? (
                   <div className="flex justify-between mt-6 text-xs font-medium">
                     <button
-                      className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white rounded-md px-4 py-1 cursor-default"
+                      className="bg-linear-to-r from-[#4185DD] to-[#B425DA] text-white rounded-md px-4 py-1 cursor-default"
                       disabled
                     >
                       Expiry Date
@@ -305,36 +306,60 @@ export default function SubscriptionPlansPage() {
                       </span>
                     </button>
                     <button
-                      className={`bg-gradient-to-r from-[#4185DD] to-[#B425DA] px-4 py-2 rounded-md text-xs font-medium ${canRenew
+                      className={`bg-linear-to-r from-[#4185DD] to-[#B425DA] px-4 py-2 rounded-md text-xs font-medium ${canRenew
                         ? "cursor-pointer hover:opacity-90"
                         : "cursor-not-allowed opacity-50"
                         }`}
-                      disabled={!canRenew}
-                      onClick={() => {
-                        if (canRenew) {
-                          // Handle renew logic here
-                          console.log("Renew plan:", plan.id);
+                      disabled={!canRenew || isInitializing === plan.id}
+                      onClick={async () => {
+                        if (canRenew && !isInitializing) {
+                          try {
+                            setIsInitializing(plan.id);
+                            // Use unified success page for both individual and organization
+                            const callbackUrl = process.env.NEXT_PUBLIC_PAYSTACK_CALLBACK_URL || `${window.location.origin}/dashboard/subscription-success`;
+                            const response = await initializeSubscription({
+                              planId: plan.id,
+                              callbackUrl,
+                            });
+                            // Redirect to Paystack payment page
+                            window.location.href = response.authorizationUrl;
+                          } catch (error) {
+                            console.error("Failed to initialize subscription:", error);
+                            setIsInitializing(null);
+                          }
                         }
                       }}
                     >
-                      Renew Plan
+                      {isInitializing === plan.id ? "Processing..." : "Renew Plan"}
                     </button>
                   </div>
                 ) : (
                   <button
-                    className={`bg-gradient-to-r from-[#4185DD] to-[#B425DA] mt-6 px-4 py-2 rounded-md text-xs font-medium ${isDisabled
+                    className={`bg-linear-to-r from-[#4185DD] to-[#B425DA] mt-6 px-4 py-2 rounded-md text-xs font-medium ${isDisabled
                       ? "cursor-not-allowed opacity-50"
                       : "cursor-pointer hover:opacity-90"
                       }`}
-                    disabled={isDisabled}
-                    onClick={() => {
-                      if (!isDisabled) {
-                        // Handle choose plan logic here
-                        console.log("Choose plan:", plan.id);
+                    disabled={isDisabled || isInitializing === plan.id}
+                    onClick={async () => {
+                      if (!isDisabled && !isInitializing) {
+                        try {
+                          setIsInitializing(plan.id);
+                          // Use unified success page for both individual and organization
+                          const callbackUrl = process.env.NEXT_PUBLIC_PAYSTACK_CALLBACK_URL || `${window.location.origin}/dashboard/subscription-success`;
+                          const response = await initializeSubscription({
+                            planId: plan.id,
+                            callbackUrl,
+                          });
+                          // Redirect to Paystack payment page
+                          window.location.href = response.authorizationUrl;
+                        } catch (error) {
+                          console.error("Failed to initialize subscription:", error);
+                          setIsInitializing(null);
+                        }
                       }
                     }}
                   >
-                    Choose Plan
+                    {isInitializing === plan.id ? "Processing..." : "Choose Plan"}
                   </button>
                 )}
               </div>

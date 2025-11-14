@@ -1,49 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { useSubscriptionStore } from "@/store/subscription";
+
+// Format amount to naira (backend stores amount in units that need to be divided by 100)
+const formatPrice = (amount: string): string => {
+  const amountInSmallestUnit = parseInt(amount, 10);
+  const amountInNaira = amountInSmallestUnit / 100;
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amountInNaira);
+};
+
+// Format date and time
+const formatDateTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const displayHours = hours % 12 || 12;
+  return `${year}-${month}-${day} ${displayHours}:${minutes}${ampm}`;
+};
+
+// Map status to display format
+const mapStatus = (status: string): string => {
+  const statusMap: { [key: string]: string } = {
+    success: "Success",
+    pending: "Pending",
+    failed: "Failed",
+  };
+  return statusMap[status.toLowerCase()] || status;
+};
 
 export default function TransactionHistory() {
-const [page, setPage] = useState(1);
+  const { transactions, isLoading, fetchTransactions } = useSubscriptionStore();
+  const hasFetchedRef = useRef(false);
 
-  const transactions = [
-    {
-      txRef: "Tx_1234567890",
-      planName: "Basic Shield",
-      dateTime: "2025-11-03 12:16AM",
-      amount: "₦15,000.00",
-      status: "Success",
-    },
-    {
-      txRef: "Tx_1234567893",
-      planName: "Total Lock-down",
-      dateTime: "2025-10-25 10:35PM",
-      amount: "₦35,000.00",
-      status: "Pending",
-    },
-    {
-      txRef: "Tx_1234567895",
-      planName: "Basic Shield",
-      dateTime: "2025-10-22 09:57AM",
-      amount: "₦15,000.00",
-      status: "Failed",
-    },
-    {
-      txRef: "Tx_1234567894",
-      planName: "Safe Guard",
-      dateTime: "2025-10-15 02:03AM",
-      amount: "₦30,000.00",
-      status: "Success",
-    },
-    {
-      txRef: "Tx_1234567897",
-      planName: "Basic Shield",
-      dateTime: "2025-09-30 07:47PM",
-      amount: "₦15,000.00",
-      status: "Success",
-    },
-  ];
+  useEffect(() => {
+    // Only fetch if we haven't fetched yet
+    if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetchTransactions();
+    }
+  }, [fetchTransactions]);
 
   const statusClasses: { [key: string]: string } = {
     Success: "bg-[#15CA40]/75",
@@ -51,61 +57,84 @@ const [page, setPage] = useState(1);
     Failed: "bg-[#EF4444]/90",
   };
 
+  if (isLoading && transactions.length === 0) {
+    return (
+      <div className="overflow-auto mt-2 ml-4 mr-4 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4185DD] mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading transactions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (transactions.length === 0 && !isLoading) {
+    return (
+      <div className="overflow-auto mt-2 ml-4 mr-4 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-gray-300">No transactions found.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-      <div className="overflow-auto mt-2 ml-4 mr-4">
-        {/* Table */}
-        <table className="w-full text-left table-auto border-collapse">
-          <thead>
-            <tr className="border-b-1 border-gray-100/20 text-gray-300">
-              <th className="px-4 py-3 font-medium">Transaction Reference</th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
-                Plan Name
-              </th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
-                Date & Time
-              </th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
-                Amount Paid
-              </th>
-              <th className="pl-5 px-4 py-3 font-medium text-center">
-                Status Badge
-              </th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {transactions.map((transaction, idx) => (
+    <div className="overflow-auto mt-2 ml-4 mr-4">
+      {/* Table */}
+      <table className="w-full text-left table-auto border-collapse">
+        <thead>
+          <tr className="border-b border-gray-100/20 text-gray-300">
+            <th className="px-4 py-3 font-medium">Transaction Reference</th>
+            <th className="pl-10 px-4 py-3 font-medium text-center">
+              Plan Name
+            </th>
+            <th className="pl-10 px-4 py-3 font-medium text-center">
+              Date & Time
+            </th>
+            <th className="pl-10 px-4 py-3 font-medium text-center">
+              Amount Paid
+            </th>
+            <th className="pl-5 px-4 py-3 font-medium text-center">
+              Status Badge
+            </th>
+          </tr>
+        </thead>
+        <tbody className="">
+          {transactions.map((transaction) => {
+            const displayStatus = mapStatus(transaction.status);
+            return (
               <tr
-                key={idx}
-                className="border-b-1 border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
+                key={transaction.id}
+                className="border-b border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
               >
-                <td className="px-4 py-3">{transaction.txRef}</td>
+                <td className="px-4 py-3">{transaction.transactionReference}</td>
                 <td className="pl-10 px-4 py-3 text-center">
-                  {transaction.planName}
+                  {transaction.plan?.name || "N/A"}
                 </td>
                 <td className="pl-10 px-4 py-3 text-center">
-                  {transaction.dateTime}
+                  {formatDateTime(transaction.date)}
                 </td>
                 <td className="pl-10 px-4 py-3 text-center">
-                  {transaction.amount}
+                  {formatPrice(transaction.amount)}
                 </td>
                 <td className="px-4 py-3 text-center text-white">
                   <Link href={`/dashboard/transaction-history/`}>
                     <button
-                      className={`text-sm transition px-2 py-2 rounded-lg cursor-pointer ${
-                        statusClasses[transaction.status] || "bg-neutral-800"
-                      }`}
+                      className={`text-sm transition px-2 py-2 rounded-lg cursor-pointer ${statusClasses[displayStatus] || "bg-neutral-800"
+                        }`}
                     >
-                      {transaction.status}
+                      {displayStatus}
                     </button>
                   </Link>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            );
+          })}
+        </tbody>
+      </table>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-center mt-6 gap-4 text-white text-sm">
+      {/* Pagination - Commented out for now */}
+      {/* <div className="flex items-center justify-center mt-6 gap-4 text-white text-sm">
           <Link href="/#">
             <button
               disabled={page === 1}
@@ -149,7 +178,7 @@ const [page, setPage] = useState(1);
               />
             </button>
           </Link>
-        </div>
-      </div>
+        </div> */}
+    </div>
   );
 }
