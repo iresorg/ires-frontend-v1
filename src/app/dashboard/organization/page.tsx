@@ -5,27 +5,35 @@ import ThreatMap from "@/components/sections/ThreatMap";
 import AttackerTTPs from "@/components/sections/AttackerTTPs";
 import EmergingThreats from "@/components/sections/EmergingThreats";
 import IncidentChart from "@/components/sections/IncidentChart";
-import OrganizationRisks from "@/components/sections/OrganizationRisks";
+import AttackVectorDistribution from "@/components/sections/AttackVectorDistribution";
+import RisksReport from "@/components/sections/RiskReport";
+import EstimatedDirectLoss from "@/components/sections/EstimatedDirectLoss";
 
 export default function OrganizationDashboardPage() {
   return (
-    <div className="min-h-screen text-white">
-      {/* Metrics Grid */}
+    <div className="min-h-screen text-white pb-10">
+  
       <OrganizationMetricsGrid />
 
-      {/* Main Dashboard Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column */}
-        <div className="flex flex-col gap-6">
+   
+      <div className="grid grid-cols-1 lg:grid-cols-14 gap-6">
+        {/* left column */}
+        <div className="lg:col-span-5 flex flex-col gap-6">
           <ThreatMap />
           <AttackerTTPs />
-          <EmergingThreats />
+          <EstimatedDirectLoss />
         </div>
 
-        {/* Right Column */}
-        <div className="flex flex-col gap-6">
+        {/* middle column */}
+        <div className="lg:col-span-6 flex flex-col gap-6">
           <IncidentChart />
-          <OrganizationRisks />
+          <AttackVectorDistribution />
+        </div>
+
+        {/* right column */}
+        <div className="lg:col-span-3 flex flex-col gap-6">
+          <RisksReport />
+          <EmergingThreats />
         </div>
       </div>
     </div>
