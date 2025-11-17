@@ -14,6 +14,11 @@ const cardVariants = {
   }),
 };
 
+const shapeVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+};
+
 export default function OurPlans() {
   const plans = [
     {
@@ -72,25 +77,50 @@ export default function OurPlans() {
         }}
       />
 
-      <Section className="relative z-10 py-16 lg:py-24">
-        {/* Decorative Shapes */}
-        <Image
-          src="/images/earth.png"
-          alt="Decorative shape"
-          width={130}
-          height={130}
-          className="absolute top-0 left-0 -translate-x-1/3 opacity-70 pointer-events-none"
-        />
-        <Image
-          src="/images/grid-cube.png"
-          alt="Decorative shape"
-          width={150}
-          height={150}
-          className="absolute bottom-0 right-0 translate-x-1/3 opacity-70 pointer-events-none"
-        />
+      <Section className="relative z-10 py-16 lg:py-24 px-4 sm:px-6 lg:px-12">
+        {/* Decorative Shapes with Bounce */}
+        <motion.div
+          className="absolute top-0 left-0 -translate-x-1/3 opacity-70 pointer-events-none w-32 h-32 lg:w-40 lg:h-40"
+          variants={shapeVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          animate={{ y: [0, -20, 0] }}
+          transition={{
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+          }}
+        >
+          <Image
+            src="/images/earth.png"
+            alt="Decorative shape"
+            width={130}
+            height={130}
+           
+          />
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-0 right-0 translate-x-1/3 opacity-70 pointer-events-none w-36 h-36 lg:w-44 lg:h-44"
+          variants={shapeVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          animate={{ y: [0, 15, 0] }}
+          transition={{
+            y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+          }}
+        >
+          <Image
+            src="/images/grid-cube.png"
+            alt="Decorative shape"
+            width={150}
+            height={150}
+            className="w-full h-full"
+          />
+        </motion.div>
 
         {/* Section Title */}
-        <div className="flex justify-center mb-16">
+        <div className="flex justify-center mb-12">
           <SectionTitle
             logo="/logos/ires-logo.svg"
             logoAlt="iRES Logo"
@@ -99,7 +129,7 @@ export default function OurPlans() {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
           {plans.map((plan, i) => (
             <motion.div
               key={i}
@@ -108,10 +138,9 @@ export default function OurPlans() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className={`w-full max-w-[360px] p-[1px] rounded-2xl 
-                bg-gradient-to-r from-[#4185DD] to-[#B425DA]`}
+              className="w-full max-w-sm sm:max-w-xs lg:max-w-full p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
             >
-              <div className="h-full bg-[#0E0E11]/90 backdrop-blur-md rounded-2xl p-8 flex flex-col justify-between">
+              <div className="h-full bg-[#0E0E11]/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
                 <div>
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
@@ -122,32 +151,34 @@ export default function OurPlans() {
                       height={26}
                       className="object-contain"
                     />
-                    <h3 className="text-lg font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                    <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                       {plan.title}
                     </h3>
                   </div>
 
                   {/* Price & Subtitle */}
-                  <p className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-xl font-semibold mb-1">
+                  <p className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-lg sm:text-xl font-semibold mb-1">
                     <i>{plan.price}</i>
                   </p>
-                  <p className="text-[#b3b3b3] text-sm mb-6">{plan.subtitle}</p>
+                  <p className="text-[#b3b3b3] text-xs sm:text-sm mb-6">
+                    {plan.subtitle}
+                  </p>
 
                   {/* Features List */}
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 sm:space-y-3">
                     {plan.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-white/90"
+                        className="flex items-start gap-2 sm:gap-3 text-white/90"
                       >
                         <Image
                           src="/images/checkbox.png"
                           alt="Check icon"
-                          width={18}
-                          height={18}
-                          className="mt-0.5"
+                          width={16}
+                          height={16}
+                          className="mt-1 sm:mt-0.5"
                         />
-                        <span className="text-sm">{feature}</span>
+                        <span className="text-xs sm:text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -157,7 +188,7 @@ export default function OurPlans() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-8 px-5 py-2.5 rounded-full text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] shadow-lg cursor-pointer"
+                  className="mt-6 sm:mt-8 px-4 sm:px-5 py-2.5 rounded-full text-white text-sm sm:text-base font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] shadow-lg cursor-pointer"
                 >
                   Choose Plan
                 </motion.button>

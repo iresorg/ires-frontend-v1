@@ -21,6 +21,11 @@ const teamMembers = [
   { role: "Product Head" },
 ];
 
+const shapeVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+};
+
 export default function MeetOurTeamSection() {
   return (
     <div className="relative w-full overflow-hidden">
@@ -33,16 +38,48 @@ export default function MeetOurTeamSection() {
         }}
       />
 
-      <Section className="relative z-10 py-16 lg:py-24">
-        {/* Decorative Shape */}
+      {/* Bouncing Shapes */}
+      <motion.div
+        className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
+        variants={shapeVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        animate={{ y: [0, -20, 0] }}
+        transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+      >
         <Image
-          src="/images/grid-cube.png"
-          alt="Decorative Shape"
-          width={140}
-          height={140}
-          className="absolute top-6 left-0 -translate-x-1/3 lg:top-8 z-20 pointer-events-none opacity-80"
+          src="/shapes/section-bg-shape-1.svg"
+          alt="Background shape"
+          width={320}
+          height={320}
+          className="w-full h-full opacity-60"
         />
+      </motion.div>
 
+      <motion.div
+        className="absolute -top-10 left-0 w-32 h-32 lg:w-40 lg:h-40 z-0"
+        variants={shapeVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        animate={{ y: [0, 15, 0], rotate: [0, 360] }}
+        transition={{
+          y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+        }}
+      >
+        <Image
+          src="/shapes/section-bg-shape-2.svg"
+          alt="Background shape"
+          width={256}
+          height={256}
+          className="w-full h-full opacity-60"
+        />
+      </motion.div>
+
+      <Section className="relative z-10 py-16 lg:py-24">
+      
         {/* CALL Button */}
         <div className="absolute top-6 right-6 lg:top-8 lg:right-12 z-40">
           <a

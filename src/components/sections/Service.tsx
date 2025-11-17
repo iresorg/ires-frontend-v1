@@ -34,8 +34,12 @@ export default function OurServices() {
         }}
       />
 
-      {/* Decorative shape */}
-      <div className="absolute -top-10 -left-10 z-0">
+      {/* Decorative Earth shape */}
+      <motion.div
+        className="absolute -top-10 -left-10 z-0"
+        animate={{ y: [0, -15, 0] }}
+        transition={{ y: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+      >
         <Image
           src="/images/earth.png"
           alt="Decorative Shape"
@@ -43,7 +47,7 @@ export default function OurServices() {
           height={130}
           className="opacity-80"
         />
-      </div>
+      </motion.div>
 
       {/* Container */}
       <div className="relative z-10 container mx-auto px-6 lg:px-12">
@@ -82,7 +86,7 @@ export default function OurServices() {
                   viewport={{ once: true }}
                   className="relative rounded-2xl overflow-hidden hover:scale-[1.03] transition-transform duration-300"
                 >
-                  {/* Gradient border  */}
+                  {/* Gradient border */}
                   <div className="absolute inset-0 rounded-2xl p-[3px] bg-gradient-to-r from-[#4185DD] to-[#601474] blur-[1px]" />
 
                   {/* Inner content */}
@@ -123,7 +127,7 @@ export default function OurServices() {
             </motion.button>
           </div>
 
-          {/* Right  Image */}
+          {/* Right Image with synchronized bounce */}
           <motion.div
             className="lg:col-span-6 relative w-full flex justify-center lg:justify-end"
             variants={fadeUp}
@@ -131,10 +135,13 @@ export default function OurServices() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Ellipse background */}
+            {/* Ellipse background bouncing */}
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
-              variants={fadeUp}
+              animate={{ y: [0, -30, 0] }}
+              transition={{
+                y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+              }}
             >
               <Image
                 src="/images/ellipse.png"
@@ -145,8 +152,14 @@ export default function OurServices() {
               />
             </motion.div>
 
-            {/* Foreground image */}
-            <motion.div className="relative z-10" variants={fadeUp}>
+            {/* Foreground cyberman bouncing */}
+            <motion.div
+              className="relative z-10"
+              animate={{ y: [0, -20, 0] }}
+              transition={{
+                y: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+              }}
+            >
               <Image
                 src="/images/cyberman.png"
                 alt="Service Illustration"

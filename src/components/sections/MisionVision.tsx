@@ -14,6 +14,11 @@ const cardVariants = {
   }),
 };
 
+const shapeVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+};
+
 export default function MissionVisionSection() {
   return (
     <div className="relative w-full overflow-hidden">
@@ -26,16 +31,26 @@ export default function MissionVisionSection() {
         }}
       />
 
-      <Section className="relative z-10 py-16 lg:py-24">
-        {/* Decorative*/}
+      {/* Bouncing Shape */}
+      <motion.div
+        className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
+        variants={shapeVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        animate={{ y: [0, -20, 0] }}
+        transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+      >
         <Image
-          src="/images/eclipes.png"
-          alt="Decorative Shape"
-          width={100}
-          height={100}
-          className="absolute top-0 right-0 translate-x-1/3 opacity-80 pointer-events-none"
+          src="/shapes/section-bg-shape-1.svg"
+          alt="Background shape"
+          width={320}
+          height={320}
+          className="w-full h-full opacity-60"
         />
+      </motion.div>
 
+      <Section className="relative z-10 py-16 lg:py-24">
         {/* Section Title */}
         <div className="flex justify-center mb-12">
           <SectionTitle
@@ -44,7 +59,7 @@ export default function MissionVisionSection() {
             title="Our Mission & Vision"
           />
         </div>
-       
+
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
           {/* Mission Card */}

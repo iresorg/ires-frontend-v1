@@ -14,6 +14,11 @@ const cardVariants = {
   }),
 };
 
+const shapeVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+};
+
 export default function OurCommitment() {
   const commitments = [
     {
@@ -44,6 +49,46 @@ export default function OurCommitment() {
         }}
       />
 
+     <motion.div
+          className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
+          variants={shapeVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          animate={{ y: [0, -20, 0] }}
+          transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+        >
+          <Image
+            src="/images/cube.png"
+            alt="Decorative sphere"
+            width={130}
+            height={130}
+            className="absolute top-0 right-0 translate-x-[10px] translate-y-[-10px] opacity-80 pointer-events-none"
+          />
+        </motion.div>
+  
+
+      <motion.div
+        className="absolute -top-10 left-0 w-32 h-32 lg:w-40 lg:h-40 z-0"
+        variants={shapeVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        animate={{ y: [0, 15, 0], rotate: [0, 360] }}
+        transition={{
+          y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+        }}
+      >
+        <Image
+          src="/shapes/section-bg-shape-2.svg"
+          alt="Background shape"
+          width={256}
+          height={256}
+          className="w-full h-full opacity-60"
+        />
+      </motion.div>
+
       <Section className="relative z-10 py-20 lg:py-28">
         {/* Section Title */}
         <div className="flex justify-center mb-12">
@@ -66,11 +111,8 @@ export default function OurCommitment() {
               viewport={{ once: true }}
               className="relative w-full max-w-[360px] transition-transform duration-300 hover:scale-[1.02]"
             >
-              {/* Outer gradient border */}
               <div className="p-[2px] rounded-[22px] bg-gradient-to-r from-[#4185DD] to-[#B425DA] h-full">
-                {/* Inner content */}
                 <div className="rounded-[20px] overflow-hidden bg-[#0E0E11]/85 backdrop-blur-sm shadow-md flex flex-col h-full">
-                  {/* Image */}
                   <div className="relative w-full h-[200px] rounded-t-[20px] overflow-hidden">
                     <Image
                       src={item.img}
@@ -79,8 +121,6 @@ export default function OurCommitment() {
                       className="object-cover"
                     />
                   </div>
-
-                  {/* Text */}
                   <div className="p-6 flex flex-col flex-grow justify-between text-center">
                     <div>
                       <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-2">
@@ -98,7 +138,7 @@ export default function OurCommitment() {
         </div>
 
         {/* Explore Plans Section */}
-        <div className="text-center">
+        <div className="text-center mb-8">
           <p className="text-white/80 mb-4 text-sm md:text-base">
             Explore Plans Available For Your Organizations
           </p>
@@ -107,8 +147,8 @@ export default function OurCommitment() {
           </button>
         </div>
 
-        {/* Call button */}
-        <div className="absolute top-16 right-8">
+        {/* Call button  */}
+        <div className="w-full flex justify-center lg:justify-end lg:absolute lg:top-16 lg:right-8 mb-12 lg:mb-0">
           <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white text-sm font-medium shadow-lg hover:opacity-90 transition cursor-pointer">
             <Image
               src="/images/call.png"
@@ -119,15 +159,6 @@ export default function OurCommitment() {
             Call Now
           </button>
         </div>
-
-        {/* Decorative Shape */}
-        <Image
-          src="/images/cube.png"
-          alt="Decorative cube"
-          width={130}
-          height={130}
-          className="absolute bottom-0 right-[-40px] opacity-80 pointer-events-none"
-        />
       </Section>
     </div>
   );

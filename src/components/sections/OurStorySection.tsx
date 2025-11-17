@@ -10,37 +10,23 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.2 },
   },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const slideInLeft = {
   hidden: { opacity: 0, x: -50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, delay: 0.2 },
-  },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.2 } },
 };
 
 const slideInRight = {
   hidden: { opacity: 0, x: 50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, delay: 0.4 },
-  },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.4 } },
 };
 
 export default function OurStorySection() {
@@ -82,9 +68,9 @@ export default function OurStorySection() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6">
+              <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6 space-y-4">
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  className="text-sm lg:text-base text-white leading-relaxed"
                   variants={itemVariants}
                 >
                   The story of iRES begins with a simple truth: most people and
@@ -93,7 +79,7 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  className="text-sm lg:text-base text-white leading-relaxed"
                   variants={itemVariants}
                 >
                   As founders, we saw it first-hand. Friends, small businesses,
@@ -106,15 +92,15 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  className="text-sm lg:text-base text-white leading-relaxed"
                   variants={itemVariants}
                 >
-                  That’s why iRES exists — to close the gap between everyday
+                  That’s why iRES exists to close the gap between everyday
                   people and complex cybersecurity solutions.
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed mb-4"
+                  className="text-sm lg:text-base text-white leading-relaxed"
                   variants={itemVariants}
                 >
                   We are building a future where your grandmother can understand
@@ -130,7 +116,7 @@ export default function OurStorySection() {
                 >
                   It’s about protecting dreams, businesses, and people’s lives
                   in the digital space. At iRES, we don’t just fight cyber
-                  threats — we fight for you.
+                  threats. We fight for you.
                 </motion.p>
               </div>
             </motion.div>
@@ -146,26 +132,34 @@ export default function OurStorySection() {
           >
             {/* Ellipse Background */}
             <motion.div
-              className="absolute inset-0 top-10 -right-20 w-full h-full flex items-center justify-center"
+              className="absolute inset-0 top-10 -right-20 w-80 h-80 lg:w-[440px] lg:h-[440px]"
               variants={itemVariants}
             >
               <Image
                 src="/images/ellipse.png"
                 alt="Background ellipse"
-                width={400}
-                height={400}
-                className="w-80 h-80 lg:w-[440px] lg:h-[440px]"
+                fill
+                className="object-contain"
               />
             </motion.div>
 
             {/* Desktop View Image */}
-            <motion.div className="relative z-10" variants={itemVariants}>
+            {/* <motion.div
+              className="relative z-10 w-[500px] h-[400px]"
+              variants={itemVariants}
+            > */}
+              <motion.div
+                          className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-[500px] lg:h-[400px]"
+                          animate={{ y: [0, -20, 0] }}
+                          transition={{
+                            y: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                          }}
+                        >
               <Image
                 src="/images/desktopview.png"
                 alt="iRES Story Illustration"
-                width={500}
-                height={500}
-                className="lg:w-[500px] lg:h-[400px] object-contain"
+                fill
+                className="object-contain"
               />
             </motion.div>
           </motion.div>
@@ -183,21 +177,13 @@ export default function OurStorySection() {
         }}
         animate={{ rotate: [0, 360] }}
         transition={{
-          rotate: {
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear",
-          },
+          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
         }}
       >
         <motion.div
           animate={{ rotate: [0, -360] }}
           transition={{
-            rotate: {
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear",
-            },
+            rotate: { duration: 8, repeat: Infinity, ease: "linear" },
           }}
         >
           <PlayIcon className="w-6 h-6 text-white" />

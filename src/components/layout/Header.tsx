@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
-import Section from '@/components/ui/Section';
-import { useAuthStore } from '@/store/auth';
-import { removeCookie } from '@/lib/api';
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Section from "@/components/ui/Section";
+import { useAuthStore } from "@/store/auth";
+import { removeCookie } from "@/lib/api";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +19,10 @@ export default function Header() {
 
   // Fetch user profile when component mounts if authenticated but user is null
   useEffect(() => {
-    const token = typeof document !== "undefined" ? document.cookie.includes("auth_token") : false;
+    const token =
+      typeof document !== "undefined"
+        ? document.cookie.includes("auth_token")
+        : false;
     if (token && !user && isAuthenticated) {
       fetchUser();
     }
@@ -28,7 +31,10 @@ export default function Header() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setShowUserDropdown(false);
       }
     };
@@ -50,16 +56,16 @@ export default function Header() {
       setIsScrolled(window.scrollY > 8);
     };
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const navItems = [
-    { label: 'About Us', href: '/about' },
-    { label: 'Organization', href: '/organization' },
-    { label: 'Individual', href: '/individual' },
-    { label: 'Explore Plans', href: '/pricing' },
-    { label: 'Our Services', href: '/services' },
+    { label: "About Us", href: "/about" },
+    { label: "Organization", href: "/organization" },
+    { label: "Individual", href: "/individual" },
+    { label: "Explore Plans", href: "/pricing" },
+    { label: "Our Services", href: "/services" },
   ];
 
   const handleLogout = () => {
@@ -114,29 +120,30 @@ export default function Header() {
   // Get dashboard route based on role
   const getDashboardRoute = () => {
     if (!user) return "/dashboard";
-    return user.role === "organization" ? "/dashboard/organization" : "/dashboard";
+    return user.role === "organization"
+      ? "/dashboard/organization"
+      : "/dashboard";
   };
 
   return (
-    <header
-      className="absolute w-full top-0 left-0 right-0 z-100 bg-transparent transition-colors duration-300"
-
-    >
+    <header className="absolute w-full top-0 left-0 right-0 z-100 bg-transparent transition-colors duration-300">
       <div className="relative top-0 z-100">
-        <Section className='py-8'>
-          <div className="flex items-center justify-between"
+        <Section className="py-8">
+          <div
+            className="flex items-center justify-between "
             style={
               isScrolled
                 ? {
-                  background: 'var(--secondary)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  borderBottom: '1px solid var(--divider-color)',
-                  borderRadius: '100px',
-                  padding: '0px 10px'
-                }
+                    background: "var(--secondary)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    borderBottom: "1px solid var(--divider-color)",
+                    borderRadius: "100px",
+                    padding: "0px 10px",
+                  }
                 : undefined
-            }>
+            }
+          >
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <Image
@@ -150,17 +157,17 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden lg:flex items-center space-x-8 rounded-4xl px-4 capitalize"
+              className="hidden lg:flex items-center space-x-8 rounded-4xl px-4 capitalize "
               style={
                 !isScrolled
                   ? {
-                    background: 'var(--secondary)',
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)',
-                    borderBottom: '1px solid var(--divider-color)',
-                    borderRadius: '100px',
-                    padding: '0px 10px'
-                  }
+                      background: "var(--secondary)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      borderBottom: "1px solid var(--divider-color)",
+                      borderRadius: "100px",
+                      padding: "0px 10px",
+                    }
                   : undefined
               }
             >
@@ -182,9 +189,11 @@ export default function Header() {
                   <div
                     className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-full transition-colors hover:bg-white/10"
                     style={{
-                      background: isScrolled ? 'transparent' : 'var(--secondary)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
+                      background: isScrolled
+                        ? "transparent"
+                        : "var(--secondary)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
                     }}
                     onClick={() => setShowUserDropdown(!showUserDropdown)}
                   >
@@ -203,7 +212,9 @@ export default function Header() {
                       alt="Dropdown"
                       width={14}
                       height={14}
-                      className={`transition-transform ${showUserDropdown ? "rotate-180" : ""}`}
+                      className={`transition-transform ${
+                        showUserDropdown ? "rotate-180" : ""
+                      }`}
                     />
                   </div>
 
@@ -236,7 +247,7 @@ export default function Header() {
                   >
                     Login
                   </Link>
-                  <Button href="/signup" className='rounded-4xl'>
+                  <Button href="/signup" className="rounded-4xl">
                     Sign Up
                   </Button>
                 </>
@@ -247,9 +258,11 @@ export default function Header() {
             <button
               onClick={toggleMobileMenu}
               className="lg:hidden p-2 rounded-lg transition-all duration-200 bg-[var(--btn-bg)]"
-              aria-label={isMobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'}
+              aria-label={
+                isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"
+              }
               style={{
-                background: 'var(--btn-bg-reverse)',
+                background: "var(--btn-bg-reverse)",
               }}
             >
               {isMobileMenuOpen ? (
@@ -286,12 +299,15 @@ export default function Header() {
 
           {/* Mobile Menu Dropdown */}
           {isMobileMenuOpen && (
-            <div className="md:hidden mt-4 p-4 rounded-lg" style={{ background: 'var(--btn-bg)' }}>
+            <div
+              className="md:hidden mt-4 p-4 rounded-lg"
+              style={{ background: "var(--btn-bg)" }}
+            >
               <div className="flex flex-col space-y-3">
                 <Link
                   href="/about"
                   className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--foreground)' }}
+                  style={{ color: "var(--foreground)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About Us
@@ -299,7 +315,7 @@ export default function Header() {
                 <Link
                   href="/organization"
                   className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--foreground)' }}
+                  style={{ color: "var(--foreground)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Organization
@@ -307,7 +323,7 @@ export default function Header() {
                 <Link
                   href="/individual"
                   className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--foreground)' }}
+                  style={{ color: "var(--foreground)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Individual
@@ -315,7 +331,7 @@ export default function Header() {
                 <Link
                   href="/pricing"
                   className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--foreground)' }}
+                  style={{ color: "var(--foreground)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Explore Plans
@@ -323,7 +339,7 @@ export default function Header() {
                 <Link
                   href="/services"
                   className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--foreground)' }}
+                  style={{ color: "var(--foreground)" }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Our Services
@@ -338,7 +354,10 @@ export default function Header() {
                         height={32}
                         className="rounded-full object-cover"
                       />
-                      <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: "var(--foreground)" }}
+                      >
                         {getUserDisplayName()}
                       </span>
                     </div>
@@ -346,7 +365,7 @@ export default function Header() {
                       href={getDashboardRoute()}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                      style={{ color: 'var(--foreground)' }}
+                      style={{ color: "var(--foreground)" }}
                     >
                       Dashboard
                     </Link>
@@ -356,7 +375,7 @@ export default function Header() {
                         setIsMobileMenuOpen(false);
                       }}
                       className="w-full text-left text-sm font-medium px-4 py-2 rounded-lg transition-colors hover:text-red-400"
-                      style={{ color: 'var(--foreground)' }}
+                      style={{ color: "var(--foreground)" }}
                     >
                       Logout
                     </button>
@@ -367,11 +386,15 @@ export default function Header() {
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center"
-                      style={{ color: 'var(--foreground)' }}
+                      style={{ color: "var(--foreground)" }}
                     >
                       Login
                     </Link>
-                    <Button href="/signup" onClick={() => setIsMobileMenuOpen(false)} className='!w-full'>
+                    <Button
+                      href="/signup"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="!w-full"
+                    >
                       Sign Up
                     </Button>
                   </div>

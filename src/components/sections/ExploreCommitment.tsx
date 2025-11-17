@@ -13,6 +13,10 @@ const cardVariants = {
     transition: { duration: 0.5, delay: i * 0.15 },
   }),
 };
+const shapeVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
+};
 
 export default function OurCommitment() {
   const commitments = [
@@ -98,14 +102,26 @@ export default function OurCommitment() {
           ))}
         </div>
 
-        {/* Decorative Shape */}
-        <Image
-          src="/images/eclipes.png"
-          alt="Decorative cube"
-          width={120}
-          height={120}
-          className="absolute bottom-0 right-[-60px] opacity-80 pointer-events-none"
-        />
+        {/* Bouncing Shapes */}
+        <motion.div
+          className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
+          variants={shapeVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          animate={{ y: [0, -20, 0] }}
+          transition={{
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+          }}
+        >
+          <Image
+            src="/images/eclipes.png"
+            alt="Decorative cube"
+            width={120}
+            height={120}
+            className="absolute bottom-0 right-[-60px] opacity-80 pointer-events-none"
+          />
+        </motion.div>
       </Section>
     </div>
   );

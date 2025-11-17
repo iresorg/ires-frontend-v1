@@ -47,8 +47,12 @@ export default function ToUseServices() {
         }}
       />
 
-      {/* Decorative shape */}
-      <div className="absolute top-0 right-0 z-0">
+      {/* Decorative shape bouncing */}
+      <motion.div
+        className="absolute top-0 right-0 z-0"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ y: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+      >
         <Image
           src="/images/eclipes.png"
           alt="Decorative Shape"
@@ -56,7 +60,7 @@ export default function ToUseServices() {
           height={100}
           className="opacity-80"
         />
-      </div>
+      </motion.div>
 
       {/* Container */}
       <div className="relative z-10 container mx-auto px-6 lg:px-12">
