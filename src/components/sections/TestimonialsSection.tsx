@@ -86,10 +86,10 @@ export default function TestimonialsSection() {
     }
 
     return (
-        <div className="relative w-full py-12 lg:py-16">
+        <div className="relative w-full py-12 lg:py-16 overflow-hidden">
             {/* Background shapes */}
             <motion.div
-                className="absolute -top-10 -right-10 w-40 h-40 lg:w-52 lg:h-52 z-0"
+                className="absolute -top-10 right-1 w-40 h-40 lg:w-52 lg:h-52 z-0"
                 variants={shapeVariants}
                 initial="hidden"
                 whileInView="visible"

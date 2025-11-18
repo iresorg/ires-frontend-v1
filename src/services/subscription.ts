@@ -76,6 +76,11 @@ export interface Transaction {
 
 export interface TransactionsResponse {
   data: Transaction[];
+  total: number;
+  limit: number;
+  page: number;
+  totalPages: number;
+  nextPage: number | null;
 }
 
 export const subscriptionService = {
@@ -121,10 +126,16 @@ export const subscriptionService = {
   },
 
   // Get transaction history
-  getTransactions: async (): Promise<Transaction[]> => {
+  getTransactions: async (
+    page: number = 1,
+    limit: number = 10
+  ): Promise<TransactionsResponse> => {
     const response = await api.get<TransactionsResponse>(
-      "/subscriptions/transactions"
+      "/subscriptions/transactions",
+      {
+        params: { page, limit },
+      }
     );
-    return response.data.data;
+    return response.data;
   },
 };

@@ -134,13 +134,13 @@ export default function Header() {
             style={
               isScrolled
                 ? {
-                    background: "var(--secondary)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    borderBottom: "1px solid var(--divider-color)",
-                    borderRadius: "100px",
-                    padding: "0px 10px",
-                  }
+                  background: "var(--secondary)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  borderBottom: "1px solid var(--divider-color)",
+                  borderRadius: "100px",
+                  padding: "0px 10px",
+                }
                 : undefined
             }
           >
@@ -161,13 +161,13 @@ export default function Header() {
               style={
                 !isScrolled
                   ? {
-                      background: "var(--secondary)",
-                      backdropFilter: "blur(10px)",
-                      WebkitBackdropFilter: "blur(10px)",
-                      borderBottom: "1px solid var(--divider-color)",
-                      borderRadius: "100px",
-                      padding: "0px 10px",
-                    }
+                    background: "var(--secondary)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    borderBottom: "1px solid var(--divider-color)",
+                    borderRadius: "100px",
+                    padding: "0px 10px",
+                  }
                   : undefined
               }
             >
@@ -175,7 +175,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-base font-normal px-3 py-3 my-2 text-[#D1D1D1] hover:bg-[var(--secondary)] rounded-4xl"
+                  className="text-base font-normal px-3 py-3 my-2 text-[#D1D1D1] hover:bg-(--secondary) rounded-4xl"
                 >
                   {label}
                 </Link>
@@ -212,9 +212,8 @@ export default function Header() {
                       alt="Dropdown"
                       width={14}
                       height={14}
-                      className={`transition-transform ${
-                        showUserDropdown ? "rotate-180" : ""
-                      }`}
+                      className={`transition-transform ${showUserDropdown ? "rotate-180" : ""
+                        }`}
                     />
                   </div>
 
@@ -257,7 +256,7 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 rounded-lg transition-all duration-200 bg-[var(--btn-bg)]"
+              className="lg:hidden p-2 rounded-lg transition-all duration-200 bg-(--btn-bg)"
               aria-label={
                 isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"
               }
@@ -300,7 +299,7 @@ export default function Header() {
           {/* Mobile Menu Dropdown */}
           {isMobileMenuOpen && (
             <div
-              className="md:hidden mt-4 p-4 rounded-lg"
+              className="lg:hidden mt-4 p-4 rounded-lg"
               style={{ background: "var(--btn-bg)" }}
             >
               <div className="flex flex-col space-y-3">
@@ -381,22 +380,28 @@ export default function Header() {
                     </button>
                   </div>
                 ) : (
-                  <div className="pt-2 space-y-2 w-full">
+                  <div className="pt-2 space-y-3 w-full">
                     <Link
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center"
-                      style={{ color: "var(--foreground)" }}
+                      className="block text-base font-medium px-4 py-3 rounded-lg transition-colors text-center text-white hover:bg-white/10"
+                      style={{
+                        background: "transparent",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                      }}
                     >
                       Login
                     </Link>
-                    <Button
+                    <Link
                       href="/signup"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="!w-full"
+                      className="block text-base font-medium px-4 py-3 rounded-lg transition-colors text-center text-white hover:opacity-90"
+                      style={{
+                        background: "var(--btn-bg)",
+                      }}
                     >
                       Sign Up
-                    </Button>
+                    </Link>
                   </div>
                 )}
               </div>

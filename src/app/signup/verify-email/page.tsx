@@ -20,6 +20,7 @@ function VerifyEmailContent() {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -81,6 +82,45 @@ function VerifyEmailContent() {
     inputRefs.current[lastIndex]?.focus();
   };
 
+  const handleResendOtp = async () => {
+    // Get fresh email from URL in case state hasn't updated
+    const currentEmail = email || (typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("email") : "");
+
+    if (!currentEmail) {
+      setErrorMessage("Email not found. Please try registering again.");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+      return;
+    }
+
+    setIsResending(true);
+    setShowError(false);
+
+    try {
+      await authService.resendOtp({
+        email: currentEmail,
+      });
+
+      // Reset timer and OTP inputs on success
+      setTimer(60);
+      setOtp(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
+
+      // Show success message briefly
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error("Resend OTP error:", error);
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const errorMsg = axiosError.response?.data?.message || "Failed to resend OTP. Please try again.";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   const handleVerify = async () => {
     const otpString = otp.join("");
     if (otpString.length !== 6) {
@@ -131,7 +171,7 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
+    <div className="relative w-full min-h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center px-4 py-8 sm:px-6 sm:py-12">
       {/* Toasts */}
       <AnimatePresence>
         {showSuccess && (
@@ -141,7 +181,7 @@ function VerifyEmailContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="absolute top-10 right-10 z-50 flex flex-col items-center text-center px-8 py-5 rounded-2xl "
+            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
             style={{
               borderImage:
                 "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
@@ -152,13 +192,14 @@ function VerifyEmailContent() {
           >
             <button
               onClick={() => setShowSuccess(false)}
-              className="absolute top-3 right-3 hover:opacity-70 transition-opacity cursor-pointer"
+              className="absolute top-2 right-2 sm:top-3 sm:right-3 hover:opacity-70 transition-opacity cursor-pointer"
             >
               <Image
                 src="/images/cancel-icon.png"
                 alt="Close"
                 width={25}
                 height={25}
+                className="w-5 h-5 sm:w-6 sm:h-6"
               />
             </button>
 
@@ -168,11 +209,12 @@ function VerifyEmailContent() {
                 alt="Success Icon"
                 width={24}
                 height={24}
+                className="w-5 h-5 sm:w-6 sm:h-6"
               />
-              <p className="text-white font-bold text-xl">Congratulations!</p>
+              <p className="text-white font-bold text-base sm:text-lg md:text-xl">Congratulations!</p>
             </div>
 
-            <p className="text-white text-sm">
+            <p className="text-white text-xs sm:text-sm">
               Your email has been successfully verified
             </p>
           </motion.div>
@@ -185,7 +227,7 @@ function VerifyEmailContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="absolute top-10 right-10 z-50 flex flex-col items-center text-center px-8 py-6 rounded-2xl"
+            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 rounded-2xl max-w-[90%] sm:max-w-none"
             style={{
               borderImage:
                 "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
@@ -196,37 +238,40 @@ function VerifyEmailContent() {
           >
             <button
               onClick={() => setShowError(false)}
-              className="absolute top-3 right-3 hover:opacity-70 transition-opacity"
+              className="absolute top-2 right-2 sm:top-3 sm:right-3 hover:opacity-70 transition-opacity"
             >
               <Image
                 src="/images/cancel-icon.png"
                 alt="Close"
                 width={25}
                 height={25}
+                className="w-5 h-5 sm:w-6 sm:h-6"
               />
             </button>
 
-            <div className="flex flex-col items-center gap-2 mb-3">
+            <div className="flex flex-col items-center gap-2 mb-2 sm:mb-3">
               <Image
                 src="/images/mail-error.png"
                 alt="Error Icon"
                 width={28}
                 height={28}
+                className="w-6 h-6 sm:w-7 sm:h-7"
               />
-              <p className="text-white font-bold text-xl">
+              <p className="text-white font-bold text-base sm:text-lg md:text-xl">
                 Email Verification Error
               </p>
             </div>
 
-            <p className="text-white text-sm mb-4">
+            <p className="text-white text-xs sm:text-sm mb-3 sm:mb-4 px-2">
               {errorMessage || "Looks like you entered an invalid code"}
             </p>
 
             <motion.button
-              onClick={() => setTimer(100)}
-              className="px-6 py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer"
+              onClick={handleResendOtp}
+              disabled={isResending}
+              className="px-4 sm:px-6 py-2 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
-              Resend Email
+              {isResending ? "Resending..." : "Resend Email"}
             </motion.button>
           </motion.div>
         )}
@@ -234,7 +279,7 @@ function VerifyEmailContent() {
 
       {/* Verification card */}
       <div
-        className="relative z-10 w-[500px] p-8 rounded-2xl bg-transparent"
+        className="relative z-10 w-full max-w-[500px] p-6 sm:p-8 rounded-2xl bg-transparent"
         style={{
           borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
           borderWidth: "1px",
@@ -242,26 +287,28 @@ function VerifyEmailContent() {
         }}
       >
         {/* Header */}
-        <div className="flex justify-between items-start mb-5">
+        <div className="flex justify-between items-start mb-4 sm:mb-5">
           <Image
             src="/logos/ires-logo.svg"
             alt="iRES Logo"
             width={55}
             height={55}
+            className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
           />
-          <Link href="/signup/individual" className="w-6 h-6">
+          <Link href="/signup/individual" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
               width={24}
               height={24}
+              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
             />
           </Link>
         </div>
 
         {/* Title */}
         <motion.h2
-          className="text-2xl font-bold mb-1 bg-clip-text text-transparent text-center"
+          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent text-center"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
@@ -281,12 +328,12 @@ function VerifyEmailContent() {
           Check your email
         </motion.h2>
 
-        <p className="text-white text-sm text-center mb-6">
+        <p className="text-white text-xs sm:text-sm text-center mb-5 sm:mb-6 px-2">
           Kindly enter the 6-digit code we sent to {email || "your email"}
         </p>
 
         {/* Code inputs */}
-        <div className="flex justify-center gap-3 mb-6" onPaste={handlePaste}>
+        <div className="flex justify-center gap-2 sm:gap-3 mb-5 sm:mb-6 px-2" onPaste={handlePaste}>
           {[...Array(6)].map((_, i) => (
             <input
               key={i}
@@ -299,14 +346,14 @@ function VerifyEmailContent() {
               value={otp[i]}
               onChange={(e) => handleOtpChange(i, e.target.value.replace(/\D/g, ""))}
               onKeyDown={(e) => handleKeyDown(i, e)}
-              className="w-12 h-12 text-center text-white text-xl bg-white/10 rounded-md outline-none focus:ring-2 focus:ring-[#4185DD]"
+              className="w-10 h-10 sm:w-12 sm:h-12 text-center text-white text-lg sm:text-xl bg-white/10 rounded-md outline-none focus:ring-2 focus:ring-[#4185DD]"
             />
           ))}
         </div>
 
         {/* Resend text */}
-        <div className="text-center text-white/80 text-sm mb-6">
-          Didn’t receive code?{" "}
+        <div className="text-center text-white/80 text-xs sm:text-sm mb-5 sm:mb-6 px-2">
+          Didn&apos;t receive code?{" "}
           {timer > 0 ? (
             <motion.span
               className="font-semibold bg-clip-text text-transparent inline-block"
@@ -330,8 +377,9 @@ function VerifyEmailContent() {
             </motion.span>
           ) : (
             <motion.button
-              onClick={() => setTimer(60)}
-              className="font-semibold bg-clip-text text-transparent inline-block hover:underline"
+              onClick={handleResendOtp}
+              disabled={isResending}
+              className="font-semibold bg-clip-text text-transparent inline-block hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
@@ -348,7 +396,7 @@ function VerifyEmailContent() {
                 },
               }}
             >
-              Resend
+              {isResending ? "Resending..." : "Resend"}
             </motion.button>
           )}
         </div>
@@ -358,7 +406,7 @@ function VerifyEmailContent() {
           onClick={handleVerify}
           type="button"
           disabled={isVerifying || otp.join("").length !== 6}
-          className="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
         >
           {isVerifying ? "Verifying..." : "Verify Email"}
         </button>
@@ -370,8 +418,8 @@ function VerifyEmailContent() {
 export default function VerifyEmail() {
   return (
     <Suspense fallback={
-      <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
-        <div className="text-white">Loading...</div>
+      <div className="relative w-full min-h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center px-4 py-8">
+        <div className="text-white text-sm sm:text-base">Loading...</div>
       </div>
     }>
       <VerifyEmailContent />

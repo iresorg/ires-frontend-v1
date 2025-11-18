@@ -48,6 +48,14 @@ export interface VerifyEmailResponse {
   verified: boolean;
 }
 
+export interface ResendOtpData {
+  email: string;
+}
+
+export interface ResendOtpResponse {
+  message: string;
+}
+
 export interface LoginData {
   email: string;
   password: string;
@@ -55,6 +63,24 @@ export interface LoginData {
 
 export interface LoginResponse {
   token: string;
+}
+
+export interface ForgotPasswordData {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+}
+
+export interface ResetPasswordData {
+  email: string;
+  token: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
 }
 
 export const authService = {
@@ -148,6 +174,17 @@ export const authService = {
     return response.data;
   },
 
+  resendOtp: async (data: ResendOtpData): Promise<ResendOtpResponse> => {
+    const response = await api.post<ResendOtpResponse>(
+      "/accounts/auth/resend-otp",
+      {
+        email: data.email,
+      }
+    );
+
+    return response.data;
+  },
+
   login: async (data: LoginData): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>("/accounts/auth/login", {
       email: data.email,
@@ -166,6 +203,34 @@ export const authService = {
         console.error("Failed to fetch user profile:", error);
       }
     }
+
+    return response.data;
+  },
+
+  forgotPassword: async (
+    data: ForgotPasswordData
+  ): Promise<ForgotPasswordResponse> => {
+    const response = await api.post<ForgotPasswordResponse>(
+      "/accounts/auth/forgot-password",
+      {
+        email: data.email,
+      }
+    );
+
+    return response.data;
+  },
+
+  resetPassword: async (
+    data: ResetPasswordData
+  ): Promise<ResetPasswordResponse> => {
+    const response = await api.post<ResetPasswordResponse>(
+      "/accounts/auth/reset-password",
+      {
+        email: data.email,
+        token: data.token,
+        newPassword: data.newPassword,
+      }
+    );
 
     return response.data;
   },

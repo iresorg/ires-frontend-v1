@@ -9,17 +9,26 @@ import type {
 } from "@/services/subscription";
 import { subscriptionService } from "@/services/subscription";
 
+interface PaginationMeta {
+  total: number;
+  limit: number;
+  page: number;
+  totalPages: number;
+  nextPage: number | null;
+}
+
 interface SubscriptionState {
   subscription: SubscriptionStatus | null;
   plans: SubscriptionPlan[];
   transactions: Transaction[];
+  transactionsPagination: PaginationMeta | null;
   isLoading: boolean;
   error: string | null;
   setSubscription: (subscription: SubscriptionStatus | null) => void;
   setPlans: (plans: SubscriptionPlan[]) => void;
   fetchSubscriptionStatus: () => Promise<void>;
   fetchPlans: (accountType?: "individual" | "organization") => Promise<void>;
-  fetchTransactions: () => Promise<void>;
+  fetchTransactions: (page?: number, limit?: number) => Promise<void>;
   initializeSubscription: (
     data: InitializeSubscriptionRequest
   ) => Promise<InitializeSubscriptionResponse>;
@@ -30,6 +39,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
   subscription: null,
   plans: [],
   transactions: [],
+  transactionsPagination: null,
   isLoading: false,
   error: null,
 
@@ -70,15 +80,26 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
     }
   },
 
-  fetchTransactions: async () => {
+  fetchTransactions: async (page: number = 1, limit: number = 10) => {
     try {
       set({ isLoading: true, error: null });
-      const transactions = await subscriptionService.getTransactions();
-      set({ transactions, isLoading: false });
+      const response = await subscriptionService.getTransactions(page, limit);
+      set({
+        transactions: response.data,
+        transactionsPagination: {
+          total: response.total,
+          limit: response.limit,
+          page: response.page,
+          totalPages: response.totalPages,
+          nextPage: response.nextPage,
+        },
+        isLoading: false,
+      });
     } catch (error: any) {
       console.error("Failed to fetch transactions:", error);
       set({
         transactions: [],
+        transactionsPagination: null,
         isLoading: false,
         error: error?.response?.data?.message || "Failed to fetch transactions",
       });
@@ -103,6 +124,12 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
   },
 
   clearSubscription: () => {
-    set({ subscription: null, plans: [], transactions: [], error: null });
+    set({
+      subscription: null,
+      plans: [],
+      transactions: [],
+      transactionsPagination: null,
+      error: null,
+    });
   },
 }));

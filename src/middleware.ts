@@ -10,7 +10,7 @@ const publicRoutes = [
   "/signup/organization",
   "/signup/verify-email",
   "/forgot-password",
-  "/create-password",
+  "/reset-password",
   "/about",
   "/contact",
   "/services",

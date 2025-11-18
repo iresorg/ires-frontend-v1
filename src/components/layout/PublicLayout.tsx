@@ -17,7 +17,7 @@ export default function PublicLayout({
     pathname.startsWith("/signup") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/forgot-password") ||
-    pathname.startsWith("/create-password") ||
+    pathname.startsWith("/reset-password") ||
     pathname.startsWith("/welcome") ||
     pathname.startsWith("/dashboard");
 

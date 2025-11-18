@@ -91,7 +91,7 @@ export default function AboutUsHero() {
         playsInline
       />
       {/* Content */}
-      <div className="relative z-[2] flex h-full items-center">
+      <div className="relative z-2 flex h-full items-center">
         <Section>
           <div className="section-title section-title-center text-center mx-auto max-w-[870px]">
             <motion.div

@@ -74,13 +74,15 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-[#0E0E1A] text-white">
-      {/* Sidebar */}
-      <Sidebar />
+      {/* Sidebar - Hidden on md and below, visible on lg and above */}
+      <div className="hidden lg:block">
+        <Sidebar />
+      </div>
 
       {/* Main content area */}
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 overflow-hidden">
         <Navbar />
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   );
