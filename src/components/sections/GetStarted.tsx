@@ -2,12 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
+
 const shapeVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
@@ -43,8 +45,7 @@ export default function GetStartedSection() {
         }}
       />
 
-
-      {/* Bouncing Shapes */}
+      {/* Floating Shape */}
       <motion.div
         className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
         variants={shapeVariants}
@@ -115,9 +116,31 @@ export default function GetStartedSection() {
                         {card.text}
                       </p>
                     </div>
-                    <button className="px-6 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer mt-auto">
-                      {card.btnText}
-                    </button>
+
+                    {/* CONDITIONAL BUTTON  */}
+                    {card.btnText === "Sign Up" ? (
+                      <Link
+                        href="/signup"
+                        className="px-6 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer mt-auto inline-block"
+                      >
+                        {card.btnText}
+                      </Link>
+                    ) : card.btnText === "Explore Plans" ? (
+                      <Link
+                        href="/pricing"
+                        className="px-6 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer mt-auto inline-block"
+                      >
+                        {card.btnText}
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/downloads/quick-guide.pdf"
+                        download
+                        className="px-6 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer mt-auto inline-block"
+                      >
+                        {card.btnText}
+                      </Link>
+                    )}
                   </div>
                 </motion.div>
               ))}
