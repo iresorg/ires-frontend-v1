@@ -15,6 +15,7 @@ const fadeUp = {
 
 export default function ToUseServices() {
   const { handleSignUpNavigation, goToPricing } = useAuthNavigation();
+
   const steps = [
     {
       title: "Sign Up",
@@ -107,19 +108,23 @@ export default function ToUseServices() {
                   </p>
                 </div>
 
+                {/* U BUTTONS */}
                 <button
-                  className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition"
+                  className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
                   onClick={() => {
                     if (step.button === "Sign Up") {
                       handleSignUpNavigation();
                       return;
                     }
+
                     if (step.button === "Explore Plans") {
                       goToPricing();
                       return;
                     }
+
                     if (step.button === "Call Now") {
                       window.location.href = "tel:+1234567890";
+                      return;
                     }
                   }}
                 >

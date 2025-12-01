@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -49,24 +50,23 @@ export default function OurCommitment() {
         }}
       />
 
-     <motion.div
-          className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
-          variants={shapeVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          animate={{ y: [0, -20, 0] }}
-          transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
-        >
-          <Image
-            src="/images/cube.png"
-            alt="Decorative sphere"
-            width={130}
-            height={130}
-            className="absolute top-0 right-0 translate-x-[10px] translate-y-[-10px] opacity-80 pointer-events-none"
-          />
-        </motion.div>
-  
+      <motion.div
+        className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
+        variants={shapeVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        animate={{ y: [0, -20, 0] }}
+        transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+      >
+        <Image
+          src="/images/cube.png"
+          alt="Decorative sphere"
+          width={130}
+          height={130}
+          className="absolute top-0 right-0 translate-x-[10px] translate-y-[-10px] opacity-80 pointer-events-none"
+        />
+      </motion.div>
 
       <motion.div
         className="absolute -top-10 left-0 w-32 h-32 lg:w-40 lg:h-40 z-0"
@@ -142,9 +142,12 @@ export default function OurCommitment() {
           <p className="text-white/80 mb-4 text-sm md:text-base">
             Explore Plans Available For Your Organizations
           </p>
-          <button className="px-6 py-2 cursor-pointer rounded-md text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition">
+          <Link
+            href="/pricing"
+            className="px-6 py-2 cursor-pointer rounded-md text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition inline-block"
+          >
             Explore Plans
-          </button>
+          </Link>
         </div>
 
         {/* Call button  */}

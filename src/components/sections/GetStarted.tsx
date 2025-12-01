@@ -117,7 +117,7 @@ export default function GetStartedSection() {
                       </p>
                     </div>
 
-                    {/* CONDITIONAL BUTTON  */}
+                    {/* CONDITIONAL BUTTON " */}
                     {card.btnText === "Sign Up" ? (
                       <Link
                         href="/signup"
