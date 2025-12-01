@@ -110,7 +110,7 @@ export default function Footer() {
                   { name: "FAQs", href: "/faq" },
                   { name: "Blogs", href: "/blog" },
                   { name: "Terms of Service & Conditions", href: "/terms" },
-                  { name: "Newsletter SignUp", href: "/newsletter" },
+              
                 ].map((link) => (
                   <li key={link.name}>
                     <Link

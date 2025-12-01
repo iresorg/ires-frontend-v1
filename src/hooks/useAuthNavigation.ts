@@ -18,6 +18,13 @@ export function useAuthNavigation() {
     router.push(getDashboardRoute());
   };
 
+  const getSubscriptionPlansRoute = () => {
+    if (!user) return "/dashboard/subscription-plans";
+    return user.role === "organization"
+      ? "/dashboard/organization/subscription-plans"
+      : "/dashboard/subscription-plans";
+  };
+
   const handleSignUpNavigation = () => {
     if (isAuthenticated && user) {
       goToDashboard();
@@ -28,7 +35,7 @@ export function useAuthNavigation() {
 
   const handleSubscribeNavigation = () => {
     if (isAuthenticated && user) {
-      goToDashboard();
+      router.push(getSubscriptionPlansRoute());
       return;
     }
     router.push("/login");
@@ -42,6 +49,7 @@ export function useAuthNavigation() {
     isAuthenticated,
     user,
     getDashboardRoute,
+    getSubscriptionPlansRoute,
     goToDashboard,
     handleSignUpNavigation,
     handleSubscribeNavigation,

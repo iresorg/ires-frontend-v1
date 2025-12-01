@@ -359,7 +359,7 @@ export default function SubscriptionPlansPage() {
                       }
                     }}
                   >
-                    {isInitializing === plan.id ? "Processing..." : "Choose Plan"}
+                    {isInitializing === plan.id ? "Processing..." : "Subscribe"}
                   </button>
                 )}
               </div>

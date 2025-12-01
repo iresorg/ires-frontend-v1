@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -13,6 +14,7 @@ const fadeUp = {
 };
 
 export default function ToUseServices() {
+  const { handleSignUpNavigation, goToPricing } = useAuthNavigation();
   const steps = [
     {
       title: "Sign Up",
@@ -73,7 +75,7 @@ export default function ToUseServices() {
           className="mb-12"
         >
           <h2 className="text-white text-lg md:text-xl font-semibold">
-            <span className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
               To Use
             </span>
             <span className="text-white"> Our Services</span>
@@ -90,13 +92,13 @@ export default function ToUseServices() {
               whileInView="visible"
               viewport={{ once: true }}
               className="group relative rounded-2xl p-[2px] 
-              bg-gradient-to-r from-[#4185DD] to-[#B425DA] 
+              bg-linear-to-r from-[#4185DD] to-[#B425DA] 
               hover:scale-[1.02] transition-transform duration-300"
             >
               {/* Inner box */}
               <div className="relative rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md flex flex-col justify-between h-full min-h-[220px] p-6 text-center">
                 <div>
-                  <h3 className="font-semibold text-base mb-3 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                  <h3 className="font-semibold text-base mb-3 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                     {step.title}
                   </h3>
 
@@ -105,7 +107,22 @@ export default function ToUseServices() {
                   </p>
                 </div>
 
-                <button className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition">
+                <button
+                  className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition"
+                  onClick={() => {
+                    if (step.button === "Sign Up") {
+                      handleSignUpNavigation();
+                      return;
+                    }
+                    if (step.button === "Explore Plans") {
+                      goToPricing();
+                      return;
+                    }
+                    if (step.button === "Call Now") {
+                      window.location.href = "tel:+1234567890";
+                    }
+                  }}
+                >
                   {step.button}
                 </button>
               </div>

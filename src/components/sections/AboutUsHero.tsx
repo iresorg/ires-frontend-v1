@@ -72,7 +72,7 @@ export default function AboutUsHero() {
 
   return (
     <div
-      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
+      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[200px] xl:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
         background: "url(/images/hero-bg.jpg)",

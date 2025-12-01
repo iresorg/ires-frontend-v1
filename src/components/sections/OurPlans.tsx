@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -20,6 +21,7 @@ const shapeVariants = {
 };
 
 export default function OurPlans() {
+  const { handleSubscribeNavigation } = useAuthNavigation();
   const plans = [
     {
       icon: "/images/Shield.png",
@@ -95,7 +97,7 @@ export default function OurPlans() {
             alt="Decorative shape"
             width={130}
             height={130}
-           
+
           />
         </motion.div>
 
@@ -129,7 +131,7 @@ export default function OurPlans() {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 justify-items-center">
           {plans.map((plan, i) => (
             <motion.div
               key={i}
@@ -138,9 +140,9 @@ export default function OurPlans() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="w-full max-w-sm sm:max-w-xs lg:max-w-full p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+              className="w-full max-w-sm sm:max-w-xs lg:max-w-full p-px rounded-2xl  bg-linear-to-r from-[#4185DD] to-[#B425DA]"
             >
-              <div className="h-full bg-[#0E0E11]/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+              <div className="h-full bg-[#0E0E11]/90 backdrop-blur-md rounded-2xl p-6 xl:p-8 flex flex-col justify-between">
                 <div>
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
@@ -151,13 +153,13 @@ export default function OurPlans() {
                       height={26}
                       className="object-contain"
                     />
-                    <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                    <h3 className="text-lg sm:text-xl font-semibold  bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                       {plan.title}
                     </h3>
                   </div>
 
                   {/* Price & Subtitle */}
-                  <p className="bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-lg sm:text-xl font-semibold mb-1">
+                  <p className=" bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-lg sm:text-xl font-semibold mb-1">
                     <i>{plan.price}</i>
                   </p>
                   <p className="text-[#b3b3b3] text-xs sm:text-sm mb-6">
@@ -188,7 +190,8 @@ export default function OurPlans() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-6 sm:mt-8 px-4 sm:px-5 py-2.5 rounded-full text-white text-sm sm:text-base font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] shadow-lg cursor-pointer"
+                  onClick={handleSubscribeNavigation}
+                  className="mt-6 sm:mt-8 px-4 sm:px-5 py-2.5 rounded-full text-white text-sm sm:text-base font-medium  bg-linear-to-r from-[#4185DD] to-[#B425DA] shadow-lg cursor-pointer"
                 >
                   Choose Plan
                 </motion.button>
