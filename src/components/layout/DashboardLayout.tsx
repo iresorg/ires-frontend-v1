@@ -22,9 +22,9 @@ export default function DashboardLayout({
       const authenticated = await checkAuth();
 
       if (!authenticated) {
-        clearUser();
-        removeCookie("auth_token");
-        removeCookie("refresh_token");
+      clearUser();
+      removeCookie("auth_token");
+      removeCookie("refresh_token");
         router.push("/login");
         setIsChecking(false);
         return;
@@ -76,7 +76,7 @@ export default function DashboardLayout({
     <div className="flex h-screen bg-[#0E0E1A] text-white">
       {/* Sidebar - Hidden on md and below, visible on lg and above */}
       <div className="hidden lg:block">
-        <Sidebar />
+      <Sidebar />
       </div>
 
       {/* Main content area */}

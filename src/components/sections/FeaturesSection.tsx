@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, PlayIcon, PhoneIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, PhoneIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
@@ -94,7 +94,7 @@ export default function FeaturesSection() {
               </motion.div>
 
               <motion.h2
-                className="text-base sm:text-lg lg:text-2xl xl:text-3xl mt-2 lg:mt-6 font-light text-white leading-tight"
+                className="text-base sm:text-lg lg:text-2xl xl:text-3xl mt-6 lg:mt-6 font-light text-white leading-tight"
                 variants={titleContainerVariants}
                 initial="hidden"
                 whileInView="visible"
@@ -185,7 +185,7 @@ export default function FeaturesSection() {
                       transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
                     >
                       <CheckIcon
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
+                        className="w-5 h-5 shrink-0 mt-0.5"
                         style={{ color: "var(--accent-secondary-color)" }}
                       />
                     </motion.div>
@@ -214,34 +214,12 @@ export default function FeaturesSection() {
                 About Us
               </Button>
 
-              <motion.button
-                className="w-12 h-12 rounded-full flex items-center justify-center mt-2 sm:mt-0"
-                style={{ background: "var(--accent-secondary-color)" }}
-                aria-label="Play video"
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0 0 20px rgba(180, 37, 218, 0.5)",
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{
-                  rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                }}
-              >
-                <motion.div
-                  animate={{ rotate: [0, -360] }}
-                  transition={{
-                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                  }}
-                >
-                  <PlayIcon className="w-6 h-6 sm:w-6 sm:h-6 text-white" />
-                </motion.div>
-              </motion.button>
             </motion.div>
           </motion.div>
 
           {/* Right Content - Phone Image */}
           <motion.div
-            className="lg:col-span-5 relative w-full mt-6 lg:mt-0"
+            className="hidden lg:block lg:col-span-5 relative w-full mt-6 lg:mt-0"
             variants={slideInRightVariants}
             initial="hidden"
             whileInView="visible"
@@ -283,10 +261,10 @@ export default function FeaturesSection() {
       </Section>
 
       {/* Call Now Button */}
-      <div className="absolute top-16 sm:top-20 right-4 transform -translate-y-1/2 z-50">
+      <div className="absolute top-4 sm:-top-6 md:top-20 right-3 sm:right-4 transform -translate-y-1/2 z-50">
         <Button
           href="tel:+1234567890"
-          className="flex items-center gap-1 px-4 sm:px-6 py-1 sm:py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+          className="flex items-center gap-1 px-4 sm:px-6 py-1 sm:py-2 bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
         >
           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
             <PhoneIcon className="w-3 sm:w-4 h-3 sm:h-4 text-red-500" />

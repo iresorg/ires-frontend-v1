@@ -184,7 +184,7 @@ export default function ContactUsSection() {
 
             {/* Contact Info and Newsletter */}
             <motion.div
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
@@ -192,7 +192,7 @@ export default function ContactUsSection() {
             >
               {/* Contact Information */}
               <motion.div
-                className="space-y-4 sm:space-y-6"
+                className="space-y-4 sm:space-y-6 lg:col-span-4"
                 variants={itemVariants}
               >
                 <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-2 sm:mb-4">
@@ -232,7 +232,7 @@ export default function ContactUsSection() {
 
               {/* Newsletter Subscription */}
               <motion.div
-                className="space-y-3 sm:space-y-4"
+                className="space-y-3 sm:space-y-4 lg:col-span-8"
                 variants={itemVariants}
               >
                 <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-white mb-2 sm:mb-4">

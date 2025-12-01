@@ -187,7 +187,7 @@ export default function TestimonialsSection() {
                     >
                         {/* Rating Card - 4 columns */}
                         <motion.div
-                            className="lg:col-span-4 relative p-8 lg:p-10 rounded-3xl border border-transparent bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm text-center"
+                            className="lg:col-span-4 relative p-8 xl:p-10 rounded-3xl border border-transparent bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm text-center"
                             style={{
                                 background: 'linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box',
                                 border: '1px solid transparent'

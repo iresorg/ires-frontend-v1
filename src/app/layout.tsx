@@ -2,7 +2,6 @@ import { Poppins } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import LoadingScreen from "@/components/common/LoadingScreen";
 import PublicLayout from "@/components/layout/PublicLayout";
-import CustomCursor from "@/components/ui/CustomCursor";
 import AuthProvider from "@/components/providers/AuthProvider";
 import "./globals.css";
 import type { Metadata } from 'next';
@@ -83,7 +82,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased bg-white dark:bg-black text-gray-900 dark:text-gray-100`}>
         <LoadingScreen />
-        <CustomCursor />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <PublicLayout>

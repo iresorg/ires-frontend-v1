@@ -1,11 +1,5 @@
 import type { Metadata } from 'next';
-import Hero from "@/components/sections/Hero";
-import ScrollingTicker from "@/components/sections/ScrollingTicker";
-import FeaturesSection from "@/components/sections/FeaturesSection";
-import WhoWeHelpSection from "@/components/sections/WhoWeHelpSection";
-import HowItWorksSection from "@/components/sections/HowItWorksSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import ContactUsSection from "@/components/sections/ContactUsSection";
+import HomeContent from "./HomeContent";
 
 
 
@@ -26,15 +20,6 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <>
-      <Hero />
-      <ScrollingTicker />
-      <FeaturesSection />
-      <WhoWeHelpSection />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <ContactUsSection />
-    
-    </>
+    <HomeContent />
   );
 }

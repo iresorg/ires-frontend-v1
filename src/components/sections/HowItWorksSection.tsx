@@ -1,10 +1,11 @@
-'use client'
+"use client"
 
-import Image from 'next/image'
-import Section from '@/components/ui/Section'
-import SectionTitle from '@/components/ui/SectionTitle'
-import Button from '@/components/ui/Button'
-import { motion } from 'framer-motion'
+import Image from "next/image"
+import Section from "@/components/ui/Section"
+import SectionTitle from "@/components/ui/SectionTitle"
+import Button from "@/components/ui/Button"
+import { motion } from "framer-motion"
+import { useAuthNavigation } from "@/hooks/useAuthNavigation"
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -70,7 +71,7 @@ const serviceCards = [
         title: "SignUp",
         description: "Creating an account with us is your first step to experiencing protection.",
         buttonText: "Sign Up",
-        buttonHref: "/signup"
+        buttonHref: undefined
     },
     {
         title: "Subscribe To A Plan",
@@ -88,7 +89,7 @@ const serviceCards = [
         title: "Stay Safe",
         description: "Our team resolves your emergencies, we continue to update you with tips to keep you protected",
         buttonText: "Sign Up",
-        buttonHref: "/signup"
+        buttonHref: undefined
     }
 ]
 
@@ -143,10 +144,10 @@ export default function HowItWorksSection() {
                         viewport={{ once: true }}
                     >
                         {processSteps.map((step, index) => (
-                            <div key={index} className="relative">
+                            <div key={index} className="relative h-full">
                                 {/* Process Card */}
                                 <motion.div
-                                    className="relative p-6 lg:p-8 rounded-3xl border border-transparent bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm text-center"
+                                    className="relative flex flex-col h-full p-6 xl:p-8 rounded-3xl border border-transparent bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm text-center"
                                     style={{
                                         background: 'linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box',
                                         border: '1px solid transparent'
@@ -162,7 +163,7 @@ export default function HowItWorksSection() {
                                         className="flex justify-center mb-4"
                                         variants={itemVariants}
                                     >
-                                        <div className="w-16 h-16 rounded-full flex items-center justify-center">
+                                        <div className="w-10 h-10 xl:w-16 xl:h-16 rounded-full flex items-center justify-center">
                                             <Image
                                                 src={step.icon}
                                                 alt={`${step.title} icon`}
@@ -183,7 +184,7 @@ export default function HowItWorksSection() {
 
                                     {/* Description */}
                                     <motion.p
-                                        className="text-white/90 text-sm lg:text-base leading-relaxed"
+                                        className="text-white/90 text-sm lg:text-base leading-relaxed flex-1"
                                         variants={itemVariants}
                                     >
                                         {step.description}{' '}
@@ -208,7 +209,7 @@ export default function HowItWorksSection() {
                                         className="hidden lg:block absolute top-1/2 -right-2 transform -translate-y-1/2 z-10"
                                         variants={itemVariants}
                                     >
-                                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                                        <div className="w-8 h-8 rounded-full bg-linear-to-r from-blue-500 to-purple-600 flex items-center justify-center">
                                             <svg
                                                 className="w-4 h-4 text-white"
                                                 fill="none"
@@ -259,7 +260,7 @@ export default function HowItWorksSection() {
 
                         {/* Service Cards Grid */}
                         <motion.div
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 xl:gap-8"
                             variants={containerVariants}
                             initial="hidden"
                             whileInView="visible"
@@ -268,7 +269,7 @@ export default function HowItWorksSection() {
                             {serviceCards.map((service, index) => (
                                 <motion.div
                                     key={index}
-                                    className="relative p-6 lg:p-8 rounded-3xl border border-transparent bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm"
+                                    className="relative flex flex-col h-full p-6 xl:p-8 rounded-3xl border border-transparent bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm"
                                     style={{
                                         background: 'linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box',
                                         border: '1px solid transparent'
@@ -295,21 +296,14 @@ export default function HowItWorksSection() {
 
                                     {/* Description */}
                                     <motion.p
-                                        className="text-white/90 text-sm lg:text-base leading-relaxed mb-6"
+                                        className="text-white/90 text-sm lg:text-base leading-relaxed mb-6 flex-1"
                                         variants={itemVariants}
                                     >
                                         {service.description}
                                     </motion.p>
 
                                     {/* Button */}
-                                    <motion.div variants={itemVariants}>
-                                        <Button
-                                            href={service.buttonHref}
-                                            className="w-full px-6 py-3 text-sm lg:text-base rounded-xl"
-                                        >
-                                            {service.buttonText}
-                                        </Button>
-                                    </motion.div>
+                                    <ServiceCardButton service={service} />
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -319,3 +313,55 @@ export default function HowItWorksSection() {
         </div>
     )
 }
+
+function ServiceCardButton({
+    service,
+}: {
+    service: {
+        title: string
+        description: string
+        buttonText: string
+        buttonHref?: string
+    }
+}) {
+    const { handleSignUpNavigation, goToPricing } = useAuthNavigation()
+
+    if (service.buttonText === "Sign Up") {
+        return (
+            <motion.div variants={itemVariants} className="mt-auto">
+                <Button
+                    onClick={handleSignUpNavigation}
+                    className="w-full px-6 py-3 text-sm lg:text-base rounded-xl"
+                >
+                    {service.buttonText}
+                </Button>
+            </motion.div>
+        )
+    }
+
+    if (service.buttonText === "Explore Plans") {
+        return (
+            <motion.div variants={itemVariants} className="mt-auto">
+                <Button
+                    href={service.buttonHref}
+                    onClick={goToPricing}
+                    className="w-full px-6 py-3 text-sm lg:text-base rounded-xl"
+                >
+                    {service.buttonText}
+                </Button>
+            </motion.div>
+        )
+    }
+
+    return (
+        <motion.div variants={itemVariants} className="mt-auto">
+            <Button
+                href={service.buttonHref}
+                className="w-full px-6 py-3 text-sm lg:text-base rounded-xl"
+            >
+                {service.buttonText}
+            </Button>
+        </motion.div>
+    )
+}
+

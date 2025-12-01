@@ -43,7 +43,7 @@ const mapStatus = (status: string): string => {
 export default function TransactionHistory() {
   const { transactions, transactionsPagination, isLoading, fetchTransactions } =
     useSubscriptionStore();
-  const [page, setPage] = useState(1);
+const [page, setPage] = useState(1);
   const limit = 10;
   const hasFetchedRef = useRef(false);
 
@@ -106,31 +106,31 @@ export default function TransactionHistory() {
             {(transactions || []).map((transaction) => {
               const displayStatus = mapStatus(transaction.status);
               return (
-                <tr
+              <tr
                   key={transaction.id}
-                  className="border-b border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
-                >
+                className="border-b border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
+              >
                   <td className="px-4 py-3">{transaction.transactionReference}</td>
-                  <td className="pl-10 px-4 py-3 text-center">
+                <td className="pl-10 px-4 py-3 text-center">
                     {transaction.plan?.name || "N/A"}
-                  </td>
-                  <td className="pl-10 px-4 py-3 text-center">
+                </td>
+                <td className="pl-10 px-4 py-3 text-center">
                     {formatDateTime(transaction.date)}
-                  </td>
-                  <td className="pl-10 px-4 py-3 text-center">
+                </td>
+                <td className="pl-10 px-4 py-3 text-center">
                     {formatPrice(transaction.amount)}
-                  </td>
-                  <td className="px-4 py-3 text-center text-white">
-                    <Link href={`/dashboard/transaction-history/`}>
-                      <button
+                </td>
+                <td className="px-4 py-3 text-center text-white">
+                  <Link href={`/dashboard/transaction-history/`}>
+                    <button
                         className={`text-sm transition px-2 py-2 rounded-lg cursor-pointer ${statusClasses[displayStatus] || "bg-neutral-800"
-                          }`}
-                      >
+                      }`}
+                    >
                         {displayStatus}
-                      </button>
-                    </Link>
-                  </td>
-                </tr>
+                    </button>
+                  </Link>
+                </td>
+              </tr>
               );
             })}
           </tbody>
@@ -188,17 +188,17 @@ export default function TransactionHistory() {
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
             className="flex flex-row items-center disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
-          >
-            <Image
-              src="/images/white-left.svg"
-              alt="Previous"
-              width={20}
-              height={20}
+            >
+              <Image
+                src="/images/white-left.svg"
+                alt="Previous"
+                width={20}
+                height={20}
               className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2"
-            />
+              />
             <p className="hidden sm:inline">Previous</p>
             <p className="sm:hidden">Prev</p>
-          </button>
+            </button>
           <div className="flex gap-1.5 sm:gap-2 items-center flex-wrap justify-center">
             {Array.from({ length: transactionsPagination.totalPages }, (_, i) => i + 1)
               .filter((num) => {
@@ -215,15 +215,15 @@ export default function TransactionHistory() {
                 return (
                   <div key={num} className="flex items-center gap-1 sm:gap-2">
                     {showEllipsisBefore && <span className="text-white/50 text-xs">...</span>}
-                    <button
-                      onClick={() => setPage(num)}
+              <button
+                onClick={() => setPage(num)}
                       className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center transition-all text-xs sm:text-sm ${num === page
                         ? "bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] text-white cursor-pointer"
                         : "hover:opacity-90 cursor-pointer"
-                        }`}
-                    >
-                      {num}
-                    </button>
+                }`}
+              >
+                {num}
+              </button>
                   </div>
                 );
               })}
@@ -237,17 +237,17 @@ export default function TransactionHistory() {
             disabled={page === transactionsPagination.totalPages || !transactionsPagination.nextPage}
             className="flex flex-row items-center disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
           >
-            <p>Next</p>
-            <Image
-              src="/images/arrow-right-vector.svg"
-              alt="Next"
-              width={15}
-              height={15}
+              <p>Next</p>
+              <Image
+                src="/images/arrow-right-vector.svg"
+                alt="Next"
+                width={15}
+                height={15}
               className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2"
-            />
-          </button>
+              />
+            </button>
         </div>
       )}
-    </div>
+      </div>
   );
 }

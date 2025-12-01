@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import Section from "@/components/ui/Section";
 import { useAuthStore } from "@/store/auth";
+import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 import { removeCookie } from "@/lib/api";
 
 export default function Header() {
@@ -16,6 +17,7 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user, isAuthenticated, clearUser, fetchUser } = useAuthStore();
+  const { handleSignUpNavigation } = useAuthNavigation();
 
   // Fetch user profile when component mounts if authenticated but user is null
   useEffect(() => {
@@ -175,7 +177,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-base font-normal px-3 py-3 my-2 text-[#D1D1D1] hover:bg-(--secondary) rounded-4xl"
+                  className="text-sm xl:text-base font-normal px-3 py-2 xl:py-3 my-1 xl:my-2 text-[#D1D1D1] hover:bg-(--secondary) rounded-4xl"
                 >
                   {label}
                 </Link>
@@ -242,11 +244,14 @@ export default function Header() {
                 <>
                   <Link
                     href="/login"
-                    className="text-base font-medium px-4 py-2 text-white hover:text-white/80 transition-colors"
+                    className="text-sm xl:text-base font-medium px-4 py-2 text-white hover:text-white/80 transition-colors"
                   >
                     Login
                   </Link>
-                  <Button href="/signup" className="rounded-4xl">
+                  <Button
+                    onClick={handleSignUpNavigation}
+                    className="rounded-4xl text-sm xl:text-base"
+                  >
                     Sign Up
                   </Button>
                 </>

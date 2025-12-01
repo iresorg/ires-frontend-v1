@@ -74,7 +74,7 @@ export default function Hero() {
 
   return (
     <div
-      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
+      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[200px] xl:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
         background: "url(/images/hero-bg.jpg)",
@@ -94,7 +94,7 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-[2] flex h-full items-center">
+      <div className="relative z-2 flex h-full items-center">
         <Section>
           <div className="section-title section-title-center text-center mx-auto max-w-[870px]">
             <motion.div
