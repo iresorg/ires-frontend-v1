@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Image from "next/image";
+import Link from "next/link";
 
 const teamVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -14,22 +15,36 @@ const teamVariants = {
   }),
 };
 
-const teamMembers = [
-  { role: "Founder/CEO" },
-  { role: "Co-Founder" },
-  { role: "Head of Operations" },
-  { role: "Product Head" },
-];
-
 const shapeVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
 };
 
+const teamMembers = [
+  {
+    name: "Dr Usman Bakare",
+    role: "Founder / CEO",
+    image: "/images/inyang.jpg",
+    linkedin: "https://www.linkedin.com/in/ceemin/",
+  },
+  {
+    name: "Simisola Olubodun",
+    role: "Co-Founder / CTO",
+    image: "/images/inyang.jpg",
+    linkedin: "https://www.linkedin.com/in/ceemin/",
+  },
+  {
+    name: "Mbre Inyang",
+    role: "COO",
+    image: "/images/inyang.jpg",
+    linkedin: "https://www.linkedin.com/in/mbre-inyang-9103b424a",
+  },
+];
+
 export default function MeetOurTeamSection() {
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Background */}
+      {/* Background Layer */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -38,7 +53,7 @@ export default function MeetOurTeamSection() {
         }}
       />
 
-      {/* Bouncing Shapes */}
+      {/* Floating Shapes */}
       <motion.div
         className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
         variants={shapeVariants}
@@ -79,8 +94,7 @@ export default function MeetOurTeamSection() {
       </motion.div>
 
       <Section className="relative z-10 py-16 lg:py-24">
-      
-        {/* CALL Button */}
+        {/* CALL BUTTON */}
         <div className="absolute top-6 right-6 lg:top-8 lg:right-12 z-40">
           <a
             href="tel:+1234567890"
@@ -97,7 +111,7 @@ export default function MeetOurTeamSection() {
           </a>
         </div>
 
-        {/* Title */}
+        {/* TITLE */}
         <div className="flex justify-center">
           <SectionTitle
             logo="/logos/ires-logo.svg"
@@ -110,8 +124,8 @@ export default function MeetOurTeamSection() {
           Meet Our Core Team
         </h2>
 
-        {/* Grid of team members */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10 justify-items-center">
+        {/* TEAM GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
           {teamMembers.map((member, i) => (
             <motion.div
               key={i}
@@ -120,19 +134,34 @@ export default function MeetOurTeamSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[220px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+              className="relative w-full max-w-[240px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
             >
               <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6 flex flex-col items-center text-center h-full">
                 <Image
-                  src="/images/person.png"
-                  alt={member.role}
-                  width={80}
-                  height={80}
-                  className="mb-4"
+                  src={member.image}
+                  alt={member.name}
+                  width={90}
+                  height={90}
+                  className="rounded-full mb-4 object-cover"
                 />
-                <p className="text-sm lg:text-base font-medium text-white">
+
+                <h3 className="text-white text-sm lg:text-base font-semibold">
+                  {member.name}
+                </h3>
+
+                <p className="text-gray-300 text-xs lg:text-sm mb-3">
                   {member.role}
                 </p>
+
+                {member.linkedin && (
+                  <Link
+                    href={member.linkedin}
+                    target="_blank"
+                    className="text-sm font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent hover:opacity-80 transition "
+                  >
+                    View LinkedIn →
+                  </Link>
+                )}
               </div>
             </motion.div>
           ))}
