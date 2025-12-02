@@ -250,7 +250,7 @@ export default function Header() {
                   </Link>
                   <Button
                     onClick={handleSignUpNavigation}
-                    className="rounded-4xl text-sm xl:text-base"
+                    className="rounded-4xl text-sm xl:text-base cursor-pointer"
                   >
                     Sign Up
                   </Button>

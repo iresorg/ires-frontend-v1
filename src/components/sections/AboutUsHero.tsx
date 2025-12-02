@@ -197,9 +197,7 @@ export default function AboutUsHero() {
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button href="#report" variant="primary">
-                    Report Threat
-                  </Button>
+                 
                 </motion.div>
               </motion.div>
             </motion.div>
