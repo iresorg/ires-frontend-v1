@@ -5,7 +5,7 @@ import OurStorySection from '@/components/sections/OurStorySection';
 import MissionVisionSection from '@/components/sections/MisionVision';
 import MeetOurTeamSection from '@/components/sections/MeetTeem';
 import WhyWeExistSection from '@/components/sections/WeExist';
-import ContactUsSection from "@/components/sections/ContactUsSection";
+
 export const metadata: Metadata = {
   title: 'About Us - iRES Cybersecurity Emergency Response',
   description: 'Learn about iRES - the leading 24/7 cybersecurity incident response emergency system. Our expert team provides real-time protection and rapid response to digital threats.',
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <MeetOurTeamSection/>
       <WhyWeExistSection/>
       
-        <ContactUsSection />
+    
      </>
   );
 }

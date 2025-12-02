@@ -4,7 +4,7 @@ import ScrollingTicker from "@/components/sections/ScrollingTicker";
 import OurServices from "@/components/sections/OurServices";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import OurCommitmentSection from "@/components/sections/OurCommitment";
-import ContactUsSection from "@/components/sections/ContactUsSection";
+
 export const metadata: Metadata = {
   title: "Organization Plans - Enterprise Cybersecurity Response",
   description:
@@ -36,7 +36,7 @@ export default function OrganizationPage() {
       <OurServices />
       <WhyChooseUs />
       <OurCommitmentSection />
-      <ContactUsSection />
+
     </>
   );
 }
