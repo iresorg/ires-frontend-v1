@@ -157,7 +157,7 @@ export default function OurServices() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="relative rounded-2xl overflow-hidden hover:scale-[1.03] transition-transform duration-300 cursor-pointer"
+                    className="relative rounded-2xl overflow-hidden hover:scale-[1.03] transition-transform duration-300 "
                   >
                     {/* Gradient border */}
                     <div className="absolute inset-0 rounded-2xl p-[3px] bg-gradient-to-r from-[#4185DD] to-[#601474] blur-[1px]" />
@@ -169,7 +169,7 @@ export default function OurServices() {
 
                       <button
                         onClick={() => setSelectedIndex(i)}
-                        className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition"
+                        className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
                       >
                         More Info
                       </button>
