@@ -30,7 +30,7 @@ const teamMembers = [
   {
     name: "Simisola Olubodun",
     role: "Co-Founder / CTO",
-    image: "/images/inyang.jpg",
+    image: "/images/simisola.jpg",
     linkedin: "https://www.linkedin.com/in/ceemin/",
   },
   {
