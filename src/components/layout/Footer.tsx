@@ -54,27 +54,74 @@ export default function Footer() {
                   </div>
                 </div>
               </div>
+
               <p className="text-white/80 text-sm leading-relaxed">
                 Experience fast security response like never before with
                 cutting-edge technology to keep you safe. This is iRES - Real
-                Time, Real People, Real Protection.
+                Time, Real People, Real Protection
               </p>
+
+              {/* Social Icons */}
               <div className="flex gap-3">
-                {["linkedin", "facebook", "instagram"].map((icon) => (
-                  <Link
-                    key={icon}
-                    href="#"
-                    className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
-                  >
-                    <Image
-                      src={`/icons/${icon}.svg`}
-                      alt={icon}
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                    />
-                  </Link>
-                ))}
+                {/* LinkedIn */}
+                <Link
+                  href="https://www.linkedin.com/company/iresorg/"
+                  target="_blank"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                >
+                  <Image
+                    src="/icons/linkedin.svg"
+                    alt="linkedin"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+
+                {/* Instagram */}
+                <Link
+                  href="https://www.instagram.com/iresorgg/"
+                  target="_blank"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                >
+                  <Image
+                    src="/icons/instagram.svg"
+                    alt="instagram"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+
+                {/* X / Twitter */}
+                <Link
+                  href="https://x.com/iRESorg?t=L-aamPkbfZi06TbjYsXfjA&s=09"
+                  target="_blank"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                >
+                  <Image
+                    src="/icons/twitter.svg"
+                    alt="twitter-x"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
+
+                {/* YouTube */}
+                <Link
+                  href="https://www.youtube.com/@iresorg"
+                  target="_blank"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                >
+                  <Image
+                    src="/icons/youtube.svg"
+                    alt="youtube"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </Link>
               </div>
             </motion.div>
 
@@ -128,40 +175,61 @@ export default function Footer() {
               <h3 className="text-white font-bold text-lg">
                 Contact Information
               </h3>
+
               <div className="space-y-3 sm:space-y-4">
-                {[
-                  {
-                    icon: "location_on",
-                    text: "17 Whatever, Somewhere, Lagos, Nigeria",
-                  },
-                  {
-                    icon: "mark_email_unread",
-                    text: "iresorgsupport@gmail.com",
-                  },
-                  {
-                    icon: "phone",
-                    text: "+234 810 000 0000",
-                  },
-                ].map((info) => (
-                  <div key={info.text} className="flex items-start gap-3">
-                    <div className="w-5 h-5 mt-1 flex-shrink-0">
+                {/* Address */}
+                <div className="flex items-start gap-3">
+                  <Image
+                    src="/icons/location_on.svg"
+                    alt="location"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 mt-1"
+                  />
+                  <span className="text-white/80 text-sm">
+                     Lagos, Nigeria.
+                  </span>
+                </div>
+
+                {/* Updated Emails */}
+                <div className="flex flex-col gap-2">
+                  {[
+                    "iresorgg@gmail.com",
+                    "techsupport@iresorg.com",
+                    "customersupport@iresorg.com",
+                  ].map((email) => (
+                    <div key={email} className="flex items-start gap-3">
                       <Image
-                        src={`/icons/${info.icon}.svg`}
-                        alt={info.icon}
+                        src="/icons/mark_email_unread.svg"
+                        alt="email"
                         width={20}
                         height={20}
-                        className="w-5 h-5"
+                        className="w-5 h-5 mt-1"
                       />
+                      <span className="text-white/80 text-sm">{email}</span>
                     </div>
-                    <span className="text-white/80 text-sm">{info.text}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-start gap-3">
+                  <Image
+                    src="/icons/phone.svg"
+                    alt="phone"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 mt-1"
+                  />
+                  <span className="text-white/80 text-sm">
+                    +234 810 000 0000
+                  </span>
+                </div>
               </div>
             </motion.div>
           </div>
         </motion.div>
 
-        {/* Copyright Bar */}
+        {/* Copyright */}
         <motion.div
           className="border-t border-white/10 py-6 mt-10"
           variants={itemVariants}
