@@ -48,7 +48,7 @@ export default function IndividualRisks() {
             <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
               <div>
                 <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Personal Risk:</span>
-                {r.risk}
+              {r.risk}
               </div>
             </div>
 
@@ -58,7 +58,7 @@ export default function IndividualRisks() {
             >
               <div>
                 <span className="sm:hidden text-[9px] text-white/90 mb-1 block">Impact:</span>
-                {r.impact}
+              {r.impact}
               </div>
             </div>
 
@@ -66,7 +66,7 @@ export default function IndividualRisks() {
             <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
               <div>
                 <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Quick Mitigation:</span>
-                {r.mitigation}
+              {r.mitigation}
               </div>
             </div>
           </div>

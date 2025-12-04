@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://iresorg.com',
+      url: 'https://iresorg.com',
     siteName: 'iRES - Cybersecurity Emergency Response',
     title: 'iRES - 24/7 Cybersecurity Incident Response Emergency System',
     description: 'Real Time. Real People. Real Protection. Expert cybersecurity incident response available 24/7 for rapid emergency response to digital threats.',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     yandex: 'your-yandex-verification-code',
   },
   alternates: {
-    canonical: 'https://iresorg.com',
+      canonical: 'https://iresorg.com',
   },
   category: 'cybersecurity',
 };
@@ -84,9 +84,9 @@ export default function RootLayout({
         <LoadingScreen />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
-            <PublicLayout>
-              {children}
-            </PublicLayout>
+          <PublicLayout>
+            {children}
+          </PublicLayout>
           </AuthProvider>
         </ThemeProvider>
       </body>

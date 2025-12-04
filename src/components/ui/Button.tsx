@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   variant?: 'primary' | 'secondary';
+  disabled?: boolean;
 }
 
 export default function Button({ 
@@ -15,7 +16,8 @@ export default function Button({
   href, 
   onClick, 
   className = '',
-  variant = 'primary'
+  variant = 'primary',
+  disabled = false
 }: ButtonProps) {
   const baseClasses = "px-6 py-3 rounded-4xl font-medium text-white transition-all duration-200 hover:scale-105";
   
@@ -42,7 +44,11 @@ export default function Button({
     }
 
     return (
-      <button onClick={onClick} className={secondaryClasses}>
+      <button 
+        onClick={disabled ? undefined : onClick} 
+        disabled={disabled} 
+        className={secondaryClasses}
+      >
         {children}
       </button>
     );
@@ -69,14 +75,19 @@ export default function Button({
 
   return (
     <button
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className={`${baseClasses} ${className}`}
-      style={buttonStyle}
+      style={disabled ? { ...buttonStyle, opacity: 0.5, cursor: 'not-allowed' } : buttonStyle}
       onMouseEnter={(e) => {
-        Object.assign(e.currentTarget.style, hoverStyle);
+        if (!disabled) {
+          Object.assign(e.currentTarget.style, hoverStyle);
+        }
       }}
       onMouseLeave={(e) => {
-        Object.assign(e.currentTarget.style, buttonStyle);
+        if (!disabled) {
+          Object.assign(e.currentTarget.style, buttonStyle);
+        }
       }}
     >
       {children}
