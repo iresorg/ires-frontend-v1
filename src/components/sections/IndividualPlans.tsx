@@ -21,7 +21,7 @@ export default function OurPlans() {
     {
       icon: "/images/Shield.png",
       title: "Basic Shield",
-      price: "₦15,000/month",
+      price: "₦50,000/month",
       subtitle: "For Everyday phone & social media users",
       features: [
         "Incident reporting via phone/email",
@@ -35,7 +35,7 @@ export default function OurPlans() {
     {
       icon: "/images/guard.png",
       title: "Safe Guard",
-      price: "₦30,000/month",
+      price: "₦80,000/month",
       subtitle: "For Freelancers, small-scale sellers, influencers",
       features: [
         "Priority incident handling",
@@ -50,7 +50,7 @@ export default function OurPlans() {
     {
       icon: "/images/fortress.png",
       title: "Total Lockdown",
-      price: "₦50,000/month",
+      price: "₦100,000/month",
       subtitle: "For High-risk individuals, public figures, executives",
       features: [
         "24/7 priority access",

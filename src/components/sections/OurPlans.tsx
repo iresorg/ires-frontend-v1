@@ -26,7 +26,7 @@ export default function OurPlans() {
     {
       icon: "/images/Shield.png",
       title: "Business Shield",
-      price: "₦80,000/month",
+      price: "₦150,000/month",
       subtitle: "For Small businesses (1–10 staff)",
       features: [
         "Incident reporting hotline",
@@ -40,7 +40,7 @@ export default function OurPlans() {
     {
       icon: "/images/guard.png",
       title: "Enterprise Guard",
-      price: "₦200,000/month",
+      price: "₦250,000/month",
       subtitle: "For Medium-sized businesses (11–50 staff)",
       features: [
         "Dedicated account manager",

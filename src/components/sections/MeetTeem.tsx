@@ -74,37 +74,34 @@ export default function MeetOurTeamSection() {
               viewport={{ once: true }}
               className="relative w-full max-w-[280px] transition-transform duration-300 hover:scale-[1.03]"
             >
-              {/* Outer gradient border */}
+              {/* Outer gradient border with image filling the card */}
               <div className="p-[2px] rounded-[22px] bg-gradient-to-r from-[#4185DD] to-[#B425DA]">
-                {/* Inner content */}
-                <div className="rounded-[20px] overflow-hidden bg-[#0E0E11]/85 backdrop-blur-sm flex flex-col items-center text-center h-full">
-                  {/* Image */}
-                  <div className="relative w-full h-[200px] sm:h-[220px] md:h-[240px] overflow-hidden">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-
-                  {/* Text */}
-                  <div className="p-6 flex flex-col items-center">
-                    <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-1">
-                      {member.name}
-                    </h3>
-                    <p className="text-white/80 text-sm mb-3">{member.role}</p>
-                    {member.linkedin && (
-                      <Link
-                        href={member.linkedin}
-                        target="_blank"
-                        className="text-sm font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent hover:opacity-80 transition cursor-pointer"
-                      >
-                        View LinkedIn →
-                      </Link>
-                    )}
-                  </div>
+                {/* Image container: fills the inner rounded area */}
+                <div className="rounded-[20px] overflow-hidden relative w-full h-[300px] sm:h-[320px] md:h-[340px]">
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    className="object-cover w-full h-full"
+                  />
                 </div>
+              </div>
+
+              {/* Text content moved below the card */}
+              <div className="mt-4 px-2 text-center">
+                <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-1">
+                  {member.name}
+                </h3>
+                <p className="text-white/80 text-sm mb-3">{member.role}</p>
+                {member.linkedin && (
+                  <Link
+                    href={member.linkedin}
+                    target="_blank"
+                    className="text-sm font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent hover:opacity-80 transition cursor-pointer"
+                  >
+                    View LinkedIn →
+                  </Link>
+                )}
               </div>
             </motion.div>
           ))}
