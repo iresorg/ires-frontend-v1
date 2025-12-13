@@ -70,7 +70,7 @@ export default function ComingSoonPage() {
             "
           >
             24/7 Cybersecurity Incident <br />
-            Response Hotline 24/7
+            Response Hotline
           </h2>
 
           {/* Paragraph */}
