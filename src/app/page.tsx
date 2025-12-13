@@ -1,124 +1,103 @@
-'use client'
+// app/page.tsx
+'use client';
 
-import Link from 'next/link'
-import PublicLayout from '@/components/layout/PublicLayout'
-import {
-  ShieldCheckIcon,
-  UserGroupIcon,
-  ChartBarIcon,
-  ClockIcon,
-} from '@heroicons/react/24/outline'
-
-const features = [
-  {
-    name: 'Real-time Response',
-    description: 'Get immediate assistance from trained responders in emergency situations.',
-    icon: ClockIcon,
-  },
-  {
-    name: 'Verified Responders',
-    description: 'All our responders are thoroughly vetted and professionally trained.',
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: 'Community Driven',
-    description: 'Join a network of dedicated professionals committed to helping others.',
-    icon: UserGroupIcon,
-  },
-  {
-    name: 'Data-Driven Insights',
-    description: 'Access comprehensive analytics and reporting for better decision making.',
-    icon: ChartBarIcon,
-  },
-]
-
-export default function HomePage() {
+export default function ComingSoonPage() {
   return (
-    <PublicLayout>
-      {/* Hero section */}
-      <div className="relative isolate overflow-hidden bg-gradient-to-b from-primary-100/20 dark:from-primary-900/20">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
-          <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-            <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
-              Emergency Response at Your Fingertips
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-              IRES connects you with trained responders in emergency situations. Our platform ensures quick,
-              reliable, and professional assistance when you need it most.
-            </p>
-            <div className="mt-10 flex items-center gap-x-6">
-              <Link
-                href="/contact"
-                className="rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-              >
-                Get Started
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
-              >
-                Learn more <span aria-hidden="true">→</span>
-              </Link>
+    <main className="relative h-screen w-screen overflow-hidden text-white">
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source src="/image/iresvideo.mp4" type="video/mp4" />
+      </video>
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      {/* Content */}
+      <div className="relative z-10 flex h-full w-full flex-col">
+        {/* Logo */}
+        <div className="p-6">
+          <img
+            src="/image/ireslogo.png"
+            alt="iRES Logo"
+            className="h-10 w-auto"
+          />
+        </div>
+
+        {/* Center Content */}
+        <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+          {/* Heading */}
+          <h1
+            className="
+              mb-6 text-3xl font-extrabold tracking-wide
+              md:text-4xl
+              text-transparent bg-clip-text
+              bg-gradient-to-r from-blue-400 to-purple-500
+              drop-shadow-lg
+            "
+          >
+            COMING SOON !!!
+          </h1>
+
+          {/* Small Glass Tag */}
+         <div
+            className="
+              mb-6 rounded-md
+              border border-transparent
+              px-4 py-1 text-sm
+              backdrop-blur
+              text-white
+            "
+            style={{
+              borderImage: 'linear-gradient(to right, #3b82f6, #a855f7) 1',
+            }}
+          >
+            iRES - Incident Response Emergency System
+          </div>
+
+          {/* Sub Heading */}
+          <h2
+            className="
+              max-w-3xl text-2xl font-bold leading-snug
+              md:text-4xl
+              text-white/90
+              
+            "
+          >
+            24/7 Cybersecurity Incident <br />
+            Response Hotline 24/7
+          </h2>
+
+          {/* Paragraph */}
+          <p className="mb-2 max-w-lg text-sm text-white/80 md:text-base">
+            Experience fast security response like never before with cutting-edge
+            technology to keep you safe.
+          </p>
+
+          {/* CTA Tag */}
+          <div
+            className="
+              rounded-full border
+              border-transparent bg-gradient-to-r from-blue-400 to-purple-500
+              p-[1px] transition-all duration-500 hover:scale-105
+            "
+          >
+            <div className="rounded-full bg-black/60 px-8 py-2 text-sm font-semibold">
+              WE ARE COMING SOON
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Feature section */}
-      <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-primary-600">Faster Response</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-            Everything you need to handle emergencies
+          {/* Footer Line */}
+          <p className="mt-6 text-xs text-white/70 tracking-wide">
+            This is iRES - Real Time, Real People, Real Protection
           </p>
-          <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-            Our platform combines cutting-edge technology with a network of trained professionals to provide
-            rapid response in emergency situations.
-          </p>
-        </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4">
-            {features.map((feature) => (
-              <div key={feature.name} className="flex flex-col rounded-xl shadow p-6 bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))]">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7">
-                  <feature.icon className="h-5 w-5 flex-none text-primary-600" aria-hidden="true" />
-                  {feature.name}
-                </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7">
-                  <p className="flex-auto">{feature.description}</p>
-                </dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </div>
-
-      {/* CTA section */}
-      <div className="relative isolate mt-32 px-6 py-32 sm:mt-56 sm:py-40 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center rounded-xl shadow bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] p-10">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Ready to make a difference?
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-8">
-            Join our network of responders and help save lives in your community. We provide training,
-            support, and the tools you need to be effective.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href="/responders"
-              className="rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-            >
-              Become a Responder
-            </Link>
-            <Link
-              href="/contact"
-              className="text-sm font-semibold leading-6"
-            >
-              Contact us <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </PublicLayout>
-  )
+    </main>
+  );
 }
