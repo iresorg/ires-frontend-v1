@@ -19,8 +19,9 @@ const teamMembers = [
   {
     name: "Dr Usman Bakare",
     role: "Founder / CEO",
-    image: "/images/.jpg",
-    linkedin: "https://www.linkedin.com/in/ceemin/",
+    image: "/images/Mr Usman.png",
+    linkedin: "https://www.linkedin.com/in/dr-usman-bakare-626a1136"
+
   },
   {
     name: "Simisola Olubodun",
