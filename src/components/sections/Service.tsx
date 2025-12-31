@@ -15,7 +15,7 @@ const fadeUp = {
 };
 
 export default function OurServices() {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const services = [
     "24/7 Advanced Network Security and Threat Monitoring",
