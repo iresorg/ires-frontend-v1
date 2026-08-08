@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
@@ -15,6 +16,16 @@ const fadeUp = {
 };
 
 export default function WhyWeExistSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setPlaying(true);
+    }
+  };
+
   return (
     <div className="relative w-full">
       {/* Background */}
@@ -35,7 +46,9 @@ export default function WhyWeExistSection() {
             width={28}
             height={28}
           />
-          <span className="text-white text-lg font-semibold">Why We Exist</span>
+          <span className="text-lg font-semibold text-white">
+            Why We Exist
+          </span>
         </div>
 
         {/* Video */}
@@ -44,17 +57,34 @@ export default function WhyWeExistSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mx-auto mt-12 w-full max-w-4xl p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+          className="mx-auto mt-12 w-full max-w-4xl overflow-hidden rounded-2xl bg-linear-to-r from-[#4185DD] to-[#B425DA] p-0.5"
         >
-          <div className="relative flex items-center justify-center w-full h-[260px] md:h-[340px] lg:h-[420px] rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md">
-            {/* Play button */}
-            <motion.button
-              className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[#4185dd] to-[#b425da] shadow-lg"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+          <div className="relative rounded-2xl bg-[#0E0E11]">
+            <video
+              ref={videoRef}
+              className="h-65 w-full rounded-2xl object-cover md:h-85 lg:h-105"
+              controls={playing}
+              preload="metadata"
+              playsInline
             >
-              <PlayIcon className="w-6 h-6 text-white" />
-            </motion.button>
+              <source src="/video/iRES_Cinematic_Demo (3).mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            {!playing && (
+              <button
+                onClick={handlePlay}
+                className="absolute inset-0 flex items-center justify-center bg-black/40 transition hover:bg-black/30"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-r from-[#4185DD] to-[#B425DA] shadow-xl"
+                >
+                  <PlayIcon className="h-7 w-7 text-white" />
+                </motion.div>
+              </button>
+            )}
           </div>
         </motion.div>
       </Section>

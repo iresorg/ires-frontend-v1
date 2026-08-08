@@ -20,9 +20,9 @@ const titleContainerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.2,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 };
 
 const wordVariants = {
@@ -32,9 +32,9 @@ const wordVariants = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.7
-    }
-  }
+      duration: 0.7,
+    },
+  },
 };
 
 const buttonVariants = {
@@ -45,13 +45,14 @@ const buttonVariants = {
     scale: 1,
     transition: {
       duration: 0.6,
-      delay: 0.2
-    }
-  }
+      delay: 0.2,
+    },
+  },
 };
 
 export default function Hero() {
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     // Listen for loading complete event
@@ -59,22 +60,22 @@ export default function Hero() {
       setLoadingComplete(true);
     };
 
-    window.addEventListener('loadingComplete', handleLoadingComplete);
-    
+    window.addEventListener("loadingComplete", handleLoadingComplete);
+
     // Fallback in case event doesn't fire
     const fallbackTimer = setTimeout(() => {
       setLoadingComplete(true);
     }, 3000);
 
     return () => {
-      window.removeEventListener('loadingComplete', handleLoadingComplete);
+      window.removeEventListener("loadingComplete", handleLoadingComplete);
       clearTimeout(fallbackTimer);
     };
   }, []);
 
   return (
     <div
-      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[200px] xl:pt-[250px] lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
+      className="hero heo-bg-image pt-35 pb-20 lg:pt-50 xl:pt-62.5 lg:pb-35 relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
         background: "url(/images/hero-bg.jpg)",
@@ -96,7 +97,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-2 flex h-full items-center">
         <Section>
-          <div className="section-title section-title-center text-center mx-auto max-w-[870px]">
+          <div className="section-title section-title-center text-center mx-auto max-w-217.5">
             <motion.div
               initial="hidden"
               animate={loadingComplete ? "visible" : "hidden"}
@@ -126,57 +127,68 @@ export default function Hero() {
                 animate={loadingComplete ? "visible" : "hidden"}
                 data-cursor="title"
               >
-                <motion.span 
+                <motion.span
                   className="font-bold bg-clip-text text-transparent gradient-text inline-block mr-2"
                   data-cursor="gradient"
                   variants={wordVariants}
                   style={{
-                    backgroundImage: "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                    backgroundImage:
+                      "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
                     backgroundSize: "200% auto",
                   }}
                   animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                  }}
-                  transition={{
-                    backgroundPosition: {
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }
-                  }}
-                >
-                  24/7
-                </motion.span>
-                <motion.span className="inline-block mr-2" variants={wordVariants}>
-                  Cybersecurity
-                </motion.span>
-                <motion.span className="inline-block mr-2" variants={wordVariants}>
-                  Incident
-                </motion.span>
-                <br />
-                <motion.span className="inline-block mr-2" variants={wordVariants}>
-                  Response
-                </motion.span>
-                <motion.span 
-                  className="text-transparent gradient-text inline-block"
-                  data-cursor="gradient"
-                  variants={wordVariants}
-                  style={{
-                    backgroundImage: "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                    backgroundSize: "200% auto",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                  }}
-                  animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                   }}
                   transition={{
                     backgroundPosition: {
                       duration: 3,
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: 0.5
-                    }
+                    },
+                  }}
+                >
+                  24/7
+                </motion.span>
+                <motion.span
+                  className="inline-block mr-2"
+                  variants={wordVariants}
+                >
+                  Cybersecurity
+                </motion.span>
+                <motion.span
+                  className="inline-block mr-2"
+                  variants={wordVariants}
+                >
+                  Incident
+                </motion.span>
+                <br />
+                <motion.span
+                  className="inline-block mr-2"
+                  variants={wordVariants}
+                >
+                  Response
+                </motion.span>
+                <motion.span
+                  className="text-transparent gradient-text inline-block"
+                  data-cursor="gradient"
+                  variants={wordVariants}
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                    backgroundSize: "200% auto",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                  }}
+                  animate={{
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                  }}
+                  transition={{
+                    backgroundPosition: {
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.5,
+                    },
                   }}
                 >
                   Hotline
@@ -190,7 +202,8 @@ export default function Hero() {
                 transition={{ delay: 0.2 }}
               >
                 Experience fast security response like never before with
-                cutting-edge technology to keep you safe. This is iRES - Real Time, Real People, Real Protection
+                cutting-edge technology to keep you safe. This is iRES - Real
+                Time, Real People, Real Protection
               </motion.p>
 
               {/* Actions */}
@@ -204,36 +217,68 @@ export default function Hero() {
                     opacity: 1,
                     transition: {
                       staggerChildren: 0.2,
-                      delayChildren: 0.5
-                    }
-                  }
+                      delayChildren: 0.5,
+                    },
+                  },
                 }}
               >
                 <motion.div
                   variants={buttonVariants}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button href="#demo" variant="secondary">Watch Demo</Button>
+                  <Button
+                    onClick={() => setIsVideoOpen(true)}
+                    variant="secondary"
+                  >
+                    Watch Demo
+                  </Button>
                 </motion.div>
                 <motion.div
                   variants={buttonVariants}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     boxShadow: "0 10px 30px rgba(65, 133, 221, 0.3)",
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   whileTap={{ scale: 0.95 }}
-                >
-                </motion.div>
+                ></motion.div>
               </motion.div>
             </motion.div>
           </div>
         </Section>
       </div>
+
+      {isVideoOpen && (
+        <div
+          className="fixed inset-0 z-120 flex items-center justify-center bg-black/80 px-4"
+          onClick={() => setIsVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl rounded-2xl bg-black p-2 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-lg font-semibold text-black"
+              aria-label="Close video"
+            >
+              ×
+            </button>
+            <video
+              className="w-full rounded-xl"
+              src="/video/iRES_Cinematic_Demo (3).mp4"
+              controls
+              autoPlay
+              playsInline
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

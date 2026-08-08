@@ -52,6 +52,7 @@ const buttonVariants = {
 
 export default function AboutUsHero() {
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     const handleLoadingComplete = () => {
@@ -71,8 +72,8 @@ export default function AboutUsHero() {
   }, []);
 
   return (
-   <div
-      className="hero heo-bg-image pt-[140px] pb-[80px] lg:pt-[200px] xl:pt-[250px]  lg:pb-[140px] relative w-full overflow-hidden hero hero-bg-image hero-video"
+    <div
+      className="hero heo-bg-image pt-35 pb-20 lg:pt-50 xl:pt-62.5  lg:pb-35 relative w-full overflow-hidden hero hero-bg-image hero-video"
       style={{
         position: "relative",
         background: "url(/images/hero-bg.jpg)",
@@ -93,7 +94,7 @@ export default function AboutUsHero() {
       {/* Content */}
       <div className="relative z-2 flex h-full items-center">
         <Section>
-          <div className="section-title section-title-center text-center mx-auto max-w-[870px]">
+          <div className="section-title section-title-center text-center mx-auto max-w-217.5">
             <motion.div
               initial="hidden"
               animate={loadingComplete ? "visible" : "hidden"}
@@ -153,11 +154,14 @@ export default function AboutUsHero() {
                 variants={containerVariants}
                 transition={{ delay: 0.2 }}
               >
-                Empowering Organizations to Stay Secure and Grow <br/> Your business
-                deserves more than basic protection, it needs a partner that<br/>
+                Empowering Organizations to Stay Secure and Grow <br /> Your
+                business deserves more than basic protection, it needs a partner
+                that
+                <br />
                 understands your unique challenges. Our Business Solutions are
-                designed to<br/> keep your organization ahead of threats while you
-                focus on growth.
+                designed to
+                <br /> keep your organization ahead of threats while you focus
+                on growth.
               </motion.p>
 
               {/* Actions */}
@@ -184,7 +188,10 @@ export default function AboutUsHero() {
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button href="#demo" variant="secondary">
+                  <Button
+                    onClick={() => setIsVideoOpen(true)}
+                    variant="secondary"
+                  >
                     Watch Demo
                   </Button>
                 </motion.div>
@@ -196,14 +203,40 @@ export default function AboutUsHero() {
                     transition: { duration: 0.2 },
                   }}
                   whileTap={{ scale: 0.95 }}
-                >
-             
-                </motion.div>
+                ></motion.div>
               </motion.div>
             </motion.div>
           </div>
         </Section>
       </div>
+
+      {isVideoOpen && (
+        <div
+          className="fixed inset-0 z-120 flex items-center justify-center bg-black/80 px-4"
+          onClick={() => setIsVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl rounded-2xl bg-black p-2 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-lg font-semibold text-black"
+              aria-label="Close video"
+            >
+              ×
+            </button>
+            <video
+              className="w-full rounded-xl"
+              src="/video/iRES_Cinematic_Demo (3).mp4"
+              controls
+              autoPlay
+              playsInline
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
