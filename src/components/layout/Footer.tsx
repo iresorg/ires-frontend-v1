@@ -187,7 +187,10 @@ export default function Footer() {
                     className="w-5 h-5 mt-1"
                   />
                   <span className="text-white/80 text-sm">
-                     Lagos, Nigeria.
+                     5th Floor, Skywater Tower, 1A, Opebi Road, Ikeja, Lagos State, Nigeria
+                  </span>
+                  <span className="text-white/80 text-sm">
+                     Plot 1606 Okay Akoko Close Off Lagos Street Garki Abuja 
                   </span>
                 </div>
 
