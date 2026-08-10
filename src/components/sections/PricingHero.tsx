@@ -52,6 +52,7 @@ const buttonVariants = {
 
 export default function AboutUsHero() {
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     const handleLoadingComplete = () => {
@@ -185,7 +186,7 @@ export default function AboutUsHero() {
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button href="#demo" variant="secondary">
+                  <Button onClick={() => setIsVideoOpen(true)} variant="secondary">
                     Watch Demo
                   </Button>
                 </motion.div>
@@ -205,6 +206,34 @@ export default function AboutUsHero() {
           </div>
         </Section>
       </div>
+
+      {isVideoOpen && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 px-4"
+          onClick={() => setIsVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl rounded-2xl bg-black p-2 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-lg font-semibold text-black"
+              aria-label="Close video"
+            >
+              ×
+            </button>
+            <video
+              className="w-full rounded-xl"
+              src="/video/iRES_Cinematic_Demo (3).mp4"
+              controls
+              autoPlay
+              playsInline
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

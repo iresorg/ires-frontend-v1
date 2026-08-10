@@ -160,16 +160,16 @@ export default function OurServices() {
                     className="relative rounded-2xl overflow-hidden hover:scale-[1.03] transition-transform duration-300 "
                   >
                     {/* Gradient border */}
-                    <div className="absolute inset-0 rounded-2xl p-[3px] bg-gradient-to-r from-[#4185DD] to-[#601474] blur-[1px]" />
+                    <div className="absolute inset-0 rounded-2xl p-0.75 bg-linear-to-r from-[#4185DD] to-[#601474] blur-[1px]" />
 
                     <div className="relative rounded-2xl bg-[#13131A]/90 backdrop-blur-sm p-6 text-center border border-[#ffffff10]">
-                      <p className="text-white text-sm font-medium mb-4 min-h-[48px]">
+                      <p className="text-white text-sm font-medium mb-4 min-h-12">
                         {service}
                       </p>
 
                       <button
                         onClick={() => setSelectedIndex(i)}
-                        className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
+                        className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
                       >
                         More Info
                       </button>
@@ -223,7 +223,7 @@ export default function OurServices() {
                   alt="Background Ellipse"
                   width={440}
                   height={440}
-                  className="w-80 h-80 lg:w-[440px] lg:h-[440px] opacity-80"
+                  className="w-80 h-80 lg:w-110 lg:h-110 opacity-80"
                 />
               </motion.div>
 
@@ -249,14 +249,14 @@ export default function OurServices() {
 
       {/* ===================== MODAL ===================== */}
       {selectedIndex !== null && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] px-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-9999 px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             className="bg-[#0F0F15] max-w-lg w-full rounded-2xl p-6 border border-white/10 text-white shadow-xl overflow-y-auto max-h-[90vh]"
           >
-            <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+            <h2 className="text-xl font-semibold mb-4 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
               {details[selectedIndex].title}
             </h2>
 
@@ -277,7 +277,7 @@ export default function OurServices() {
 
             <button
               onClick={() => setSelectedIndex(null)}
-              className="mt-6 w-full py-2 rounded-lg bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white font-medium hover:opacity-90 transition cursor-pointer"
+              className="mt-6 w-full py-2 rounded-lg bg-linear-to-r from-[#4185DD] to-[#B425DA] text-white font-medium hover:opacity-90 transition cursor-pointer"
             >
               Close
             </button>

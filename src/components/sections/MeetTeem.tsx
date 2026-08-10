@@ -29,12 +29,6 @@ const teamMembers = [
     image: "/images/simisola.jpg",
     linkedin: "https://www.linkedin.com/in/ceemin/",
   },
-  {
-    name: "Mbre Inyang",
-    role: "COO",
-    image: "/images/inyang.jpg",
-    linkedin: "https://www.linkedin.com/in/mbre-inyang-9103b424a",
-  },
 ];
 
 export default function MeetOurTeamSection() {
@@ -73,12 +67,12 @@ export default function MeetOurTeamSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[280px] transition-transform duration-300 hover:scale-[1.03]"
+              className="relative w-full max-w-70 transition-transform duration-300 hover:scale-[1.03]"
             >
               {/* Outer gradient border with image filling the card */}
-              <div className="p-[2px] rounded-[22px] bg-gradient-to-r from-[#4185DD] to-[#B425DA]">
+              <div className="p-0.5 rounded-[22px] bg-linear-to-r from-[#4185DD] to-[#B425DA]">
                 {/* Image container: fills the inner rounded area */}
-                <div className="rounded-[20px] overflow-hidden relative w-full h-[300px] sm:h-[320px] md:h-[340px]">
+                <div className="rounded-[20px] overflow-hidden relative w-full h-75 sm:h-80 md:h-85">
                   <Image
                     src={member.image}
                     alt={member.name}
@@ -90,7 +84,7 @@ export default function MeetOurTeamSection() {
 
               {/* Text content moved below the card */}
               <div className="mt-4 px-2 text-center">
-                <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-1">
+                <h3 className="text-base font-semibold text-transparent bg-clip-text bg-linear-to-r from-[#4185DD] to-[#B425DA] mb-1">
                   {member.name}
                 </h3>
                 <p className="text-white/80 text-sm mb-3">{member.role}</p>
@@ -98,7 +92,7 @@ export default function MeetOurTeamSection() {
                   <Link
                     href={member.linkedin}
                     target="_blank"
-                    className="text-sm font-semibold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent hover:opacity-80 transition cursor-pointer"
+                    className="text-sm font-semibold bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent hover:opacity-80 transition cursor-pointer"
                   >
                     View LinkedIn →
                   </Link>
