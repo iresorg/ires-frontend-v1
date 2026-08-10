@@ -58,7 +58,7 @@ const TickerContent = ({ items }: { items: typeof tickerItems }) => (
 export default function ScrollingTicker() {
   return (
     <div
-      className="our-scrolling-ticker relative bg-[var(--secondary)] py-4 lg:py-6 z-10"
+      className="our-scrolling-ticker relative bg-(--secondary) py-4 lg:py-6 z-10"
       style={{
         backdropFilter: "blur(100px)",
         WebkitBackdropFilter: "blur(100px)",
