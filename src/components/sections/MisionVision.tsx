@@ -64,7 +64,7 @@ export default function MissionVisionSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
           {/* Mission Card */}
           <motion.div
-            className="w-full max-w-[520px] p-[1px] rounded-3xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+            className="w-full max-w-130 p-px rounded-3xl bg-linear-to-r from-[#4185DD] to-[#B425DA]"
             custom={0}
             variants={cardVariants}
             initial="hidden"
@@ -80,14 +80,13 @@ export default function MissionVisionSection() {
                 className="mb-4"
               />
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                <h3 className="text-xl font-semibold mb-4 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                   Mission
                 </h3>
                 <p className="text-sm lg:text-base text-white/90 leading-relaxed">
-                  To deliver cutting-edge, human-centered cybersecurity
-                  solutions that empower individuals, businesses, and
-                  institutions to feel safe and operate confidently in the
-                  digital world.
+                 To deliver always-on cybersecurity emergency response, intelligence and 
+                 coordinated recovery services that enable organizations to respond to 
+                 cyber threats with speed, confidence and resilience.
                 </p>
               </div>
             </div>
@@ -95,7 +94,7 @@ export default function MissionVisionSection() {
 
           {/* Vision Card */}
           <motion.div
-            className="w-full max-w-[520px] p-[1px] rounded-3xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+            className="w-full max-w-130 p-px rounded-3xl bg-linear-to-r from-[#4185DD] to-[#B425DA]"
             custom={1}
             variants={cardVariants}
             initial="hidden"
@@ -111,13 +110,11 @@ export default function MissionVisionSection() {
                 className="mb-4"
               />
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                <h3 className="text-xl font-semibold mb-4 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
                   Vision
                 </h3>
                 <p className="text-sm lg:text-base text-white/90 leading-relaxed">
-                  To become the most trusted cybersecurity partner in Africa and
-                  beyond setting the global standard for accessible, innovative,
-                  and people-first digital protection.
+                  A digitally resilient Africa where no organization faces a cyber crisis alone.
                 </p>
               </div>
             </div>
