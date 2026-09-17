@@ -20,46 +20,30 @@ export default function OurPlans() {
   const plans = [
     {
       icon: "/images/Shield.png",
-      title: "Basic Shield",
-      price: "₦50,000/month",
-      subtitle: "For Everyday phone & social media users",
+      title: "Individual Protection",
+      subtitle: "Individuals facing personal cyber attacks or online harassment",
       features: [
-        "Incident reporting via phone/email",
-        "Social media account recovery",
-        "Basic scam & fraud advisory",
-        "Personal data privacy checks",
-        "1 cyber incident resolution / month",
-        "24–48 hrs response time",
+        "24/7 emergency hotline access ",
+        "Confidential consultation and triage ",
+        "Full incident response for personal threats ",
+        "Account recovery services ",
+        "Identity theft investigation ",
+        "Privacy breach remediation ",
+        "Evidence documentation for legal action ",
+        "Law enforcement coordination",
       ],
     },
     {
       icon: "/images/guard.png",
-      title: "Safe Guard",
-      price: "₦80,000/month",
-      subtitle: "For Freelancers, small-scale sellers, influencers",
+      title: "One-Off Plan",
+      subtitle: "Designed for individuals and small businesses who need immediate assistance for a single incident or threat (common cases include social media account compromise). We recover hacked social media accounts.",
       features: [
-        "Priority incident handling",
-        "Malware & spyware removal",
-        "Payment fraud investigation",
-        "Social media & email breach recovery",
-        "Data loss prevention tips",
-        "Up to 2 incidents resolved / month",
-        "12–24 hrs response time",
-      ],
-    },
-    {
-      icon: "/images/fortress.png",
-      title: "Total Lockdown",
-      price: "₦100,000/month",
-      subtitle: "For High-risk individuals, public figures, executives",
-      features: [
-        "24/7 priority access",
-        "Advanced account monitoring",
-        "Comprehensive breach investigation",
-        "Device security optimization",
-        "Data recovery support",
-        "3 incidents resolution / month",
-        "4–6 hrs response time",
+        "Immediate response to a single incident ",
+        "Social media account recovery and security hardening ",
+        "Investigation of online harassment or threats ",
+        "Guidance on preventing future incidents ",
+        "Documentation for potential legal action ",
+        "Coordination with law enforcement if necessary",
       ],
     },
   ];
@@ -132,7 +116,6 @@ export default function OurPlans() {
 
                   {/* Price & Subtitle */}
                   <p className=" bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-lg sm:text-xl font-semibold mb-1">
-                    <i>{plan.price}</i>
                   </p>
                   <p className="text-[#b3b3b3] text-sm sm:text-base mb-6">
                     {plan.subtitle}

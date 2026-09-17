@@ -25,45 +25,46 @@ export default function OurPlans() {
   const plans = [
     {
       icon: "/images/Shield.png",
-      title: "Business Shield",
-      price: "₦150,000/month",
-      subtitle: "For Small businesses (1–10 staff)",
+      title: "Basic Protection",
+      subtitle: "For Small businesses and growing organizations",
       features: [
-        "Incident reporting hotline",
-        "Phishing & scam prevention",
-        "Basic ransomware & malware response",
-        "Website & email breach recovery",
-        "2 cyber incident resolution / month",
-        "24–48 hrs response time",
+        "24/7 emergency hotline access",
+        "Incident response (standard timeline)",
+        "Monthly security health assessments",
+        "Security awareness training (quarterly)",
+        "Threat intelligence briefings ",
+        "Full incident response services",
+        "Compliance documentation support",
       ],
     },
     {
       icon: "/images/guard.png",
-      title: "Enterprise Guard",
-      price: "₦250,000/month",
-      subtitle: "For Medium-sized businesses (11–50 staff)",
+      title: "Advanced Protection",
+      subtitle: "Mid-sized organizations (50-500 employees)",
       features: [
-        "Dedicated account manager",
-        "Network intrusion detection",
-        "Ransomware containment & removal",
-        "DDoS attack mitigation",
-        "Payment system compromise investigation",
-        "Up to 5 incidents resolved / month",
-        "12–24 hrs response time",
+        "Priority emergency response (faster than basic)",
+        "Monthly security health assessments",
+        "Quarterly vulnerability scans & penetration tests",
+        "24/7 emergecy hotline acccess",
+        "Full incident response services",
+        "Compliance and regulatory support",
       ],
     },
     {
       icon: "/images/fortress.png",
-      title: "Corporate Fortress",
-      price: "₦500,000/month",
-      subtitle: "For Large corporations & critical sectors",
+      title: "Enterprise Protection",
+      subtitle: "For Large organizations (500+ employees) requiring dedicated IR capabilities",
       features: [
-        "24/7 SOC (Security Operations Center) support",
-        "Onsite & remote incident response",
-        "Insider threat detection",
-        "Advanced threat hunting & forensics",
-        "Unlimited incidents / month",
-        "SLA: under 4 hrs response time",
+        "Dedicated incident response team (named contacts) ",
+        "Custom incident response playbooks for your organization ",
+        "Integration with existing security tools and SOC",
+        "Monthly tabletop exercises and security drills",
+        "24/7 priority hotline with immediate escalation ",
+        "Unlimited security consultations and strategic guidance ",
+        "Compliance and audit support (NDPR, ISO 27001, CBN, etc.) ",
+        " Quarterly executive briefings and threat reports ",
+        " On-site response capability (when urgency requires)",
+        "Dedicated account management ",
       ],
     },
   ];
@@ -97,7 +98,6 @@ export default function OurPlans() {
             alt="Decorative shape"
             width={130}
             height={130}
-
           />
         </motion.div>
 
@@ -158,10 +158,7 @@ export default function OurPlans() {
                     </h3>
                   </div>
 
-                  {/* Price & Subtitle */}
-                  <p className=" bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent text-lg sm:text-xl font-semibold mb-1">
-                    <i>{plan.price}</i>
-                  </p>
+                  {/* Subtitle */}
                   <p className="text-[#b3b3b3] text-xs sm:text-sm mb-6">
                     {plan.subtitle}
                   </p>
