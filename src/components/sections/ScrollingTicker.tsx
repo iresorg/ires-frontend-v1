@@ -6,19 +6,20 @@ import { StarIcon } from "@heroicons/react/24/solid";
 const tickerItems = [
   { type: "text", content: "This is iRES" },
   { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
-  { type: "star", content: "Healthcare" },
+  { type: "star", content: "24/7 Incident Response" },
   { type: "text", content: "Real Time" },
   { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
-  { type: "star", content: "Finance and Banking" },
+  { type: "star", content: "Healthcare" },
   { type: "text", content: "Real People" },
   { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
-  { type: "star", content: "Legal and Law Firms" },
+  { type: "star", content: "Finance and Banking" },
   { type: "text", content: "Real Protection" },
+  { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
+  { type: "star", content: "Threat Containment" },
   { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
   { type: "star", content: "Government and Public Sector" },
   { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
   { type: "star", content: "Technology and Software" },
-  { type: "logo", src: "/logos/ires-logo.svg", alt: "iRES Logo" },
 ];
 
 // Create multiple sets for seamless scrolling

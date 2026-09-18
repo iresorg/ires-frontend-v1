@@ -10,29 +10,40 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.2 },
+    transition: { staggerChildren: 0.12 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.2, 0, 0, 1] as const },
+  },
 };
 
 const slideInLeft = {
-  hidden: { opacity: 0, x: -50 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.2 } },
+  hidden: { opacity: 0, x: -40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.75, ease: [0.2, 0, 0, 1] as const },
+  },
 };
 
 const slideInRight = {
-  hidden: { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.4 } },
+  hidden: { opacity: 0, x: 40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.75, delay: 0.15, ease: [0.2, 0, 0, 1] as const },
+  },
 };
 
 export default function OurStorySection() {
   return (
-    <div className="relative w-full">
-      {/* Background shapes */}
+    <div className="relative w-full overflow-hidden">
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -40,18 +51,17 @@ export default function OurStorySection() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
-      <Section className="relative z-10 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
+      <Section className="relative z-10 py-14 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-center">
           <motion.div
-            className="lg:col-span-7 space-y-8"
+            className="lg:col-span-7 space-y-6 md:space-y-8"
             variants={slideInLeft}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-80px" }}
           >
-            {/* Header */}
             <motion.div variants={itemVariants}>
               <SectionTitle
                 logo="/logos/ires-logo.svg"
@@ -60,17 +70,21 @@ export default function OurStorySection() {
               />
             </motion.div>
 
-            {/* Story Text Box */}
             <motion.div
-              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+              className="relative rounded-3xl p-6 lg:p-8 brand-border"
+              style={{
+                background:
+                  "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+              }}
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
+              whileHover={{ y: -6, transition: { duration: 0.28 } }}
             >
-              <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-6 space-y-4">
+              <div className="space-y-4">
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed"
+                  className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
                   The story of iRES begins with a simple truth: most people and
@@ -79,7 +93,7 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed"
+                  className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
                   As founders, we saw it first-hand. Friends, small businesses,
@@ -92,7 +106,7 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed"
+                  className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
                   That’s why iRES exists to close the gap between everyday
@@ -100,7 +114,7 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed"
+                  className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
                   We are building a future where your grandmother can understand
@@ -111,7 +125,7 @@ export default function OurStorySection() {
                 </motion.p>
 
                 <motion.p
-                  className="text-sm lg:text-base text-white leading-relaxed"
+                  className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
                   It’s about protecting dreams, businesses, and people’s lives
@@ -122,7 +136,6 @@ export default function OurStorySection() {
             </motion.div>
           </motion.div>
 
-          {/* Right Content */}
           <motion.div
             className="lg:col-span-5 relative w-full flex justify-center"
             variants={slideInRight}
@@ -130,31 +143,26 @@ export default function OurStorySection() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Ellipse Background */}
             <motion.div
               className="absolute inset-0 top-10 -right-20 w-80 h-80 lg:w-[440px] lg:h-[440px]"
-              variants={itemVariants}
+              animate={{ rotate: [0, 8, 0] }}
+              transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
             >
               <Image
                 src="/images/ellipse.png"
                 alt="Background ellipse"
                 fill
-                className="object-contain"
+                className="object-contain opacity-80"
               />
             </motion.div>
 
-            {/* Desktop View Image */}
-            {/* <motion.div
-              className="relative z-10 w-[500px] h-[400px]"
-              variants={itemVariants}
-            > */}
-              <motion.div
-                          className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-[500px] lg:h-[400px]"
-                          animate={{ y: [0, -20, 0] }}
-                          transition={{
-                            y: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-                          }}
-                        >
+            <motion.div
+              className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-[500px] lg:h-[400px] float-y"
+              animate={{ y: [0, -18, 0] }}
+              transition={{
+                y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+              }}
+            >
               <Image
                 src="/images/desktopview.png"
                 alt="iRES Story Illustration"
@@ -166,28 +174,17 @@ export default function OurStorySection() {
         </div>
       </Section>
 
-      {/* Play Button */}
       <motion.button
         className="absolute bottom-8 left-8 w-12 h-12 rounded-full flex items-center justify-center z-20"
-        style={{ background: "var(--accent-secondary-color)" }}
+        style={{ background: "var(--btn-bg)" }}
         aria-label="Play video"
         whileHover={{
           scale: 1.1,
-          boxShadow: "0 0 20px rgba(180, 37, 218, 0.5)",
-        }}
-        animate={{ rotate: [0, 360] }}
-        transition={{
-          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+          boxShadow: "0 0 20px rgba(65, 133, 221, 0.45)",
         }}
       >
-        <motion.div
-          animate={{ rotate: [0, -360] }}
-          transition={{
-            rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-          }}
-        >
-          <PlayIcon className="w-6 h-6 text-white" />
-        </motion.div>
+        <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
+        <PlayIcon className="relative z-10 w-6 h-6 text-white" />
       </motion.button>
     </div>
   );

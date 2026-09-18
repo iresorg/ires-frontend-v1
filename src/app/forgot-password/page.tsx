@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { authService } from "@/services/auth";
 import type { AxiosError } from "axios";
+import { AuthSecureBadge } from "@/components/ui/AuthShell";
 
 export default function ForgotPassword() {
   const [emailSent, setEmailSent] = useState(false);
@@ -44,7 +45,6 @@ export default function ForgotPassword() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 py-6 sm:py-8">
-      {/*  Background Video */}
       <video
         className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
         src="/video/hero-video.mp4"
@@ -54,7 +54,6 @@ export default function ForgotPassword() {
         playsInline
       />
 
-      {/*  Fallback Image */}
       <Image
         src="/images/welcome-signup.png"
         alt="Background"
@@ -63,8 +62,8 @@ export default function ForgotPassword() {
         priority
       />
 
-      {/* Overlay */}
       <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+      <div className="security-grid pointer-events-none fixed inset-0 z-[-1] opacity-50" />
 
       {/* Success Screen */}
       {emailSent ? (
@@ -72,14 +71,8 @@ export default function ForgotPassword() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="relative z-10 w-full max-w-[450px] p-5 sm:p-6 md:p-8 rounded-2xl bg-transparent"
-          style={{
-            borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-            borderWidth: "1px",
-            borderStyle: "solid",
-          }}
+          className="relative z-10 w-full max-w-[450px] p-5 sm:p-6 md:p-8 rounded-2xl glass-panel brand-border"
         >
-          {/* Logo / Close */}
           <div className="flex justify-between items-start mb-4 sm:mb-5">
             <Image
               src="/logos/ires-logo.svg"
@@ -88,7 +81,7 @@ export default function ForgotPassword() {
               height={55}
               className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
             />
-            <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
+            <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
               <Image
                 src="/images/cancel-icon.png"
                 alt="Close"
@@ -99,14 +92,18 @@ export default function ForgotPassword() {
             </Link>
           </div>
 
-          {/* Success Icon */}
+          <AuthSecureBadge label="Secure reset" />
+
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="relative flex justify-center mb-4 sm:mb-5"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-r from-[#4185DD] to-[#B425DA] flex items-center justify-center">
+            <div
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center"
+              style={{ background: "var(--btn-bg)" }}
+            >
               <svg
                 className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white"
                 fill="none"
@@ -121,39 +118,15 @@ export default function ForgotPassword() {
                 />
               </svg>
             </div>
-            {/* Animated ring */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-2 border-[#4185DD]"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [1, 0, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <span className="pulse-ring absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[var(--accent-color)]" />
           </motion.div>
 
-          {/* Success Message */}
           <div className="text-center space-y-2 mb-4 sm:mb-5">
             <motion.h2
-              className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent"
+              className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               Reset Link Sent!
@@ -166,17 +139,16 @@ export default function ForgotPassword() {
             </p>
           </div>
 
-          {/* Back to Login Button */}
           <Link
             href="/login"
-            className="block w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer text-center text-sm sm:text-base"
+            className="block w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer text-center text-sm sm:text-base"
+            style={{ background: "var(--btn-bg)" }}
           >
             Back to Login
           </Link>
         </motion.div>
       ) : (
         <>
-          {/* Error Toast */}
           <AnimatePresence>
             {showError && error && (
               <motion.div
@@ -185,14 +157,7 @@ export default function ForgotPassword() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.4 }}
-                className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
-                style={{
-                  borderImage:
-                    "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-                }}
+                className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
               >
                 <button
                   onClick={() => setShowError(false)}
@@ -227,16 +192,7 @@ export default function ForgotPassword() {
             )}
           </AnimatePresence>
 
-          {/* Card */}
-          <div
-            className="relative z-10 w-full max-w-[450px] p-5 sm:p-6 md:p-8 rounded-2xl bg-transparent"
-            style={{
-              borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-            }}
-          >
-            {/* Logo / Close */}
+          <div className="relative z-10 w-full max-w-[450px] p-5 sm:p-6 md:p-8 rounded-2xl glass-panel brand-border">
             <div className="flex justify-between items-start mb-4 sm:mb-5">
               <Image
                 src="/logos/ires-logo.svg"
@@ -245,7 +201,7 @@ export default function ForgotPassword() {
                 height={55}
                 className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
               />
-              <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
+              <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
                 <Image
                   src="/images/cancel-icon.png"
                   alt="Close"
@@ -256,23 +212,13 @@ export default function ForgotPassword() {
               </Link>
             </div>
 
-            {/* Title */}
+            <AuthSecureBadge />
+
             <motion.h2
-              className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-center bg-clip-text text-transparent"
+              className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 text-center bg-clip-text text-transparent gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               Forgot Password
@@ -282,9 +228,8 @@ export default function ForgotPassword() {
               Enter your registered email
             </p>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
-              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
                 <Image
                   src="/images/email-icon.png"
                   alt="Email"
@@ -304,7 +249,8 @@ export default function ForgotPassword() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="mt-1 sm:mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                className="mt-1 sm:mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                style={{ background: "var(--btn-bg)" }}
               >
                 {isLoading ? "Sending..." : "Send"}
               </button>

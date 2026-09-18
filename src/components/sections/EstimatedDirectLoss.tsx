@@ -1,48 +1,37 @@
 "use client";
 
+import DashboardPanel from "@/components/ui/DashboardPanel";
+
 export default function EstimatedDirectLoss() {
   return (
-    <div className="rounded-xl p-5 border-white/10 bg-[#0E0E1A] border-1">
-      {/* Title */}
-      <h2 className="text-white font-md mb-1 text-sm">
-        Estimated Direct Loss (2025)
-      </h2>
-
-      {/* Main Value */}
-      <p className="text-lg font-bold text-white mb-4">
-        #160 Billion - #300 Billion
+    <DashboardPanel title="Estimated Direct Loss (2025)">
+      <p className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+        ₦160B – ₦300B
       </p>
+      <p className="mt-1 text-xs text-white/45">Projected annual impact range</p>
 
-      {/* Divider */}
-      <div className="w-full border-t border-white/10 my-4"></div>
-
-      {/* Bar */}
-      <div className="w-full h-4 rounded-full flex overflow-hidden">
-        {/* Direct Loss */}
-        <div className="bg-[#FF7143]" style={{ width: "60%" }}></div>
-        {/* Business Interruption */}
-        <div className="bg-[#4CB050]" style={{ width: "25%" }}></div>
-        {/* Remediation */}
-        <div className="bg-[#D00F24]" style={{ width: "15%" }}></div>
+      <div className="mt-5 h-3 w-full overflow-hidden rounded-full bg-white/5 ring-1 ring-white/10">
+        <div className="flex h-full w-full">
+          <div className="bg-[#4185DD]" style={{ width: "60%" }} />
+          <div className="bg-[#B425DA]" style={{ width: "25%" }} />
+          <div className="bg-[#EF4444]" style={{ width: "15%" }} />
+        </div>
       </div>
 
-      {/* Legend */}
-      <div className="flex items-center gap-6 mt-4 text-xs text-white font-mono">
+      <div className="mt-4 flex flex-wrap gap-4 text-xs text-white/70">
         <div className="flex items-center gap-2">
-          <span className="w-4 h-2 bg-[#FF7143]"></span>
+          <span className="h-2 w-4 rounded-sm bg-[#4185DD]" />
           Direct Loss
         </div>
-
-        <div className="flex items-center gap-2 ">
-          <span className="w-4 h-2 bg-[#4CB050] "></span>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-4 rounded-sm bg-[#B425DA]" />
           Business Interruption
         </div>
-
-        <div className="flex items-center gap-2 ">
-          <span className="w-3 h-2 bg-[#D00F24] "></span>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-4 rounded-sm bg-[#EF4444]" />
           Remediation
         </div>
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

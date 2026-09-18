@@ -1,207 +1,251 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import PublicLayout  from '@/components/layout/PublicLayout'
-import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import PublicLayout from "@/components/layout/PublicLayout";
+import Section from "@/components/ui/Section";
+import SectionTitle from "@/components/ui/SectionTitle";
+import Button from "@/components/ui/Button";
+import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 
 const contactInfo = [
-    {
-        name: 'Email',
-        description: 'Get in touch with our team',
-        icon: EnvelopeIcon,
-        value: 'contact@ires.org',
-        href: 'mailto:contact@ires.org',
-    },
-    {
-        name: 'Phone',
-        description: 'Call us directly',
-        icon: PhoneIcon,
-        value: '+1 (555) 123-4567',
-        href: 'tel:+15551234567',
-    },
-    {
-        name: 'Office',
-        description: 'Visit our headquarters',
-        icon: MapPinIcon,
-        value: '123 Emergency Lane, Response City, RC 12345',
-        href: 'https://maps.google.com',
-    },
-]
+  {
+    name: "Email",
+    description: "Get in touch with our team",
+    icon: EnvelopeIcon,
+    value: "contact@ires.org",
+    href: "mailto:contact@ires.org",
+  },
+  {
+    name: "Phone",
+    description: "Call us directly",
+    icon: PhoneIcon,
+    value: "+1 (555) 123-4567",
+    href: "tel:+15551234567",
+  },
+  {
+    name: "Office",
+    description: "Visit our headquarters",
+    icon: MapPinIcon,
+    value: "123 Emergency Lane, Response City, RC 12345",
+    href: "https://maps.google.com",
+  },
+];
+
+const inputClass =
+  "block w-full rounded-xl border-0 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 outline-none ring-1 ring-white/10 transition focus:ring-2 focus:ring-[var(--accent-color)]/50";
 
 export default function ContactPage() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-    })
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        // TODO: Implement form submission
-        console.log('Form submitted:', formData)
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    return (
-        <PublicLayout>
-            <div className="bg-white dark:bg-gray-900">
-                {/* Header */}
-                <div className="relative isolate overflow-hidden bg-gradient-to-b from-primary-100/20 dark:from-primary-900/20">
-                    <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-                        <div className="mx-auto max-w-2xl lg:mx-0">
-                            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
-                                Contact Us
-                            </h1>
-                            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                                Have questions about our services or want to learn more about becoming a responder?
-                                We&apos;re here to help.
-                            </p>
-                        </div>
-                    </div>
+  return (
+    <PublicLayout>
+      <div className="relative overflow-hidden">
+        <div className="security-grid pointer-events-none absolute inset-0 opacity-40" />
+
+        <Section className="relative z-10 pt-32 pb-12 lg:pt-40 lg:pb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl"
+          >
+            <SectionTitle
+              logo="/logos/ires-logo.svg"
+              logoAlt="iRES Logo"
+              title="Contact"
+            />
+            <h1 className="mt-6 text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl">
+              <span
+                className="gradient-shift bg-clip-text font-bold text-transparent"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                }}
+              >
+                Contact Us
+              </span>
+            </h1>
+            <p className="mt-6 text-base leading-relaxed text-[#d1d1d1] sm:text-lg">
+              Have questions about our services or want to learn more about
+              becoming a responder? We&apos;re here to help.
+            </p>
+          </motion.div>
+        </Section>
+
+        <Section className="relative z-10 pb-20 lg:pb-28">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+            <motion.form
+              onSubmit={handleSubmit}
+              className="space-y-5 rounded-3xl p-6 sm:p-8 glass-panel brand-border"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <span className="status-dot" />
+                <span className="text-[11px] uppercase tracking-wider text-white/55">
+                  Encrypted inquiry
+                </span>
+              </div>
+
+              {(
+                [
+                  { id: "name", label: "Name", type: "text", required: true },
+                  { id: "email", label: "Email", type: "email", required: true },
+                  { id: "phone", label: "Phone", type: "tel", required: false },
+                ] as const
+              ).map((field) => (
+                <div key={field.id}>
+                  <label
+                    htmlFor={field.id}
+                    className="mb-2 block text-sm font-medium text-white"
+                  >
+                    {field.label}
+                  </label>
+                  <input
+                    type={field.type}
+                    name={field.id}
+                    id={field.id}
+                    value={formData[field.id]}
+                    onChange={handleChange}
+                    required={field.required}
+                    className={inputClass}
+                  />
                 </div>
+              ))}
 
-                {/* Contact form and info */}
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                        <div className="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
-                            {/* Contact form */}
-                            <div>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
-                                        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                            Name
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                required
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                            Email
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                required
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                            Phone
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="tel"
-                                                name="phone"
-                                                id="phone"
-                                                value={formData.phone}
-                                                onChange={handleChange}
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="subject" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                            Subject
-                                        </label>
-                                        <div className="mt-2">
-                                            <select
-                                                name="subject"
-                                                id="subject"
-                                                value={formData.subject}
-                                                onChange={handleChange}
-                                                required
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700 sm:text-sm sm:leading-6"
-                                            >
-                                                <option value="">Select a subject</option>
-                                                <option value="general">General Inquiry</option>
-                                                <option value="responder">Become a Responder</option>
-                                                <option value="partnership">Partnership Opportunity</option>
-                                                <option value="support">Technical Support</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="message" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                            Message
-                                        </label>
-                                        <div className="mt-2">
-                                            <textarea
-                                                name="message"
-                                                id="message"
-                                                rows={4}
-                                                value={formData.message}
-                                                onChange={handleChange}
-                                                required
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button
-                                            type="submit"
-                                            className="rounded-md bg-primary-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-                                        >
-                                            Send Message
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="mb-2 block text-sm font-medium text-white"
+                >
+                  Subject
+                </label>
+                <select
+                  name="subject"
+                  id="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                >
+                  <option value="" className="bg-[#1c1b2b]">
+                    Select a subject
+                  </option>
+                  <option value="general" className="bg-[#1c1b2b]">
+                    General Inquiry
+                  </option>
+                  <option value="responder" className="bg-[#1c1b2b]">
+                    Become a Responder
+                  </option>
+                  <option value="partnership" className="bg-[#1c1b2b]">
+                    Partnership Opportunity
+                  </option>
+                  <option value="support" className="bg-[#1c1b2b]">
+                    Technical Support
+                  </option>
+                </select>
+              </div>
 
-                            {/* Contact information */}
-                            <div className="lg:pl-8">
-                                <h2 className="text-base font-semibold leading-7 text-primary-600">Get in touch</h2>
-                                <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                                    We&apos;re here to help
-                                </p>
-                                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                                    Have questions about our services or want to learn more about becoming a responder?
-                                    Reach out to us through any of these channels.
-                                </p>
-                                <dl className="mt-10 space-y-4 text-base leading-7 text-gray-600 dark:text-gray-300">
-                                    {contactInfo.map((item) => (
-                                        <div key={item.name} className="flex gap-x-4">
-                                            <dt className="flex-none">
-                                                <span className="sr-only">{item.name}</span>
-                                                <item.icon className="h-7 w-6 text-gray-400" aria-hidden="true" />
-                                            </dt>
-                                            <dd>
-                                                <a
-                                                    href={item.href}
-                                                    className="hover:text-primary-600 dark:hover:text-primary-400"
-                                                >
-                                                    {item.value}
-                                                </a>
-                                                <p className="mt-1">{item.description}</p>
-                                            </dd>
-                                        </div>
-                                    ))}
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </PublicLayout>
-    )
-} 
+              <div>
+                <label
+                  htmlFor="message"
+                  className="mb-2 block text-sm font-medium text-white"
+                >
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  id="message"
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className={inputClass}
+                />
+              </div>
+
+              <Button type="submit" className="w-full rounded-xl py-3">
+                Send Message
+              </Button>
+            </motion.form>
+
+            <motion.div
+              className="rounded-3xl p-6 sm:p-8 glass-panel brand-border lg:pl-10"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+            >
+              <p
+                className="text-sm font-semibold"
+                style={{ color: "var(--accent-color)" }}
+              >
+                Get in touch
+              </p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                We&apos;re here to help
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[#d1d1d1]">
+                Have questions about our services or want to learn more about
+                becoming a responder? Reach out through any of these channels.
+              </p>
+              <dl className="mt-10 space-y-5">
+                {contactInfo.map((item) => (
+                  <div
+                    key={item.name}
+                    className="flex gap-4 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 transition hover:bg-white/[0.07]"
+                  >
+                    <dt className="flex-none">
+                      <span className="sr-only">{item.name}</span>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
+                        <item.icon
+                          className="h-5 w-5"
+                          style={{ color: "var(--accent-color)" }}
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </dt>
+                    <dd>
+                      <a
+                        href={item.href}
+                        className="font-medium text-white transition hover:opacity-80"
+                      >
+                        {item.value}
+                      </a>
+                      <p className="mt-1 text-sm text-white/60">
+                        {item.description}
+                      </p>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </motion.div>
+          </div>
+        </Section>
+      </div>
+    </PublicLayout>
+  );
+}

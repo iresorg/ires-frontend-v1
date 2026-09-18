@@ -8,6 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { authService } from "@/services/auth";
 import PasswordResetToast from "@/components/sections/PasswordResetToast";
 import type { AxiosError } from "axios";
+import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
@@ -113,29 +114,7 @@ function ResetPasswordContent() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 py-6 sm:py-8">
-      {/*  Background Video */}
-      <video
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
-        src="/video/hero-video.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-
-      {/*  Fallback Image */}
-      <Image
-        src="/images/welcome-signup.png"
-        alt="Background"
-        fill
-        className="object-cover z-[-3]"
-        priority
-      />
-
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
-      {/* Toasts */}
+    <div className="relative">
       <AnimatePresence>
         {passwordReset && (
           <PasswordResetToast onClose={() => setPasswordReset(false)} />
@@ -147,14 +126,7 @@ function ResetPasswordContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
-            style={{
-              borderImage:
-                "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-            }}
+            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
           >
             <button
               onClick={() => setShowError(false)}
@@ -189,15 +161,7 @@ function ResetPasswordContent() {
         )}
       </AnimatePresence>
 
-      <div
-        className="relative z-10 w-full max-w-[450px] p-5 sm:p-6 md:p-8 rounded-2xl bg-transparent"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
-      >
-        {/* Logo and Close */}
+      <AuthShell maxWidthClass="max-w-[450px]">
         <div className="flex justify-between items-start mb-4 sm:mb-5">
           <Image
             src="/logos/ires-logo.svg"
@@ -206,7 +170,7 @@ function ResetPasswordContent() {
             height={55}
             className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
           />
-          <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
+          <Link href="/login" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -217,23 +181,13 @@ function ResetPasswordContent() {
           </Link>
         </div>
 
-        {/* Title */}
+        <AuthSecureBadge />
+
         <motion.h2
-          className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2 text-center bg-clip-text text-transparent"
+          className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2 text-center bg-clip-text text-transparent gradient-shift"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-            backgroundSize: "200% auto",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            backgroundPosition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
           }}
         >
           Reset Password
@@ -243,10 +197,8 @@ function ResetPasswordContent() {
           Enter your new password below. Make sure it&apos;s different from your previous password.
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 space-y-1 sm:space-y-2">
-          {/* Password Input */}
-          <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+          <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
             <Image
               src="/images/locker.png"
               alt="Lock"
@@ -271,8 +223,7 @@ function ResetPasswordContent() {
             />
           </div>
 
-          {/* Confirm Password Input */}
-          <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+          <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
             <Image
               src="/images/locker.png"
               alt="Lock"
@@ -302,19 +253,25 @@ function ResetPasswordContent() {
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-1 sm:mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            className="mt-1 sm:mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            style={{ background: "var(--btn-bg)" }}
           >
             {isLoading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
-      </div>
+      </AuthShell>
     </div>
   );
 }
 
 export default function ResetPassword() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={
+      <div className="relative min-h-screen w-full flex items-center justify-center">
+        <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+        <div className="text-white text-sm">Loading...</div>
+      </div>
+    }>
       <ResetPasswordContent />
     </Suspense>
   );

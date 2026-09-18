@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 import { authService } from "@/services/auth";
 import type { AxiosError } from "axios";
+import { AuthSecureBadge } from "@/components/ui/AuthShell";
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
@@ -171,7 +172,17 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="relative w-full min-h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center px-4 py-8 sm:px-6 sm:py-12">
+    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden px-4 py-8 sm:px-6 sm:py-12">
+      <Image
+        src="/images/welcome-signup.png"
+        alt=""
+        fill
+        className="object-cover z-[-3]"
+        priority
+      />
+      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+      <div className="security-grid pointer-events-none fixed inset-0 z-[-1] opacity-50" />
+
       {/* Toasts */}
       <AnimatePresence>
         {showSuccess && (
@@ -181,14 +192,7 @@ function VerifyEmailContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
-            style={{
-              borderImage:
-                "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-            }}
+            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
           >
             <button
               onClick={() => setShowSuccess(false)}
@@ -227,14 +231,7 @@ function VerifyEmailContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 rounded-2xl max-w-[90%] sm:max-w-none"
-            style={{
-              borderImage:
-                "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-            }}
+            className="absolute top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
           >
             <button
               onClick={() => setShowError(false)}
@@ -269,7 +266,8 @@ function VerifyEmailContent() {
             <motion.button
               onClick={handleResendOtp}
               disabled={isResending}
-              className="px-4 sm:px-6 py-2 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="px-4 sm:px-6 py-2 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              style={{ background: "var(--btn-bg)" }}
             >
               {isResending ? "Resending..." : "Resend Email"}
             </motion.button>
@@ -278,24 +276,19 @@ function VerifyEmailContent() {
       </AnimatePresence>
 
       {/* Verification card */}
-      <div
-        className="relative z-10 w-full max-w-[500px] p-6 sm:p-8 rounded-2xl bg-transparent"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
-      >
+      <div className="relative z-10 w-full max-w-[500px] p-6 sm:p-8 rounded-2xl glass-panel brand-border">
         {/* Header */}
         <div className="flex justify-between items-start mb-4 sm:mb-5">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={55}
-            height={55}
-            className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
-          />
-          <Link href="/signup/individual" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
+          <Link href="/" aria-label="Go to homepage" className="shrink-0 transition hover:opacity-90">
+            <Image
+              src="/logos/ires-logo.svg"
+              alt="iRES Logo"
+              width={55}
+              height={55}
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
+            />
+          </Link>
+          <Link href="/signup/individual" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -306,23 +299,14 @@ function VerifyEmailContent() {
           </Link>
         </div>
 
+        <AuthSecureBadge />
+
         {/* Title */}
         <motion.h2
-          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent text-center"
+          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent text-center gradient-shift"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-            backgroundSize: "200% auto",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            backgroundPosition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
           }}
         >
           Check your email
@@ -346,7 +330,7 @@ function VerifyEmailContent() {
               value={otp[i]}
               onChange={(e) => handleOtpChange(i, e.target.value.replace(/\D/g, ""))}
               onKeyDown={(e) => handleKeyDown(i, e)}
-              className="w-10 h-10 sm:w-12 sm:h-12 text-center text-white text-lg sm:text-xl bg-white/10 rounded-md outline-none focus:ring-2 focus:ring-[#4185DD]"
+              className="w-10 h-10 sm:w-12 sm:h-12 text-center text-white text-lg sm:text-xl bg-white/10 rounded-md outline-none ring-1 ring-white/5 transition focus:ring-[var(--accent-color)]/40"
             />
           ))}
         </div>
@@ -356,21 +340,10 @@ function VerifyEmailContent() {
           Didn&apos;t receive code?{" "}
           {timer > 0 ? (
             <motion.span
-              className="font-semibold bg-clip-text text-transparent inline-block"
+              className="font-semibold bg-clip-text text-transparent inline-block gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               Resend in 0:{timer.toString().padStart(2, "0")}
@@ -379,21 +352,10 @@ function VerifyEmailContent() {
             <motion.button
               onClick={handleResendOtp}
               disabled={isResending}
-              className="font-semibold bg-clip-text text-transparent inline-block hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+              className="font-semibold bg-clip-text text-transparent inline-block hover:underline disabled:opacity-50 disabled:cursor-not-allowed gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               {isResending ? "Resending..." : "Resend"}
@@ -406,7 +368,8 @@ function VerifyEmailContent() {
           onClick={handleVerify}
           type="button"
           disabled={isVerifying || otp.join("").length !== 6}
-          className="w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+          className="w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+          style={{ background: "var(--btn-bg)" }}
         >
           {isVerifying ? "Verifying..." : "Verify Email"}
         </button>
@@ -418,7 +381,9 @@ function VerifyEmailContent() {
 export default function VerifyEmail() {
   return (
     <Suspense fallback={
-      <div className="relative w-full min-h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center px-4 py-8">
+      <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden px-4 py-8">
+        <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+        <div className="security-grid pointer-events-none fixed inset-0 z-[-1] opacity-50" />
         <div className="text-white text-sm sm:text-base">Loading...</div>
       </div>
     }>

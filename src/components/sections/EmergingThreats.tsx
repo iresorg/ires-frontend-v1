@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import DashboardPanel from "@/components/ui/DashboardPanel";
 
 export default function EmergingThreats() {
   const threats = [
@@ -19,25 +20,17 @@ export default function EmergingThreats() {
   ];
 
   return (
-    <div className="rounded-xl p-5 border-white/10 bg-[#0E0E1A] border-1 ">
-      <h2 className="text-white font-semibold mb-3 text-lg">
-        Top-3 Emerging Threats (2025)
-      </h2>
-
-      <ul className="text-sm text-white divide-y divide-white/10 space-y-4 font-mono">
-        {threats.map((item, index) => (
-          <li key={index} className="flex items-center py-2">
-            <Image
-              src={item.icon}
-              alt="threat icon"
-              width={18}
-              height={18}
-              className="mr-3 flex-shrink-0"
-            />
-            <span>{item.text}</span>
+    <DashboardPanel title="Top Emerging Threats">
+      <ul className="divide-y divide-white/10">
+        {threats.map((item) => (
+          <li key={item.text} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 ring-1 ring-white/10">
+              <Image src={item.icon} alt="" width={16} height={16} />
+            </div>
+            <span className="text-sm text-white/80">{item.text}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </DashboardPanel>
   );
 }

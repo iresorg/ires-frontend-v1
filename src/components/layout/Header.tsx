@@ -9,6 +9,11 @@ import Section from "@/components/ui/Section";
 import { useAuthStore } from "@/store/auth";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 import { removeCookie } from "@/lib/api";
+import {
+  getDisplayName,
+  profileService,
+} from "@/services/profile";
+import UserAvatar from "@/components/ui/UserAvatar";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,12 +26,10 @@ export default function Header() {
 
   // Fetch user profile when component mounts if authenticated but user is null
   useEffect(() => {
-    const token =
-      typeof document !== "undefined"
-        ? document.cookie.includes("auth_token")
-        : false;
-    if (token && !user && isAuthenticated) {
-      fetchUser();
+    if (typeof document === "undefined") return;
+    const hasToken = document.cookie.includes("auth_token");
+    if (hasToken && !user && isAuthenticated) {
+      fetchUser({ silent: true });
     }
   }, [user, isAuthenticated, fetchUser]);
 
@@ -70,53 +73,22 @@ export default function Header() {
     { label: "Our Services", href: "/services" },
   ];
 
-  const handleLogout = () => {
+  const settingsHref =
+    user?.role === "organization"
+      ? "/dashboard/organization/settings"
+      : "/dashboard/settings";
+
+  const handleLogout = async () => {
+    try {
+      await profileService.logout();
+    } catch {
+      // Clear local session even if API fails
+    }
     clearUser();
     removeCookie("auth_token");
     removeCookie("refresh_token");
     setShowUserDropdown(false);
     router.push("/");
-  };
-
-  // Get user display name based on role
-  const getUserDisplayName = () => {
-    if (!user) return "User";
-
-    if (user.role === "organization" && user.organizationProfile) {
-      return user.organizationProfile.organizationName;
-    }
-
-    if (user.role === "individual" && user.individualProfile) {
-      return `${user.individualProfile.firstName} ${user.individualProfile.lastName}`;
-    }
-
-    // Fallback to email username
-    return user.email.split("@")[0] || "User";
-  };
-
-  // Get profile picture URL
-  const getProfilePicture = () => {
-    if (!user) return "/images/avatar.png";
-
-    if (user.role === "individual" && user.individualProfile?.profilePicture) {
-      try {
-        const parsed = JSON.parse(user.individualProfile.profilePicture);
-        return parsed.url || "/images/avatar.png";
-      } catch {
-        return "/images/avatar.png";
-      }
-    }
-
-    if (user.role === "organization" && user.organizationProfile?.logoUrl) {
-      try {
-        const parsed = JSON.parse(user.organizationProfile.logoUrl);
-        return parsed.url || "/images/avatar.png";
-      } catch {
-        return "/images/avatar.png";
-      }
-    }
-
-    return "/images/avatar.png";
   };
 
   // Get dashboard route based on role
@@ -128,23 +100,15 @@ export default function Header() {
   };
 
   return (
-    <header className="absolute w-full top-0 left-0 right-0 z-100 bg-transparent transition-colors duration-300">
-      <div className="relative top-0 z-100">
-        <Section className="py-8">
+    <header className="fixed top-0 left-0 right-0 z-100 w-full bg-transparent transition-all duration-300">
+      <div className="relative z-100">
+        <Section className={`transition-all duration-300 ${isScrolled ? "py-3" : "py-8"}`}>
           <div
-            className="flex items-center justify-between "
-            style={
+            className={`flex items-center justify-between transition-all duration-300 ${
               isScrolled
-                ? {
-                  background: "var(--secondary)",
-                  backdropFilter: "blur(10px)",
-                  WebkitBackdropFilter: "blur(10px)",
-                  borderBottom: "1px solid var(--divider-color)",
-                  borderRadius: "100px",
-                  padding: "0px 10px",
-                }
-                : undefined
-            }
+                ? "rounded-full px-3 py-1.5 bg-[#1c1b2b]/90 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+                : ""
+            }`}
           >
             {/* Logo */}
             <Link href="/" className="flex items-center">
@@ -159,17 +123,18 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden lg:flex items-center space-x-8 rounded-4xl px-4 capitalize "
+              className={`hidden lg:flex items-center gap-1 capitalize ${
+                !isScrolled
+                  ? "rounded-full px-2 py-1.5"
+                  : "rounded-full px-1 py-1"
+              }`}
               style={
                 !isScrolled
                   ? {
-                    background: "var(--secondary)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    borderBottom: "1px solid var(--divider-color)",
-                    borderRadius: "100px",
-                    padding: "0px 10px",
-                  }
+                      background: "var(--secondary)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                    }
                   : undefined
               }
             >
@@ -177,7 +142,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-sm xl:text-base font-normal px-3 py-2 xl:py-3 my-1 xl:my-2 text-[#D1D1D1] hover:bg-(--secondary) rounded-4xl"
+                  className="rounded-full px-3.5 py-2 text-sm font-normal text-[#D1D1D1] transition-colors xl:px-4 xl:text-base hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]/50"
                 >
                   {label}
                 </Link>
@@ -199,15 +164,9 @@ export default function Header() {
                     }}
                     onClick={() => setShowUserDropdown(!showUserDropdown)}
                   >
-                    <Image
-                      src={getProfilePicture()}
-                      alt="Profile"
-                      width={32}
-                      height={32}
-                      className="rounded-full object-cover"
-                    />
+                    <UserAvatar user={user} size={32} />
                     <span className="text-sm font-medium text-white">
-                      {getUserDisplayName()}
+                      {getDisplayName(user)}
                     </span>
                     <Image
                       src="/images/white-dropdown.png"
@@ -229,6 +188,13 @@ export default function Header() {
                           className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
                         >
                           Dashboard
+                        </Link>
+                        <Link
+                          href={settingsHref}
+                          onClick={() => setShowUserDropdown(false)}
+                          className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors mt-1"
+                        >
+                          Profile & settings
                         </Link>
                         <button
                           onClick={handleLogout}
@@ -351,18 +317,12 @@ export default function Header() {
                 {isAuthenticated && user ? (
                   <div className="pt-2 space-y-2">
                     <div className="flex items-center gap-2 px-4 py-2">
-                      <Image
-                        src={getProfilePicture()}
-                        alt="Profile"
-                        width={32}
-                        height={32}
-                        className="rounded-full object-cover"
-                      />
+                      <UserAvatar user={user} size={32} />
                       <span
                         className="text-sm font-medium"
                         style={{ color: "var(--foreground)" }}
                       >
-                        {getUserDisplayName()}
+                        {getDisplayName(user)}
                       </span>
                     </div>
                     <Link
@@ -372,6 +332,14 @@ export default function Header() {
                       style={{ color: "var(--foreground)" }}
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href={settingsHref}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      style={{ color: "var(--foreground)" }}
+                    >
+                      Profile & settings
                     </Link>
                     <button
                       onClick={() => {

@@ -12,29 +12,31 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.15,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.55,
+      ease: [0.2, 0, 0, 1] as const,
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.7,
+      ease: [0.2, 0, 0, 1] as const,
     },
   },
 };
@@ -107,8 +109,9 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <div className="relative w-full py-12 lg:py-16 overflow-hidden">
-      {/* Background shapes */}
+    <div className="relative w-full py-14 lg:py-20 overflow-hidden">
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
+
       <motion.div
         className="absolute -top-10 right-1 w-40 h-40 lg:w-52 lg:h-52 z-0"
         variants={shapeVariants}
@@ -173,9 +176,8 @@ export default function TestimonialsSection() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-60px" }}
         >
-          {/* Header */}
           <motion.div className="text-start space-y-4" variants={itemVariants}>
             <SectionTitle
               logo="/logos/ires-logo.svg"
@@ -183,45 +185,44 @@ export default function TestimonialsSection() {
               title="Our Testimonials"
             />
             <h2 className="text-lg lg:text-2xl xl:text-3xl mt-2 lg:mt-6 font-light text-white leading-tight">
-              Our Clients speak real results
+              Our Clients speak{" "}
+              <span
+                className="gradient-shift inline-block bg-clip-text font-bold text-transparent"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                }}
+              >
+                real results
+              </span>
             </h2>
             <h3
-              className="text-sm lg:text-base font-medium"
+              className="gradient-shift text-sm lg:text-base font-medium bg-clip-text text-transparent"
               style={{
-                background:
-                  "linear-gradient(135deg, var(--accent-secondary-color), var(--accent-color))",
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-secondary-color) 0%, var(--accent-color) 50%, var(--accent-secondary-color) 100%)",
               }}
             >
               real protection
             </h3>
           </motion.div>
 
-          {/* Main Content */}
           <motion.div
             className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12"
             variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
           >
-            {/* Rating Card - 4 columns */}
             <motion.div
-              className="lg:col-span-4 relative p-8 xl:p-10 rounded-3xl border border-transparent bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm text-center"
+              className="lg:col-span-4 relative p-8 xl:p-10 rounded-3xl brand-border text-center"
               style={{
                 background:
-                  "linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
-                border: "1px solid transparent",
+                  "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
               }}
               variants={cardVariants}
               whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.3 },
+                y: -6,
+                transition: { duration: 0.28 },
               }}
             >
-              {/* Rating */}
               <motion.div className="mb-6" variants={itemVariants}>
                 <div className="text-6xl lg:text-7xl font-bold text-white mb-2">
                   4.9
@@ -230,19 +231,12 @@ export default function TestimonialsSection() {
                   (4+ Reviews)
                 </div>
 
-                {/* Stars */}
                 <div className="flex justify-center gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
                       className="w-5 h-5"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
+                      style={{ color: "var(--accent-color)" }}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -251,12 +245,11 @@ export default function TestimonialsSection() {
                   ))}
                 </div>
 
-                {/* Customer Photos */}
                 <div className="flex justify-center -space-x-2 mb-6">
                   {[...Array(4)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-10 h-10 rounded-full border-2 border-white overflow-hidden"
+                      className="w-10 h-10 rounded-full border-2 overflow-hidden"
                       style={{ borderColor: "var(--accent-secondary-color)" }}
                     >
                       <Image
@@ -276,24 +269,21 @@ export default function TestimonialsSection() {
               </motion.div>
             </motion.div>
 
-            {/* Testimonial Card - 8 columns, no border */}
             <motion.div
-              className="lg:col-span-8 relative p-8 lg:p-10 rounded-3xl bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm"
+              className="lg:col-span-8 relative p-8 lg:p-10 rounded-3xl brand-border"
+              style={{
+                background:
+                  "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+              }}
               variants={cardVariants}
               whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.3 },
+                y: -6,
+                transition: { duration: 0.28 },
               }}
             >
-              {/* Testimonial Tag */}
               <motion.div className="mb-6" variants={itemVariants}>
-                <div
-                  className="inline-flex items-center gap-1 px-4 py-2 rounded-full border-2"
-                  style={{
-                    borderColor: "var(--accent-secondary-color)",
-                    background: "var(--secondary)",
-                  }}
-                >
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel brand-border">
+                  <span className="status-dot" />
                   <Image
                     src="/logos/ires-logo.svg"
                     alt="iRES Logo"
@@ -307,15 +297,13 @@ export default function TestimonialsSection() {
                 </div>
               </motion.div>
 
-              {/* Testimonial Content */}
               <motion.div className="space-y-6" variants={itemVariants}>
                 <p className="text-white/90 text-sm lg:text-base leading-relaxed">
                   {testimonials[currentTestimonial].text}
                 </p>
 
-                {/* Author Info */}
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <div className="w-12 h-12 rounded-full overflow-hidden ring-1 ring-white/10">
                     <Image
                       src={testimonials[currentTestimonial].avatar}
                       alt={testimonials[currentTestimonial].author}
@@ -338,7 +326,6 @@ export default function TestimonialsSection() {
                 </div>
               </motion.div>
 
-              {/* Navigation Arrows - Bottom Right */}
               <motion.div
                 className="absolute bottom-8 right-8 flex gap-2"
                 variants={itemVariants}
@@ -346,11 +333,8 @@ export default function TestimonialsSection() {
                 <button
                   type="button"
                   onClick={prevTestimonial}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
-                  }}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-opacity hover:opacity-90"
+                  style={{ background: "var(--btn-bg)" }}
                 >
                   <svg
                     className="w-4 h-4 text-white"
@@ -369,11 +353,8 @@ export default function TestimonialsSection() {
                 <button
                   type="button"
                   onClick={nextTestimonial}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
-                  }}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-opacity hover:opacity-90"
+                  style={{ background: "var(--btn-bg)" }}
                 >
                   <svg
                     className="w-4 h-4 text-white"
@@ -393,7 +374,6 @@ export default function TestimonialsSection() {
             </motion.div>
           </motion.div>
 
-          {/* Call Now Button */}
           <motion.div className="flex justify-center" variants={itemVariants}>
             <Button
               href="tel:+1234567890"

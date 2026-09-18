@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/auth";
 import { useSubscriptionStore } from "@/store/subscription";
 
-// Map tier to icon
 const getPlanIcon = (tier: number) => {
   switch (tier) {
     case 1:
@@ -21,10 +20,8 @@ const getPlanIcon = (tier: number) => {
   }
 };
 
-// Format date
 const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB", {
+  return new Date(dateString).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -34,62 +31,68 @@ const formatDate = (dateString: string): string => {
 export default function SubscriptionSuccess() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const { subscription, isLoading, fetchSubscriptionStatus } = useSubscriptionStore();
+  const {
+    subscription,
+    payg,
+    entitlement,
+    isStatusLoading,
+    fetchSubscriptionStatus,
+  } = useSubscriptionStore();
   const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    // Only fetch if we haven't fetched yet
     if (!hasFetchedRef.current) {
       hasFetchedRef.current = true;
-      // Refresh subscription status after successful payment
       fetchSubscriptionStatus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchSubscriptionStatus]);
 
   const handleBackToPlans = () => {
-    // Redirect based on user role
-    const plansRoute = user?.role === "organization"
-      ? "/dashboard/organization/subscription-plans"
-      : "/dashboard/subscription-plans";
+    const plansRoute =
+      user?.role === "organization"
+        ? "/dashboard/organization/subscription-plans"
+        : "/dashboard/subscription-plans";
     router.push(plansRoute);
   };
 
-  // Show loading state
-  if (isLoading || !subscription) {
+  const hasAccess = entitlement?.hasAccess ?? false;
+  const paygCredits = payg?.creditsAvailable ?? 0;
+  const isPaygSuccess = !subscription && paygCredits > 0;
+
+  if (isStatusLoading && !subscription && !payg) {
     return (
-      <div className="min-h-screen text-white flex items-center justify-center px-4 py-8">
+      <div className="flex min-h-[480px] items-center justify-center py-8 text-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-[#4185DD] mx-auto mb-4"></div>
-          <p className="text-gray-300 text-sm sm:text-base">Loading subscription details...</p>
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-b-2 border-[var(--accent-color)] sm:h-12 sm:w-12" />
+          <p className="text-sm text-white/60 sm:text-base">
+            Loading payment details...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-6 sm:py-8 relative">
-      {/* Background gradient blob */}
-      <div className="absolute inset-0" />
-
-      {/* Success Card */}
+    <div className="relative flex min-h-[480px] flex-col items-center justify-center py-6 text-white sm:py-8">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-lg rounded-2xl p-px bg-linear-to-r from-[#4185DD] to-[#B425DA] flex flex-col z-10"
+        className="relative z-10 flex w-full max-w-lg flex-col"
       >
-        <div className="bg-[#1C1B2B] rounded-2xl p-5 sm:p-6 md:p-8 flex flex-col space-y-4 sm:space-y-5 md:space-y-6">
-          {/* Success Icon */}
+        <div className="flex flex-col space-y-4 rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 sm:space-y-5 sm:p-6 md:space-y-6 md:p-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="relative flex justify-center"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-linear-to-r from-[#4185DD] to-[#B425DA] flex items-center justify-center">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-full sm:h-20 sm:w-20"
+              style={{ background: "var(--btn-bg)" }}
+            >
               <svg
-                className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white"
+                className="h-8 w-8 text-white sm:h-10 sm:w-10 md:h-12 md:w-12"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -102,80 +105,110 @@ export default function SubscriptionSuccess() {
                 />
               </svg>
             </div>
-            {/* Animated ring */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-2 border-[#4185DD]"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [1, 0, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
           </motion.div>
 
-          {/* Success Message */}
-          <div className="text-center space-y-1 sm:space-y-2">
-            <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+          <div className="space-y-1 text-center sm:space-y-2">
+            <h2
+              className="text-xl font-bold bg-clip-text text-transparent sm:text-2xl"
+              style={{
+                backgroundImage:
+                  "linear-gradient(90deg, var(--accent-color), var(--accent-secondary-color))",
+              }}
+            >
               Payment Successful!
             </h2>
-            <p className="text-gray-300 text-xs sm:text-sm px-2">
-              Your subscription has been activated successfully.
+            <p className="px-2 text-xs text-gray-300 sm:text-sm">
+              {isPaygSuccess
+                ? "Your pay-as-you-go credit has been added."
+                : "Your subscription has been activated successfully."}
             </p>
           </div>
 
-          {/* Plan Details Card - Simplified */}
-          <div className="w-full bg-[#141327] rounded-lg p-4 sm:p-5 space-y-2.5 sm:space-y-3 border border-gray-700/50">
-            {/* Plan Name with Icon */}
-            <div className="flex items-center gap-2 sm:gap-3 pb-2 sm:pb-3 border-b border-gray-700/50">
-              <Image
-                src={getPlanIcon(subscription.plan.tier)}
-                alt={subscription.plan.name}
-                width={32}
-                height={32}
-                className="w-7 h-7 sm:w-8 sm:h-8 shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-xs sm:text-sm bg-linear-to-r from-[#70A4FF] to-[#601474] bg-clip-text text-transparent truncate">
-                  {subscription.plan.name}
-                </h3>
-                <p className="text-[10px] sm:text-xs text-green-400 capitalize">{subscription.status}</p>
+          <div className="w-full space-y-2.5 rounded-xl bg-white/[0.03] p-4 ring-1 ring-white/10 sm:space-y-3 sm:p-5">
+            {subscription ? (
+              <>
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2 sm:gap-3 sm:pb-3">
+                  <Image
+                    src={getPlanIcon(subscription.plan.tier)}
+                    alt={subscription.plan.name}
+                    width={32}
+                    height={32}
+                    className="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3
+                      className="truncate text-xs font-semibold bg-clip-text text-transparent sm:text-sm"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(90deg, #70A4FF, #601474)",
+                      }}
+                    >
+                      {subscription.plan.name}
+                    </h3>
+                    <p className="text-[10px] capitalize text-green-400 sm:text-xs">
+                      {subscription.status}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] text-gray-400 sm:text-xs">
+                    Expiry Date
+                  </span>
+                  <span className="text-right text-[10px] font-medium text-white sm:text-xs">
+                    {formatDate(subscription.currentPeriodEnd)}
+                  </span>
+                </div>
+                {subscription.usage && (
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-gray-400 sm:text-xs">
+                      Incidents
+                    </span>
+                    <span className="text-right text-[10px] font-medium text-white sm:text-xs">
+                      {subscription.usage.usedIncidents} used
+                      {subscription.usage.remainingIncidents === null
+                        ? " · Unlimited left"
+                        : ` · ${subscription.usage.remainingIncidents} left`}
+                    </span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="space-y-2 text-center">
+                <p className="text-sm font-medium text-white">
+                  Pay as you go credits
+                </p>
+                <p
+                  className="text-3xl font-bold bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(90deg, var(--accent-color), var(--accent-secondary-color))",
+                  }}
+                >
+                  {paygCredits}
+                </p>
+                <p className="text-xs text-white/60">
+                  {hasAccess
+                    ? "You can use these credits for incident response."
+                    : "Credits will appear once payment is confirmed."}
+                </p>
               </div>
-            </div>
-
-            {/* Key Info Only */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-gray-400 text-[10px] sm:text-xs">Expiry Date</span>
-                <span className="text-white text-[10px] sm:text-xs font-medium text-right">
-                  {formatDate(subscription.currentPeriodEnd)}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Action Button */}
           <button
             onClick={handleBackToPlans}
-            className="w-full bg-linear-to-r from-[#4185DD] to-[#B425DA] px-4 sm:px-6 py-2.5 sm:py-3 rounded-md text-xs sm:text-sm font-medium cursor-pointer hover:opacity-90 transition-opacity"
+            className="w-full cursor-pointer rounded-xl px-4 py-2.5 text-xs font-medium text-white transition-opacity hover:opacity-90 sm:px-6 sm:py-3 sm:text-sm"
+            style={{ background: "var(--btn-bg)" }}
           >
-            Back to Subscription Plans
+            Back to subscription plans
           </button>
 
-          {/* Additional Info */}
-          <p className="text-gray-400 text-[10px] sm:text-xs text-center px-2">
-            You can manage your subscription from the subscription plans page.
+          <p className="px-2 text-center text-[10px] text-white/45 sm:text-xs">
+            You can manage billing from the subscription plans page.
           </p>
         </div>
       </motion.div>
-
-      {/* Footer */}
-      <footer className="mt-6 sm:mt-8 md:mt-10 text-white text-xs sm:text-sm text-center px-4">
-        Copyright © {new Date().getFullYear()} iRES. All Rights Reserved.
-      </footer>
     </div>
   );
 }

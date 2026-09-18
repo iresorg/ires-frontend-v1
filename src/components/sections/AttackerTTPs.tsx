@@ -1,6 +1,7 @@
- "use client";
+"use client";
 
 import Image from "next/image";
+import DashboardPanel from "@/components/ui/DashboardPanel";
 
 export default function TTPs() {
   const items = [
@@ -27,35 +28,31 @@ export default function TTPs() {
   ];
 
   return (
-    <div className=" border-white/10 bg-[#0E0E1A] border-1 p-4 rounded-xl">
-      <h3 className="text-white font-semibold mb-3 text-lg">
-        Dominant Attacker TTPs (Global/Regional)
-      </h3>
-      <ul className="text-sm text-gray-300 space-y-4">
-        {items.map((item, index) => (
-          <li key={index} className="flex items-center space-x-2">
-            {item.iconBefore && (
-              <Image
-                src={item.iconBefore}
-                alt="icon before"
-                width={16}
-                height={16}
-                className="flex-shrink-0 mr-4"
-              />
-            )}
-            <span>{item.text}</span>
-            {item.iconAfter && (
-              <Image
-                src={item.iconAfter}
-                alt="icon after"
-                width={16}
-                height={16}
-                className="flex-shrink-0"
-              />
-            )}
+    <DashboardPanel title="Dominant Attacker TTPs">
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li
+            key={item.text}
+            className="flex items-center gap-3 rounded-xl bg-white/[0.03] px-3 py-2.5 ring-1 ring-white/5 transition hover:bg-white/[0.06]"
+          >
+            <Image
+              src={item.iconBefore}
+              alt=""
+              width={16}
+              height={16}
+              className="shrink-0"
+            />
+            <span className="flex-1 text-sm text-white/80">{item.text}</span>
+            <Image
+              src={item.iconAfter}
+              alt=""
+              width={14}
+              height={14}
+              className="shrink-0 opacity-70"
+            />
           </li>
         ))}
       </ul>
-    </div>
+    </DashboardPanel>
   );
 }

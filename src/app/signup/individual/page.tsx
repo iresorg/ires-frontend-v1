@@ -12,6 +12,7 @@ import { authService } from "@/services/auth";
 import SuccessToast from "@/components/sections/SucessToast";
 import ErrorToast from "@/components/sections/ErrorToast";
 import type { AxiosError } from "axios";
+import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
 
 const countries = [
   { name: "Nigeria", code: "+234", flag: "/images/nigeria-flag.png" },
@@ -81,29 +82,7 @@ export default function IndividualSignup() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
-      {/*  Background Video */}
-      <video
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
-        src="/video/hero-video.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-
-      {/*  Fallback Image */}
-      <Image
-        src="/images/welcome-signup.png"
-        alt="Background"
-        fill
-        className="object-cover z-[-3]"
-        priority
-      />
-
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
-      {/* Toasts */}
+    <div className="relative">
       {toastType === "success" && (
         <SuccessToast onClose={() => setToastType(null)} message={toastMessage} />
       )}
@@ -111,24 +90,18 @@ export default function IndividualSignup() {
         <ErrorToast onClose={() => setToastType(null)} message={toastMessage} />
       )}
 
-      {/* Signup Card */}
-      <div
-        className="relative z-10 w-full max-w-[500px] p-6 sm:p-8 rounded-2xl bg-transparent"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
-      >
+      <AuthShell maxWidthClass="max-w-[500px]">
         <div className="flex justify-between items-start mb-4 sm:mb-5">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={55}
-            height={55}
-            className="w-12 h-12 sm:w-[55px] sm:h-[55px]"
-          />
-          <Link href="/signup" className="w-6 h-6 shrink-0">
+          <Link href="/" aria-label="Go to homepage" className="shrink-0 transition hover:opacity-90">
+            <Image
+              src="/logos/ires-logo.svg"
+              alt="iRES Logo"
+              width={55}
+              height={55}
+              className="w-12 h-12 sm:w-[55px] sm:h-[55px]"
+            />
+          </Link>
+          <Link href="/signup" className="w-6 h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -139,22 +112,13 @@ export default function IndividualSignup() {
           </Link>
         </div>
 
+        <AuthSecureBadge />
+
         <motion.h2
-          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent"
+          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent gradient-shift"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-            backgroundSize: "200% auto",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            backgroundPosition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
           }}
         >
           Sign up
@@ -170,7 +134,7 @@ export default function IndividualSignup() {
                 type="text"
                 placeholder="First Name"
                 {...register("firstName")}
-                className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#4185DD] text-sm sm:text-base"
+                className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none ring-1 ring-white/5 transition focus:ring-[var(--accent-color)]/40 text-sm sm:text-base"
               />
               {errors.firstName && (
                 <p className="text-red-400 text-xs mt-1">{errors.firstName.message}</p>
@@ -181,7 +145,7 @@ export default function IndividualSignup() {
                 type="text"
                 placeholder="Last Name"
                 {...register("lastName")}
-                className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#4185DD] text-sm sm:text-base"
+                className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none ring-1 ring-white/5 transition focus:ring-[var(--accent-color)]/40 text-sm sm:text-base"
               />
               {errors.lastName && (
                 <p className="text-red-400 text-xs mt-1">{errors.lastName.message}</p>
@@ -190,7 +154,7 @@ export default function IndividualSignup() {
           </div>
 
           <div>
-            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
               <Image
                 src="/images/email-icon.png"
                 alt="Email"
@@ -213,7 +177,7 @@ export default function IndividualSignup() {
           {/* Phone Number with Country Selection */}
           <div>
             <div className="relative">
-              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3">
+              <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
                 <div
                   className="flex items-center gap-[4px] cursor-pointer select-none shrink-0"
                   onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
@@ -272,7 +236,7 @@ export default function IndividualSignup() {
 
           {/* Password */}
           <div>
-            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
               <Image src="/images/locker.png" alt="Lock" width={20} height={20} className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
               <input
                 type={showPassword ? "text" : "password"}
@@ -296,7 +260,7 @@ export default function IndividualSignup() {
 
           {/* Confirm Password */}
           <div>
-            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
               <Image src="/images/locker.png" alt="Lock" width={20} height={20} className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -324,14 +288,15 @@ export default function IndividualSignup() {
               type="file"
               accept="image/*"
               {...register("profilePicture")}
-              className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#4185DD] file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-white/20 file:text-white file:cursor-pointer hover:file:bg-white/30 text-xs sm:text-sm"
+              className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none ring-1 ring-white/5 transition focus:ring-[var(--accent-color)]/40 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-white/20 file:text-white file:cursor-pointer hover:file:bg-white/30 text-xs sm:text-sm"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-2 sm:mt-3 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            className="mt-2 sm:mt-3 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            style={{ background: "var(--btn-bg)" }}
           >
             {isSubmitting ? "Signing up..." : "Sign up"}
             {!isSubmitting && (
@@ -350,28 +315,17 @@ export default function IndividualSignup() {
           Already have an account?{" "}
           <Link href="/login" className="hover:underline">
             <motion.span
-              className="font-semibold bg-clip-text text-transparent inline-block"
+              className="font-semibold bg-clip-text text-transparent inline-block gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               Log in
             </motion.span>
           </Link>
         </p>
-      </div>
+      </AuthShell>
     </div>
   );
 }

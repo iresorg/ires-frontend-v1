@@ -16,10 +16,12 @@ export default function SectionTitle({
 }: SectionTitleProps) {
   return (
     <div
-      className={`inline-flex items-center gap-1 px-6 py-3 rounded-full border-2 ${className}`}
+      className={`inline-flex items-center gap-1 px-6 py-3 rounded-full border ${className}`}
       style={{
-        borderColor: 'var(--accent-secondary-color)',
-        background: 'var(--secondary)',
+        borderColor: 'transparent',
+        background:
+          'linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(90deg, var(--accent-color), var(--accent-secondary-color)) border-box',
+        boxShadow: '0 0 24px rgba(65, 133, 221, 0.08)',
       }}
     >
       {logo && (
@@ -38,7 +40,7 @@ export default function SectionTitle({
         <span
           className="text-lg font-medium bg-clip-text text-transparent"
           style={{
-            backgroundImage: 'linear-gradient(to right, #60a5fa 0%, var(--accent-secondary-color) 100%)',
+            backgroundImage: 'linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 100%)',
           }}
         >
           {title}

@@ -5,36 +5,51 @@ export default function MetricsGrid() {
     {
       label: "Overall Threat Level",
       value: "HIGH",
-      color: "from-[#D52A3D] to-[#B71C1C]",
+      hint: "Elevated risk posture",
+      accent: "#EF4444",
+      tone: "text-[#FCA5A5]",
     },
     {
       label: "Active Incidents (30d)",
-      value: "1,289 ↑",
-      color: "from-[#FF7043] to-[#EA580C]",
+      value: "1,289",
+      hint: "↑ vs prior period",
+      accent: "#F97316",
+      tone: "text-[#FDBA74]",
     },
     {
       label: "Median Time-to-Detect",
-      value: "52 Hours",
-      color: "from-[#FF7043] to-[#CA8A04]",
+      value: "52 hrs",
+      hint: "Detection latency",
+      accent: "#EAB308",
+      tone: "text-[#FDE047]",
     },
     {
-      label: "MFA Adoption % (Internal)",
+      label: "MFA Adoption (Internal)",
       value: "85%",
-      color: "from-[#4CAF50] to-[#16A34A]",
+      hint: "Coverage improving",
+      accent: "#22C55E",
+      tone: "text-[#86EFAC]",
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {metrics.map((m, i) => (
+    <div className="mb-6 grid grid-cols-2 gap-3 lg:mb-8 lg:grid-cols-4 lg:gap-4">
+      {metrics.map((m) => (
         <div
-          key={i}
-          className={`rounded-xl bg-gradient-to-r ${m.color} text-white px-4 py-3 flex flex-col items-center justify-center`}
+          key={m.label}
+          className="relative overflow-hidden rounded-2xl bg-[#141327]/90 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 sm:p-5"
         >
-          <p className="text-sm  tracking-wider text-center">
+          <span
+            className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
+            style={{ background: m.accent }}
+          />
+          <p className="text-[11px] font-medium uppercase tracking-wider text-white/45 sm:text-xs">
             {m.label}
           </p>
-          <p className="text-lg font-bold">{m.value}</p>
+          <p className={`mt-2 text-xl font-semibold tracking-tight sm:text-2xl ${m.tone}`}>
+            {m.value}
+          </p>
+          <p className="mt-1 text-[11px] text-white/40 sm:text-xs">{m.hint}</p>
         </div>
       ))}
     </div>

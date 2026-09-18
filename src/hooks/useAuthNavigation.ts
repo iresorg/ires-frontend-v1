@@ -33,12 +33,16 @@ export function useAuthNavigation() {
     router.push("/signup");
   };
 
-  const handleSubscribeNavigation = () => {
+  const handleSubscribeNavigation = (returnPath?: string) => {
     if (isAuthenticated && user) {
       router.push(getSubscriptionPlansRoute());
       return;
     }
-    router.push("/login");
+    const redirect =
+      typeof returnPath === "string" && returnPath.startsWith("/")
+        ? returnPath
+        : "/pricing";
+    router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
   };
 
   const goToPricing = () => {

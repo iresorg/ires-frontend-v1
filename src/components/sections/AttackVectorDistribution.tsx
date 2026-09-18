@@ -7,15 +7,16 @@ import {
   ResponsiveContainer,
   PieLabelRenderProps,
 } from "recharts";
+import DashboardPanel from "@/components/ui/DashboardPanel";
 
 export default function AttackVectorDistribution() {
   const data = [
-    { name: "Social Engineering/Phishing", value: 45, color: "#D00F24" },
-    { name: "Compromised Credentials/Identity", value: 20, color: "#4CB050" },
-    { name: "Ransomware/Malware Payloads", value: 15, color: "#1A5BFF" },
-    { name: "Web/Application Vulnerabilities", value: 10, color: "#FF7143" },
-    { name: "Insider/Misconfiguration", value: 6, color: "#B39DDB" },
-    { name: "IoT/Other", value: 4, color: "#4A4A4A" },
+    { name: "Social Engineering/Phishing", value: 45, color: "#B425DA" },
+    { name: "Compromised Credentials", value: 20, color: "#4185DD" },
+    { name: "Ransomware/Malware", value: 15, color: "#EF4444" },
+    { name: "Web/App Vulnerabilities", value: 10, color: "#F97316" },
+    { name: "Insider/Misconfiguration", value: 6, color: "#22C55E" },
+    { name: "IoT/Other", value: 4, color: "#6B7280" },
   ];
 
   const renderLabel = (props: PieLabelRenderProps) => {
@@ -32,20 +33,19 @@ export default function AttackVectorDistribution() {
       return null;
     }
 
-    const radius = innerRadius + (outerRadius - innerRadius) / 2;
-    const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
-    const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+    const radius = Number(innerRadius) + (Number(outerRadius) - Number(innerRadius)) / 2;
+    const x = Number(cx) + radius * Math.cos(-midAngle * (Math.PI / 180));
+    const y = Number(cy) + radius * Math.sin(-midAngle * (Math.PI / 180));
 
     return (
       <text
         x={x}
         y={y}
         fill="#fff"
-        fontSize={12}
-        fontWeight="bold"
+        fontSize={11}
+        fontWeight={600}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontFamily="monospace"
       >
         {(percent * 100).toFixed(0)}%
       </text>
@@ -53,51 +53,40 @@ export default function AttackVectorDistribution() {
   };
 
   return (
-    <div className="rounded-xl p-5 border border-white/10 bg-[#0E0E1A]">
-      <h2 className="text-white font-semibold mb-4 text-lg text-center font-mono">
-        Attack-Vector Distribution
-      </h2>
-
-      <div className="flex items-center justify-between">
-        {/* PIE CHART */}
-        <div className="w-1/2 h-56">
+    <DashboardPanel title="Attack-Vector Distribution">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="h-52 w-full sm:w-1/2">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 dataKey="value"
-                innerRadius={60}
-                outerRadius={88} 
-                paddingAngle={0} 
+                innerRadius={55}
+                outerRadius={85}
+                paddingAngle={2}
                 label={renderLabel}
                 stroke="none"
-                cornerRadius={6} 
               >
-                {data.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} stroke={entry.color} />
+                {data.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        {/* LEGEND */}
-        <ul className="text-sm text-white space-y-2 font-mono w-1/2">
-          {data.map((item, index) => (
-            <li key={index} className="flex items-center">
+        <ul className="w-full space-y-2 sm:w-1/2">
+          {data.map((item) => (
+            <li key={item.name} className="flex items-center gap-2 text-xs text-white/75 sm:text-sm">
               <span
-                className="w-0 h-0 mr-2"
-                style={{
-                  borderLeft: "6px solid transparent",
-                  borderRight: "6px solid transparent",
-                  borderBottom: `10px solid ${item.color}`,
-                }}
-              ></span>
+                className="h-2.5 w-2.5 shrink-0 rounded-full"
+                style={{ background: item.color }}
+              />
               {item.name}
             </li>
           ))}
         </ul>
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

@@ -49,7 +49,6 @@ export default function WhyChooseUs() {
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Background */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -57,8 +56,8 @@ export default function WhyChooseUs() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
-      {/* Bouncing Shapes */}
       <motion.div
         className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
         variants={shapeVariants}
@@ -99,7 +98,6 @@ export default function WhyChooseUs() {
       </motion.div>
 
       <Section className="relative z-10 py-20 lg:py-28">
-        {/* Section Title */}
         <div className="flex justify-center mb-12">
           <SectionTitle
             logo="/logos/ires-logo.svg"
@@ -108,7 +106,6 @@ export default function WhyChooseUs() {
           />
         </div>
 
-        {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {reasons.map((reason, i) => (
             <motion.div
@@ -118,16 +115,21 @@ export default function WhyChooseUs() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[360px] p-[2px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]"
+              whileHover={{ y: -6, transition: { duration: 0.28 } }}
+              className="relative w-full max-w-[360px] rounded-2xl p-6 glass-panel brand-border"
             >
-              <div className="h-full rounded-[1rem] bg-[#0D0D0F]/90 backdrop-blur-sm p-6">
-                <h3 className="text-base font-semibold mb-3 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent leading-snug">
-                  {reason.title}
-                </h3>
-                <p className="text-sm text-white/90 leading-relaxed">
-                  {reason.text}
-                </p>
-              </div>
+              <h3
+                className="text-base font-semibold mb-3 bg-clip-text text-transparent leading-snug"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
+                }}
+              >
+                {reason.title}
+              </h3>
+              <p className="text-sm text-white/90 leading-relaxed">
+                {reason.text}
+              </p>
             </motion.div>
           ))}
         </div>
