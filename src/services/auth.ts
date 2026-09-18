@@ -210,28 +210,26 @@ export const authService = {
   forgotPassword: async (
     data: ForgotPasswordData
   ): Promise<ForgotPasswordResponse> => {
+    // POST {API}/api/v1/accounts/auth/forgot-password — public, no JWT
     const response = await api.post<ForgotPasswordResponse>(
       "/accounts/auth/forgot-password",
-      {
-        email: data.email,
-      }
+      { email: data.email },
     );
-
     return response.data;
   },
 
   resetPassword: async (
     data: ResetPasswordData
   ): Promise<ResetPasswordResponse> => {
+    // POST {API}/api/v1/accounts/auth/reset-password — public, no JWT
     const response = await api.post<ResetPasswordResponse>(
       "/accounts/auth/reset-password",
       {
         email: data.email,
         token: data.token,
         newPassword: data.newPassword,
-      }
+      },
     );
-
     return response.data;
   },
 };

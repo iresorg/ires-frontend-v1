@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { removeCookie } from "@/lib/api";
@@ -606,7 +607,13 @@ export default function AccountSettings() {
           >
             <h2 className="mb-2 text-base font-semibold">Change password</h2>
             <p className="mb-5 text-sm text-white/50">
-              Use at least 6 characters for your new password.
+              Use at least 6 characters for your new password.{" "}
+              <Link
+                href="/forgot-password"
+                className="text-[var(--accent-color)] hover:underline"
+              >
+                Forgot password instead?
+              </Link>
             </p>
 
             {passwordMessage && (

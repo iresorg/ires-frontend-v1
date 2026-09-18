@@ -1,5 +1,27 @@
-import axios from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import type { ApiResponse } from "@/types";
+
+const PUBLIC_AUTH_PATHS = [
+  "/accounts/auth/login",
+  "/accounts/auth/register",
+  "/accounts/auth/forgot-password",
+  "/accounts/auth/reset-password",
+  "/accounts/auth/verify-email",
+  "/accounts/auth/resend-otp",
+];
+
+function resolveApiBaseUrl(): string {
+  const raw = (process.env.NEXT_PUBLIC_API_URL || "").trim().replace(/\/$/, "");
+  if (!raw) {
+    console.error(
+      "NEXT_PUBLIC_API_URL is not set. Auth API calls will fail — set it to your backend, e.g. https://api.example.com/api/v1",
+    );
+    return "";
+  }
+  return raw;
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 // Simple cookie helpers
 const getCookie = (name: string): string | null => {
@@ -22,8 +44,13 @@ const removeCookie = (name: string): void => {
   document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
 };
 
+function isPublicAuthRequest(config: InternalAxiosRequestConfig): boolean {
+  const url = config.url || "";
+  return PUBLIC_AUTH_PATHS.some((path) => url.includes(path));
+}
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -32,57 +59,72 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = getCookie("auth_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (!API_BASE_URL) {
+      return Promise.reject(
+        new Error(
+          "API base URL is not configured (NEXT_PUBLIC_API_URL). Requests must go to the backend, not the Netlify site.",
+        ),
+      );
     }
+
+    // Public auth endpoints must not send a stale portal JWT
+    if (!isPublicAuthRequest(config)) {
+      const token = getCookie("auth_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 // Response interceptor
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
 
-    // Handle 401 Unauthorized
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    // Never run refresh/redirect logic on public auth routes
+    if (isPublicAuthRequest(originalRequest)) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // Attempt to refresh token
         const refreshToken = getCookie("refresh_token");
         if (refreshToken) {
           const response = await api.post<ApiResponse<{ token: string }>>(
             "/auth/refresh",
-            {
-              refreshToken,
-            }
+            { refreshToken },
           );
 
           const { token } = response.data.data;
           setCookie("auth_token", token);
-
-          // Retry the original request
           originalRequest.headers.Authorization = `Bearer ${token}`;
           return api(originalRequest);
         }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (refreshError) {
-        // If refresh fails, redirect to login
+      } catch {
         removeCookie("auth_token");
         removeCookie("refresh_token");
-        window.location.href = "/auth/login";
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
-export { getCookie, setCookie, removeCookie };
+export { getCookie, setCookie, removeCookie, API_BASE_URL };
