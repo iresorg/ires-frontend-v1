@@ -182,7 +182,7 @@ export function getSeverityBadgeClass(severity: string): string {
 
 export function getEntitlementLabel(source: EntitlementSource): string {
   if (source === "subscription") return "Subscription";
-  if (source === "payg") return "Pay as you go";
+  if (source === "payg") return "One-off plan";
   return "—";
 }
 

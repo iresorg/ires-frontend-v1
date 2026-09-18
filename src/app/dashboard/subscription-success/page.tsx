@@ -120,7 +120,7 @@ export default function SubscriptionSuccess() {
             </h2>
             <p className="px-2 text-xs text-gray-300 sm:text-sm">
               {isPaygSuccess
-                ? "Your pay-as-you-go credit has been added."
+                ? "Your one-off plan credit has been added."
                 : "Your subscription has been activated successfully."}
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function SubscriptionSuccess() {
             ) : (
               <div className="space-y-2 text-center">
                 <p className="text-sm font-medium text-white">
-                  Pay as you go credits
+                  One-off plan credits
                 </p>
                 <p
                   className="text-3xl font-bold bg-clip-text text-transparent"

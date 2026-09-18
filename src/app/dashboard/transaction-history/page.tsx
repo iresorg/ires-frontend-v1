@@ -74,7 +74,7 @@ export default function TransactionHistory() {
             Transaction history
           </h1>
           <p className="mt-1 text-sm text-white/50">
-            Subscription and pay-as-you-go charges
+            Subscription and one-off plan charges
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export default function TransactionHistory() {
           <h2 className="text-lg font-semibold text-white">No transactions yet</h2>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
             You haven&apos;t made any payments. Subscribe to a plan or buy a
-            pay-as-you-go credit to get incident response cover — your charges
+            one-off plan credit to get incident response cover — your charges
             will show up here.
           </p>
           <Link
@@ -113,7 +113,7 @@ export default function TransactionHistory() {
           Transaction history
         </h1>
         <p className="mt-1 text-sm text-white/50">
-          Subscription and pay-as-you-go charges
+          Subscription and one-off plan charges
         </p>
       </div>
 

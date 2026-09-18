@@ -175,11 +175,11 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
       set({ error: null });
       return await subscriptionService.initializePayg(data);
     } catch (error: any) {
-      console.error("Failed to initialize pay-as-you-go:", error);
+      console.error("Failed to initialize one-off plan:", error);
       set({
         error:
           error?.response?.data?.message ||
-          "Failed to initialize pay-as-you-go",
+          "Failed to initialize one-off plan",
       });
       throw error;
     }

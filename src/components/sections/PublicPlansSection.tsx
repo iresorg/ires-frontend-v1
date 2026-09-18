@@ -203,7 +203,7 @@ export default function PublicPlansSection() {
               active={paymentType === "one_time"}
               onClick={() => setPaymentType("one_time")}
             >
-              Pay as you go
+              One-off plan
             </FilterPill>
           </div>
         </div>

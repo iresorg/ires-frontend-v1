@@ -176,7 +176,7 @@ export default function SubscriptionPlansPage() {
             Subscription plans
           </h1>
           <p className="mt-1 text-sm text-white/50">
-            Manage cover, pay-as-you-go credits, and billing
+            Manage cover, one-off plan credits, and billing
           </p>
         </div>
 
@@ -184,7 +184,7 @@ export default function SubscriptionPlansPage() {
           {(
             [
               ["subscription", "Subscriptions"],
-              ["one_time", "Pay as you go"],
+              ["one_time", "One-off plan"],
             ] as const
           ).map(([value, label]) => (
             <button
@@ -233,7 +233,7 @@ export default function SubscriptionPlansPage() {
                   </span>
                 )}
                 <span className="rounded-lg bg-white/5 px-3 py-1 text-white/80 ring-1 ring-white/10">
-                  PAYG credits: {payg?.creditsAvailable ?? 0}
+                  One-off credits: {payg?.creditsAvailable ?? 0}
                 </span>
                 {subscription?.usage && (
                   <span className="rounded-lg bg-white/5 px-3 py-1 text-white/80 ring-1 ring-white/10">
