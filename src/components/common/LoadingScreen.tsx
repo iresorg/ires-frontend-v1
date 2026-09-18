@@ -2,12 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { markAppLoadComplete, isAppLoadComplete } from '@/lib/appLoad';
 
 export default function LoadingScreen() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(() => !isAppLoadComplete());
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // Skip splash on client-side navigations after first load
+    if (isAppLoadComplete()) {
+      setIsVisible(false);
+      document.body.style.overflow = 'unset';
+      return;
+    }
+
     // Prevent scrolling while loading
     document.body.style.overflow = 'hidden';
 
@@ -20,8 +28,7 @@ export default function LoadingScreen() {
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
       document.body.style.overflow = 'unset';
-      // Dispatch custom event to signal loading is complete
-      window.dispatchEvent(new CustomEvent('loadingComplete'));
+      markAppLoadComplete();
     }, 2500);
 
     return () => {

@@ -12,6 +12,7 @@ import { authService } from "@/services/auth";
 import type { AxiosError } from "axios";
 // import ErrorToast from "@/components/sections/ErrorToast";
 import CustomSelect from "@/components/ui/CustomSelect";
+import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
 
 const countries = [
   { name: "Nigeria", code: "+234", flag: "/images/nigeria-flag.png" },
@@ -160,49 +161,19 @@ export default function OrganizationSignup() {
  };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
-      {/*  Background Video */}
-      <video
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
-        src="/video/hero-video.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-
-      {/*  Fallback Image */}
-      <Image
-        src="/images/welcome-signup.png"
-        alt="Background"
-        fill
-        className="object-cover z-[-3]"
-        priority
-      />
-
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
-
-
-      {/* Signup Card */}
-      <div
-        className="relative z-10 w-full max-w-[800px] p-4 sm:p-6 rounded-2xl bg-transparent mt-4 sm:mt-8 md:mt-20 mb-2"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
-      >
+      <AuthShell maxWidthClass="max-w-[800px]">
         {/* Logo */}
         <div className="flex justify-between items-start mb-2 sm:mb-0">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={55}
-            height={55}
-            className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
-          />
-          <Link href="/signup" aria-label="Close" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0">
+          <Link href="/" aria-label="Go to homepage" className="shrink-0 transition hover:opacity-90">
+            <Image
+              src="/logos/ires-logo.svg"
+              alt="iRES Logo"
+              width={55}
+              height={55}
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
+            />
+          </Link>
+          <Link href="/signup" aria-label="Close" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -213,23 +184,14 @@ export default function OrganizationSignup() {
           </Link>
         </div>
 
+        <AuthSecureBadge />
+
         {/* Main content */}
         <motion.h2
-          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent text-center -mt-2 sm:-mt-5"
+          className="text-xl sm:text-2xl font-bold mb-1 bg-clip-text text-transparent text-center gradient-shift"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-            backgroundSize: "200% auto",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            backgroundPosition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
           }}
         >
           Sign up
@@ -527,13 +489,7 @@ export default function OrganizationSignup() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-3">
             <div
-              className="bg-gray-700/40 rounded-lg border-[2px] border-dashed p-4 sm:p-6"
-              style={{
-                borderImage:
-                  "linear-gradient(90deg, #4185DD, #5D207F, #601474) 1",
-                borderImageSlice: 1,
-                borderStyle: isDragging ? "dashed" : "solid",
-              }}
+              className={`bg-white/5 rounded-lg border-2 border-dashed p-4 sm:p-6 brand-border ${isDragging ? "opacity-90" : ""}`}
               onDragEnter={handleDragEnter}
               onDragOver={handleDragEnter}
               onDragLeave={handleDragLeave}
@@ -659,7 +615,8 @@ export default function OrganizationSignup() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-              className="mt-4 sm:mt-6 w-full sm:w-[80%] md:w-[60%] py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="mt-4 sm:mt-6 w-full sm:w-[80%] md:w-[60%] py-2.5 sm:py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all flex items-center justify-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              style={{ background: "var(--btn-bg)" }}
               >
                 {isSubmitting ? "Signing up..." : "Sign up"}
               </button>
@@ -671,28 +628,16 @@ export default function OrganizationSignup() {
           Already have an account?{" "}
           <Link href="/login" className="hover:underline">
             <motion.span
-              className="font-semibold bg-clip-text text-transparent inline-block"
+              className="font-semibold bg-clip-text text-transparent inline-block gradient-shift"
               style={{
                 backgroundImage:
                   "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-                backgroundSize: "200% auto",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
               }}
             >
               Log in
             </motion.span>
           </Link>
         </p>
-      </div>
-    </div>
+      </AuthShell>
   );
 }

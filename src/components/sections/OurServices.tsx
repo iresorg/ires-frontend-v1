@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { PlayIcon } from "@heroicons/react/24/solid";
+import Button from "@/components/ui/Button";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -27,7 +28,6 @@ export default function OurServicesForOrganizations() {
 
   return (
     <section className="relative w-full py-16 lg:py-24 overflow-hidden">
-      {/* Background overlay */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -35,9 +35,9 @@ export default function OurServicesForOrganizations() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-6 lg:px-12">
-        {/* Title */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -56,9 +56,7 @@ export default function OurServicesForOrganizations() {
           </h2>
         </motion.div>
 
-        {/* Grid */}
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column */}
           <div className="lg:col-span-6 flex flex-col gap-6 relative">
             {services.map((service, i) => (
               <motion.div
@@ -67,21 +65,25 @@ export default function OurServicesForOrganizations() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className={`w-full max-w-md sm:max-w-full p-[1px] rounded-2xl bg-gradient-to-r from-[#4185DD] to-[#B425DA]
+                whileHover={{ y: -6, transition: { duration: 0.28 } }}
+                className={`w-full max-w-md sm:max-w-full rounded-2xl p-5 glass-panel brand-border
                   ${i === 1 ? "lg:ml-8" : ""} ${i === 2 ? "lg:ml-16" : ""}`}
               >
-                <div className="rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md p-5">
-                  <h3 className="text-base font-semibold mb-2 bg-gradient-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
-                    {service.title}
-                  </h3>
-                  <p className="text-white text-sm leading-relaxed">
-                    {service.text}
-                  </p>
-                </div>
+                <h3
+                  className="text-base font-semibold mb-2 bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
+                  }}
+                >
+                  {service.title}
+                </h3>
+                <p className="text-white text-sm leading-relaxed">
+                  {service.text}
+                </p>
               </motion.div>
             ))}
 
-            {/* Play Button */}
             <motion.button
               className="mt-6 sm:mt-8 w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: "var(--accent-secondary-color)" }}
@@ -106,7 +108,6 @@ export default function OurServicesForOrganizations() {
             </motion.button>
           </div>
 
-          {/* Right Column */}
           <motion.div
             className="lg:col-span-6 relative w-full flex justify-center mt-12 lg:mt-0"
             variants={fadeUp}
@@ -114,7 +115,6 @@ export default function OurServicesForOrganizations() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Ellipse */}
             <motion.div className="absolute inset-0 flex items-center justify-center">
               <Image
                 src="/images/ellipse.png"
@@ -125,8 +125,6 @@ export default function OurServicesForOrganizations() {
               />
             </motion.div>
 
-            {/* Foreground image */}
-         
             <motion.div
               className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-[500px] lg:h-[400px]"
               animate={{ y: [0, -20, 0] }}
@@ -144,17 +142,23 @@ export default function OurServicesForOrganizations() {
           </motion.div>
         </div>
 
-        {/* Call Now Button */}
         <div className="mt-12 flex justify-end lg:absolute lg:bottom-0 lg:right-8">
-          <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#4185dd] to-[#b425da] text-white text-sm font-medium shadow-lg cursor-pointer">
-            <Image
-              src="/images/call.png"
-              alt="Call Icon"
-              width={18}
-              height={18}
-            />
+          <Button
+            href="tel:+1234567890"
+            className="flex items-center gap-2 px-5 py-2 text-sm"
+          >
+            <div className="relative w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
+              <Image
+                src="/images/call.png"
+                alt="Call Icon"
+                width={18}
+                height={18}
+                className="relative z-10"
+              />
+            </div>
             Call Now
-          </button>
+          </Button>
         </div>
       </div>
     </section>

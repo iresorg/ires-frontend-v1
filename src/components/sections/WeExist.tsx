@@ -4,14 +4,14 @@ import { useRef, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
-import Image from "next/image";
+import SectionTitle from "@/components/ui/SectionTitle";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6 },
+    transition: { duration: 0.55, ease: [0.2, 0, 0, 1] as const },
   },
 };
 
@@ -27,8 +27,7 @@ export default function WhyWeExistSection() {
   };
 
   return (
-    <div className="relative w-full">
-      {/* Background */}
+    <div className="relative w-full overflow-hidden">
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -36,38 +35,47 @@ export default function WhyWeExistSection() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
-      <Section className="relative z-10 py-16 lg:py-24">
-        {/* Title */}
-        <div className="flex items-center justify-center space-x-3">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={28}
-            height={28}
+      <Section className="relative z-10 py-14 lg:py-20">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="flex justify-center"
+        >
+          <SectionTitle
+            logo="/logos/ires-logo.svg"
+            logoAlt="iRES Logo"
+            title="Why We Exist"
           />
-          <span className="text-lg font-semibold text-white">
-            Why We Exist
-          </span>
-        </div>
+        </motion.div>
 
-        {/* Video */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mx-auto mt-12 w-full max-w-4xl overflow-hidden rounded-2xl bg-linear-to-r from-[#4185DD] to-[#B425DA] p-0.5"
+          className="mx-auto mt-12 w-full max-w-4xl overflow-hidden rounded-3xl brand-border"
+          style={{
+            background:
+              "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+          }}
+          whileHover={{ y: -6, transition: { duration: 0.28 } }}
         >
-          <div className="relative rounded-2xl bg-[#0E0E11]">
+          <div className="relative rounded-3xl overflow-hidden">
             <video
               ref={videoRef}
-              className="h-65 w-full rounded-2xl object-cover md:h-85 lg:h-105"
+              className="h-65 w-full rounded-3xl object-cover md:h-85 lg:h-105"
               controls={playing}
               preload="metadata"
               playsInline
             >
-              <source src="/video/iRES_Cinematic_Demo (3).mp4" type="video/mp4" />
+              <source
+                src="/video/iRES_Cinematic_Demo (3).mp4"
+                type="video/mp4"
+              />
               Your browser does not support the video tag.
             </video>
 
@@ -79,9 +87,11 @@ export default function WhyWeExistSection() {
                 <motion.div
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-r from-[#4185DD] to-[#B425DA] shadow-xl"
+                  className="relative flex h-16 w-16 items-center justify-center rounded-full shadow-xl"
+                  style={{ background: "var(--btn-bg)" }}
                 >
-                  <PlayIcon className="h-7 w-7 text-white" />
+                  <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
+                  <PlayIcon className="relative z-10 h-7 w-7 text-white" />
                 </motion.div>
               </button>
             )}

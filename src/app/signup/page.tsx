@@ -3,11 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { AuthSecureBadge } from "@/components/ui/AuthShell";
 
 export default function WelcomeSignupPage() {
   return (
     <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
-      {/* 🎥 Background video */}
       <video
         className="absolute inset-0 -z-10 w-full h-full object-cover"
         src="/video/hero-video.mp4"
@@ -17,7 +17,6 @@ export default function WelcomeSignupPage() {
         playsInline
       />
 
-      {/* Fall background */}
       <div className="absolute inset-0 -z-20">
         <Image
           src="/images/welcome-signup.png"
@@ -28,11 +27,14 @@ export default function WelcomeSignupPage() {
         />
       </div>
 
-      {/* Overlay for contrast */}
       <div className="absolute inset-0 bg-[#1C1B2B]/90 -z-10" />
+      <div className="security-grid pointer-events-none absolute inset-0 -z-[9] opacity-50" />
 
-      {/* Logo */}
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20">
+      <Link
+        href="/"
+        aria-label="Go to homepage"
+        className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20 transition hover:opacity-90"
+      >
         <Image
           src="/logos/ires-logo.svg"
           alt="iRES Logo"
@@ -40,13 +42,12 @@ export default function WelcomeSignupPage() {
           height={80}
           className="h-8 w-auto sm:h-10"
         />
-      </div>
+      </Link>
 
-      {/* Close icon */}
       <Link
         href="/"
         aria-label="Close"
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center opacity-80 transition hover:opacity-100"
       >
         <Image
           src="/images/cancel-icon.png"
@@ -57,38 +58,32 @@ export default function WelcomeSignupPage() {
         />
       </Link>
 
-      {/* Main content */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-0"
       >
-        {/* Title */}
+        <AuthSecureBadge />
+
         <h1
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wide mb-3 sm:mb-4"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wide mb-3 sm:mb-4 bg-clip-text text-transparent gradient-shift"
           style={{
             backgroundImage:
-              "linear-gradient(90deg, #4185DD 0%, #B425DA 50%, #FF7FB1 100%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
+              "linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary-color) 50%, #FF7FB1 100%)",
           }}
         >
           WELCOME!
         </h1>
 
-        {/* Subtitle */}
         <p className="text-white/90 text-sm sm:text-base md:text-lg mb-6 sm:mb-8 md:mb-10 px-2">
           Who do you want to sign up/log in as?
         </p>
 
-        {/* Option buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 w-full max-w-2xl mx-auto">
-          {/* Individual */}
           <Link
             href="/signup/individual"
-            className="relative w-full max-w-[280px] sm:w-64 h-36 sm:h-40 md:h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD] transition-all hover:bg-white/5"
+            className="relative w-full max-w-[280px] sm:w-64 h-36 sm:h-40 md:h-44 flex flex-col items-center justify-center rounded-2xl glass-panel brand-border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(65,133,221,0.25)]"
           >
             <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
               <Image
@@ -104,10 +99,9 @@ export default function WelcomeSignupPage() {
             </div>
           </Link>
 
-          {/* Organization */}
           <Link
             href="/signup/organization"
-            className="relative w-full max-w-[280px] sm:w-64 h-36 sm:h-40 md:h-44 flex flex-col items-center justify-center rounded-2xl border border-[#4185DD] transition-all hover:bg-white/5"
+            className="relative w-full max-w-[280px] sm:w-64 h-36 sm:h-40 md:h-44 flex flex-col items-center justify-center rounded-2xl glass-panel brand-border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(65,133,221,0.25)]"
           >
             <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
               <Image
@@ -124,7 +118,6 @@ export default function WelcomeSignupPage() {
           </Link>
         </div>
 
-        {/* Footer */}
         <p className="mt-8 sm:mt-12 md:mt-16 text-xs sm:text-sm text-white/80 px-2">
           Copyright © 2025 iRES. All Rights Reserved.
         </p>

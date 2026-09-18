@@ -18,7 +18,18 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#1A1A2E] text-white">
+    <footer
+      className="text-white"
+      style={{ background: "var(--bg-color, #1c1b2b)" }}
+    >
+      <div
+        className="h-[2px] w-full"
+        style={{
+          background:
+            "linear-gradient(90deg, var(--accent-color), var(--accent-secondary-color))",
+        }}
+        aria-hidden
+      />
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-0">
         {/* Main Footer Content */}
         <motion.div
@@ -67,7 +78,7 @@ export default function Footer() {
                 <Link
                   href="https://www.linkedin.com/company/iresorg/"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
                 >
                   <Image
                     src="/icons/linkedin.svg"
@@ -82,7 +93,7 @@ export default function Footer() {
                 <Link
                   href="https://www.instagram.com/iresorgg/"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
                 >
                   <Image
                     src="/icons/instagram.svg"
@@ -97,7 +108,7 @@ export default function Footer() {
                 <Link
                   href="https://x.com/iRESorg?t=L-aamPkbfZi06TbjYsXfjA&s=09"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
                 >
                   <Image
                     src="/icons/twitter.svg"
@@ -112,7 +123,7 @@ export default function Footer() {
                 <Link
                   href="https://www.youtube.com/@iresorg"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
                 >
                   <Image
                     src="/icons/youtube.svg"

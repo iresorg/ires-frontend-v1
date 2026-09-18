@@ -4,12 +4,20 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6 },
+    transition: { duration: 0.65, ease: [0.2, 0, 0, 1] as const },
   },
 };
 
@@ -40,8 +48,7 @@ export default function ToUseServices() {
   ];
 
   return (
-    <section className="relative w-full py-16 lg:py-24 overflow-hidden">
-      {/* Background overlay */}
+    <section className="relative w-full py-14 lg:py-20 overflow-hidden">
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -49,10 +56,10 @@ export default function ToUseServices() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
-      {/* Decorative shape bouncing */}
       <motion.div
-        className="absolute top-0 right-0 z-0"
+        className="absolute top-0 right-0 z-0 float-y"
         animate={{ y: [0, -20, 0] }}
         transition={{ y: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
       >
@@ -65,52 +72,66 @@ export default function ToUseServices() {
         />
       </motion.div>
 
-      {/* Container */}
       <div className="relative z-10 container mx-auto px-6 lg:px-12">
-        {/* Title */}
         <motion.div
-          variants={fadeUp}
+          variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h2 className="text-white text-lg md:text-xl font-semibold">
-            <span className="bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-light text-white leading-tight">
+            <span
+              className="gradient-shift mr-2 inline-block bg-clip-text font-bold text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+              }}
+            >
               To Use
             </span>
-            <span className="text-white"> Our Services</span>
+            Our Services
           </h2>
         </motion.div>
 
-        {/* Boxes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, i) => (
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+        >
+          {steps.map((step, index) => (
             <motion.div
-              key={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="group relative rounded-2xl p-[2px] 
-              bg-linear-to-r from-[#4185DD] to-[#B425DA] 
-              hover:scale-[1.02] transition-transform duration-300"
+              key={`${step.title}-${index}`}
+              variants={cardVariants}
+              whileHover={{ y: -6, transition: { duration: 0.28 } }}
+              className="group relative flex h-full flex-col rounded-3xl p-6 brand-border"
+              style={{
+                background:
+                  "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+              }}
             >
-              {/* Inner box */}
-              <div className="relative rounded-2xl bg-[#0E0E11]/90 backdrop-blur-md flex flex-col justify-between h-full min-h-[220px] p-6 text-center">
+              <div className="flex flex-col justify-between h-full min-h-[220px] text-center">
                 <div>
-                  <h3 className="font-semibold text-base mb-3 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+                  <h3
+                    className="font-semibold text-base mb-3 bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(135deg, var(--accent-secondary-color), var(--accent-color))",
+                    }}
+                  >
                     {step.title}
                   </h3>
 
-                  <p className="text-white text-sm mb-5 leading-relaxed">
+                  <p className="text-white/90 text-sm mb-5 leading-relaxed">
                     {step.text}
                   </p>
                 </div>
 
-                {/* U BUTTONS */}
                 <button
-                  className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
+                  className="px-5 py-2 rounded-xl text-white text-sm font-medium hover:opacity-90 transition cursor-pointer"
+                  style={{ background: "var(--btn-bg)" }}
                   onClick={() => {
                     if (step.button === "Sign Up") {
                       handleSignUpNavigation();
@@ -133,7 +154,7 @@ export default function ToUseServices() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
