@@ -14,29 +14,31 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.15,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.55,
+      ease: [0.2, 0, 0, 1] as const,
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.7,
+      ease: [0.2, 0, 0, 1] as const,
     },
   },
 };
@@ -81,7 +83,9 @@ export default function ContactUsSection() {
     } catch (err) {
       console.error("Newsletter subscription error:", err);
       const axiosError = err as AxiosError<{ message?: string }>;
-      const errorMsg = axiosError.response?.data?.message || "Failed to subscribe. Please try again.";
+      const errorMsg =
+        axiosError.response?.data?.message ||
+        "Failed to subscribe. Please try again.";
       setErrorMessage(errorMsg);
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);
@@ -91,8 +95,9 @@ export default function ContactUsSection() {
   };
 
   return (
-    <div className="relative w-full py-12 lg:py-16">
-      {/* Background Shape */}
+    <div className="relative w-full py-14 lg:py-20 overflow-hidden">
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
+
       <motion.div
         className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
         variants={shapeVariants}
@@ -111,7 +116,6 @@ export default function ContactUsSection() {
         />
       </motion.div>
 
-      {/* Toasts */}
       <AnimatePresence>
         {showSuccess && (
           <motion.div
@@ -120,14 +124,7 @@ export default function ContactUsSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="fixed top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
-            style={{
-              borderImage:
-                "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-            }}
+            className="fixed top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
           >
             <button
               onClick={() => setShowSuccess(false)}
@@ -168,14 +165,7 @@ export default function ContactUsSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.4 }}
-            className="fixed top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none"
-            style={{
-              borderImage:
-                "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              boxShadow: "0 0 15px rgba(180, 37, 218, 0.25)",
-            }}
+            className="fixed top-4 right-4 sm:top-10 sm:right-10 z-50 flex flex-col items-center text-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 rounded-2xl max-w-[90%] sm:max-w-none glass-panel brand-border"
           >
             <button
               onClick={() => setShowError(false)}
@@ -216,19 +206,17 @@ export default function ContactUsSection() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-60px" }}
         >
-          {/* Main Card */}
           <motion.div
-            className="relative p-6 sm:p-8 lg:p-12 rounded-3xl border border-transparent bg-linear-to-br from-white/5 to-white/10 backdrop-blur-sm"
+            className="relative p-6 sm:p-8 lg:p-12 rounded-3xl brand-border"
             style={{
               background:
-                "linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
-              border: "1px solid transparent",
+                "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
             }}
             variants={cardVariants}
+            whileHover={{ y: -6, transition: { duration: 0.28 } }}
           >
-            {/* Section Title */}
             <motion.div
               className="text-center mb-6 sm:mb-8"
               variants={itemVariants}
@@ -240,7 +228,6 @@ export default function ContactUsSection() {
               />
             </motion.div>
 
-            {/* Main Heading */}
             <motion.div
               className="text-center mb-6 sm:mb-8"
               variants={itemVariants}
@@ -248,13 +235,10 @@ export default function ContactUsSection() {
               <h2 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight mb-2 sm:mb-4">
                 We&apos;re Just a{" "}
                 <motion.span
-                  className="bg-clip-text text-transparent"
+                  className="gradient-shift bg-clip-text text-transparent"
                   style={{
                     backgroundImage:
-                      "linear-gradient(135deg, var(--accent-secondary-color), var(--accent-color))",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                      "linear-gradient(to right, var(--accent-secondary-color) 0%, var(--accent-color) 50%, var(--accent-secondary-color) 100%)",
                   }}
                 >
                   click away
@@ -266,30 +250,23 @@ export default function ContactUsSection() {
               </p>
             </motion.div>
 
-            {/* Feature Items */}
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12"
               variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
             >
               {[
                 "Dedicated Support Team",
                 "Fast and Reliable Assistance",
                 "Multiple Ways to Reach Us",
-              ].map((feature, index) => (
+              ].map((feature) => (
                 <motion.div
-                  key={index}
+                  key={feature}
                   className="flex items-center gap-2 sm:gap-3"
                   variants={itemVariants}
                 >
                   <div
                     className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shrink-0"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
-                    }}
+                    style={{ background: "var(--btn-bg)" }}
                   >
                     <svg
                       className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
@@ -312,15 +289,10 @@ export default function ContactUsSection() {
               ))}
             </motion.div>
 
-            {/* Contact Info and Newsletter */}
             <motion.div
               className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12"
               variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
             >
-              {/* Contact Information */}
               <motion.div
                 className="space-y-4 sm:space-y-6 lg:col-span-4"
                 variants={itemVariants}
@@ -330,7 +302,7 @@ export default function ContactUsSection() {
                 </h3>
 
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-white/5 ring-1 ring-white/10">
                     <Image
                       src="/icons/phone.svg"
                       alt="Phone icon"
@@ -345,7 +317,7 @@ export default function ContactUsSection() {
                 </div>
 
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-white/5 ring-1 ring-white/10">
                     <Image
                       src="/icons/mark_email_unread.svg"
                       alt="Email icon"
@@ -360,7 +332,6 @@ export default function ContactUsSection() {
                 </div>
               </motion.div>
 
-              {/* Newsletter Subscription */}
               <motion.div
                 className="space-y-3 sm:space-y-4 lg:col-span-8"
                 variants={itemVariants}
@@ -377,7 +348,7 @@ export default function ContactUsSection() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="flex-1 px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white/40 transition-colors"
+                    className="flex-1 px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-[var(--accent-color)]/60 transition-colors"
                     required
                   />
                   <Button
@@ -387,7 +358,9 @@ export default function ContactUsSection() {
                     disabled={isLoading}
                     className="px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm lg:text-base rounded-xl whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Subscribing..." : "Subscribe to Our Newsletter"}
+                    {isLoading
+                      ? "Subscribing..."
+                      : "Subscribe to Our Newsletter"}
                   </Button>
                 </form>
               </motion.div>

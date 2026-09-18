@@ -3,22 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema, type LoginFormData } from "@/validation/auth";
 import { authService } from "@/services/auth";
 import { useAuthStore } from "@/store/auth";
 import type { AxiosError } from "axios";
 import ErrorToast from "@/components/sections/ErrorToast";
 
-export default function LoginPage() {
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const {
     register,
@@ -38,19 +39,21 @@ export default function LoginPage() {
         password: data.password,
       });
 
-      // Get user from store (set by auth service after login)
       const currentUser = useAuthStore.getState().user;
+      const redirect = searchParams.get("redirect");
 
-      // Redirect based on user role
+      if (redirect && redirect.startsWith("/")) {
+        router.push(redirect);
+        return;
+      }
+
       if (currentUser) {
         if (currentUser.role === "organization") {
           router.push("/dashboard/organization");
         } else {
-          // Default for "individual" or unknown roles
           router.push("/dashboard");
         }
       } else {
-        // fallback
         router.push("/dashboard");
       }
     } catch (error) {
@@ -67,7 +70,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
-      {/*  Background Video */}
       <video
         className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
         src="/video/hero-video.mp4"
@@ -77,7 +79,6 @@ export default function LoginPage() {
         playsInline
       />
 
-      {/*  Fallback Image */}
       <Image
         src="/images/welcome-signup.png"
         alt="Background"
@@ -86,9 +87,9 @@ export default function LoginPage() {
         priority
       />
 
-      {/* Overlay */}
       <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
-      {/* Error Toast */}
+      <div className="security-grid fixed inset-0 z-[-1] opacity-50 pointer-events-none" />
+
       {showError && (
         <ErrorToast
           onClose={() => setShowError(false)}
@@ -96,16 +97,12 @@ export default function LoginPage() {
         />
       )}
 
-      {/* Login card */}
-      <div
-        className="relative z-10 w-full max-w-[480px] p-6 sm:p-8 rounded-2xl bg-transparent"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
+      <motion.div
+        className="relative z-10 w-full max-w-[480px] p-6 sm:p-8 rounded-2xl glass-panel brand-border"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: [0.2, 0, 0, 1] }}
       >
-        {/* IRES logo and close icon */}
         <div className="flex justify-between items-start mb-4 sm:mb-5">
           <Image
             src="/logos/ires-logo.svg"
@@ -114,7 +111,7 @@ export default function LoginPage() {
             height={55}
             className="w-12 h-12 sm:w-[55px] sm:h-[55px]"
           />
-          <Link href="/signup" className="w-6 h-6 shrink-0">
+          <Link href="/signup" className="w-6 h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"
               alt="Close"
@@ -125,21 +122,18 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Title */}
+        <div className="mb-4 flex items-center justify-center gap-2">
+          <span className="status-dot" />
+          <span className="text-[11px] uppercase tracking-wider text-white/55">
+            Secure session
+          </span>
+        </div>
+
         <motion.h2
-          className="text-xl sm:text-2xl font-bold mb-1 text-center bg-clip-text text-transparent"
+          className="text-xl sm:text-2xl font-bold mb-1 text-center bg-clip-text text-transparent gradient-shift"
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-            backgroundSize: "200% auto",
-          }}
-          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-          transition={{
-            backgroundPosition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
           }}
         >
           Welcome Back!
@@ -150,11 +144,9 @@ export default function LoginPage() {
           Log in to your account below
         </p>
 
-        {/* Form */}
         <form className="flex flex-col gap-3 sm:gap-4" onSubmit={handleSubmit(onSubmit)}>
-          {/* Email input */}
           <div>
-            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
               <Image
                 src="/images/email-icon.png"
                 alt="Email"
@@ -176,9 +168,8 @@ export default function LoginPage() {
             )}
           </div>
 
-          {/* Password input */}
           <div>
-            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3">
+            <div className="flex items-center bg-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 ring-1 ring-white/5 transition focus-within:ring-[var(--accent-color)]/40">
               <Image
                 src="/images/locker.png"
                 alt="Lock"
@@ -212,11 +203,11 @@ export default function LoginPage() {
             )}
           </div>
 
-          {/* Login button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold bg-linear-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            className="mt-2 w-full py-2.5 sm:py-3 rounded-lg text-white font-semibold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base hover:opacity-90"
+            style={{ background: "var(--btn-bg)" }}
           >
             {isSubmitting ? "Logging in..." : "Log in"}
           </button>
@@ -275,7 +266,21 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#1C1B2B] text-white">
+          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-[#4185DD]" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
+import Button from "@/components/ui/Button";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -41,7 +42,6 @@ export default function OurCommitment() {
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Background overlay */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -49,6 +49,7 @@ export default function OurCommitment() {
           backgroundImage: "var(--bg-shape)",
         }}
       />
+      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
       <motion.div
         className="absolute -bottom-10 right-0 w-40 h-40 lg:w-52 lg:h-52 z-0"
@@ -90,7 +91,6 @@ export default function OurCommitment() {
       </motion.div>
 
       <Section className="relative z-10 py-20 lg:py-28">
-        {/* Section Title */}
         <div className="flex justify-center mb-12">
           <SectionTitle
             logo="/logos/ires-logo.svg"
@@ -99,7 +99,6 @@ export default function OurCommitment() {
           />
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center mb-16">
           {commitments.map((item, i) => (
             <motion.div
@@ -109,58 +108,67 @@ export default function OurCommitment() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="relative w-full max-w-[360px] transition-transform duration-300 hover:scale-[1.02]"
+              whileHover={{ y: -6, transition: { duration: 0.28 } }}
+              className="relative w-full max-w-[360px] overflow-hidden rounded-[22px] glass-panel brand-border flex flex-col"
             >
-              <div className="p-[2px] rounded-[22px] bg-gradient-to-r from-[#4185DD] to-[#B425DA] h-full">
-                <div className="rounded-[20px] overflow-hidden bg-[#0E0E11]/85 backdrop-blur-sm shadow-md flex flex-col h-full">
-                  <div className="relative w-full h-[200px] rounded-t-[20px] overflow-hidden">
-                    <Image
-                      src={item.img}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow justify-between text-center">
-                    <div>
-                      <h3 className="text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#4185DD] to-[#B425DA] mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-white/90 leading-relaxed">
-                        {item.text}
-                      </p>
-                    </div>
-                  </div>
+              <div className="relative w-full h-[200px] overflow-hidden">
+                <Image
+                  src={item.img}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-grow justify-between text-center">
+                <div>
+                  <h3
+                    className="text-base font-semibold bg-clip-text text-transparent mb-2"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color))",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-white/90 leading-relaxed">
+                    {item.text}
+                  </p>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Explore Plans Section */}
         <div className="text-center mb-8">
           <p className="text-white/80 mb-4 text-sm md:text-base">
             Explore Plans Available For Your Organizations
           </p>
           <Link
             href="/pricing"
-            className="px-6 py-2 cursor-pointer rounded-md text-white text-sm font-medium bg-gradient-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition inline-block"
+            className="px-6 py-2 cursor-pointer rounded-md text-white text-sm font-medium hover:opacity-90 transition inline-block"
+            style={{ background: "var(--btn-bg)" }}
           >
             Explore Plans
           </Link>
         </div>
 
-        {/* Call button  */}
         <div className="w-full flex justify-center lg:justify-end lg:absolute lg:top-16 lg:right-8 mb-12 lg:mb-0">
-          <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#4185DD] to-[#B425DA] text-white text-sm font-medium shadow-lg hover:opacity-90 transition cursor-pointer">
-            <Image
-              src="/images/call.png"
-              alt="Call Icon"
-              width={18}
-              height={18}
-            />
+          <Button
+            href="tel:+1234567890"
+            className="flex items-center gap-2 px-5 py-2 text-sm"
+          >
+            <div className="relative w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
+              <Image
+                src="/images/call.png"
+                alt="Call Icon"
+                width={18}
+                height={18}
+                className="relative z-10"
+              />
+            </div>
             Call Now
-          </button>
+          </Button>
         </div>
       </Section>
     </div>

@@ -132,19 +132,11 @@ export default function Header() {
       <div className="relative top-0 z-100">
         <Section className="py-8">
           <div
-            className="flex items-center justify-between "
-            style={
+            className={`flex items-center justify-between transition-all duration-300 ${
               isScrolled
-                ? {
-                  background: "var(--secondary)",
-                  backdropFilter: "blur(10px)",
-                  WebkitBackdropFilter: "blur(10px)",
-                  borderBottom: "1px solid var(--divider-color)",
-                  borderRadius: "100px",
-                  padding: "0px 10px",
-                }
-                : undefined
-            }
+                ? "glass-panel brand-border rounded-full px-3 py-1"
+                : ""
+            }`}
           >
             {/* Logo */}
             <Link href="/" className="flex items-center">
@@ -177,7 +169,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-sm xl:text-base font-normal px-3 py-2 xl:py-3 my-1 xl:my-2 text-[#D1D1D1] hover:bg-(--secondary) rounded-4xl"
+                  className="text-sm xl:text-base font-normal px-3 py-2 xl:py-3 my-1 xl:my-2 text-[#D1D1D1] rounded-4xl transition-colors hover:text-[var(--accent-color)] hover:bg-white/5"
                 >
                   {label}
                 </Link>

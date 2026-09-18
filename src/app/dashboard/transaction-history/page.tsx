@@ -4,18 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSubscriptionStore } from "@/store/subscription";
-
-// Format amount to naira (backend stores amount in units that need to be divided by 100)
-const formatPrice = (amount: string): string => {
-  const amountInSmallestUnit = parseInt(amount, 10);
-  const amountInNaira = amountInSmallestUnit / 100;
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amountInNaira);
-};
+import { formatKoboToNaira } from "@/services/subscription";
 
 // Format date and time
 const formatDateTime = (dateString: string): string => {
@@ -118,7 +107,7 @@ const [page, setPage] = useState(1);
                     {formatDateTime(transaction.date)}
                 </td>
                 <td className="pl-10 px-4 py-3 text-center">
-                    {formatPrice(transaction.amount)}
+                    {formatKoboToNaira(transaction.amount)}
                 </td>
                 <td className="px-4 py-3 text-center text-white">
                   <Link href={`/dashboard/transaction-history/`}>
@@ -168,7 +157,7 @@ const [page, setPage] = useState(1);
                 </div>
                 <div>
                   <p className="text-xs text-white/70 mb-1">Amount Paid</p>
-                  <p className="text-sm text-white">{formatPrice(transaction.amount)}</p>
+                  <p className="text-sm text-white">{formatKoboToNaira(transaction.amount)}</p>
                 </div>
               </div>
 

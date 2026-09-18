@@ -4,13 +4,31 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { PlayIcon } from "@heroicons/react/24/solid";
+import SectionTitle from "@/components/ui/SectionTitle";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6 },
+    transition: { duration: 0.55, ease: [0.2, 0, 0, 1] as const },
+  },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 36 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.2, 0, 0, 1] as const },
   },
 };
 
@@ -97,8 +115,7 @@ export default function OurServices() {
 
   return (
     <>
-      <section className="relative w-full py-16 lg:py-24 overflow-hidden">
-        {/* Background overlay */}
+      <section className="relative w-full py-14 lg:py-20 overflow-hidden">
         <div
           className="absolute inset-0 w-full h-full"
           style={{
@@ -106,10 +123,10 @@ export default function OurServices() {
             backgroundImage: "var(--bg-shape)",
           }}
         />
+        <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
 
-        {/* EARTH FLOATING */}
         <motion.div
-          className="absolute -top-10 -left-10 z-0"
+          className="absolute -top-10 -left-10 z-0 float-y"
           animate={{ y: [0, -15, 0] }}
           transition={{
             y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
@@ -125,7 +142,6 @@ export default function OurServices() {
         </motion.div>
 
         <div className="relative z-10 container mx-auto px-6 lg:px-12">
-          {/* Title */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -133,77 +149,62 @@ export default function OurServices() {
             viewport={{ once: true }}
             className="flex justify-center items-center mb-12"
           >
-            <Image
-              src="/logos/ires-logo.svg"
-              alt="iRES Logo"
-              width={30}
-              height={30}
-              className="mr-2"
+            <SectionTitle
+              logo="/logos/ires-logo.svg"
+              logoAlt="iRES Logo"
+              title="Our Services"
             />
-            <h2 className="text-white text-lg md:text-xl font-semibold">
-              Our Services
-            </h2>
           </motion.div>
 
-          {/* GRID */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            {/* LEFT COLUMN */}
             <div className="lg:col-span-6 flex flex-col gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+              >
                 {services.map((service, i) => (
                   <motion.div
-                    key={i}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    className="relative rounded-2xl overflow-hidden hover:scale-[1.03] transition-transform duration-300 "
+                    key={service}
+                    variants={cardVariants}
+                    whileHover={{ y: -6, transition: { duration: 0.28 } }}
+                    className="relative rounded-3xl p-6 text-center brand-border"
+                    style={{
+                      background:
+                        "linear-gradient(160deg, rgba(28,27,43,0.92) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+                    }}
                   >
-                    {/* Gradient border */}
-                    <div className="absolute inset-0 rounded-2xl p-0.75 bg-linear-to-r from-[#4185DD] to-[#601474] blur-[1px]" />
+                    <p className="text-white text-sm font-medium mb-4 min-h-12">
+                      {service}
+                    </p>
 
-                    <div className="relative rounded-2xl bg-[#13131A]/90 backdrop-blur-sm p-6 text-center border border-[#ffffff10]">
-                      <p className="text-white text-sm font-medium mb-4 min-h-12">
-                        {service}
-                      </p>
-
-                      <button
-                        onClick={() => setSelectedIndex(i)}
-                        className="px-5 py-2 rounded-lg text-white text-sm font-medium bg-linear-to-r from-[#4185DD] to-[#B425DA] hover:opacity-90 transition cursor-pointer"
-                      >
-                        More Info
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => setSelectedIndex(i)}
+                      className="px-5 py-2 rounded-lg text-white text-sm font-medium hover:opacity-90 transition cursor-pointer"
+                      style={{ background: "var(--btn-bg)" }}
+                    >
+                      More Info
+                    </button>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
-              {/* PLAY BUTTON */}
               <motion.button
-                className="mt-10 w-14 h-14 rounded-full flex items-center justify-center"
-                style={{ background: "var(--accent-secondary-color)" }}
+                className="mt-10 relative w-14 h-14 rounded-full flex items-center justify-center"
+                style={{ background: "var(--btn-bg)" }}
                 aria-label="Play video"
                 whileHover={{
                   scale: 1.1,
-                  boxShadow: "0 0 25px rgba(180, 37, 218, 0.5)",
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{
-                  rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                  boxShadow: "0 0 25px rgba(65, 133, 221, 0.45)",
                 }}
               >
-                <motion.div
-                  animate={{ rotate: [0, -360] }}
-                  transition={{
-                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                  }}
-                >
-                  <PlayIcon className="w-6 h-6 text-white" />
-                </motion.div>
+                <span className="pulse-ring absolute inset-0 rounded-full border border-[var(--accent-color)]" />
+                <PlayIcon className="relative z-10 w-6 h-6 text-white" />
               </motion.button>
             </div>
 
-            {/* RIGHT IMAGE AREA */}
             <motion.div
               className="lg:col-span-6 relative w-full flex justify-center lg:justify-end"
               variants={fadeUp}
@@ -228,7 +229,7 @@ export default function OurServices() {
               </motion.div>
 
               <motion.div
-                className="relative z-10"
+                className="relative z-10 float-y"
                 animate={{ y: [0, -20, 0] }}
                 transition={{
                   y: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
@@ -247,16 +248,25 @@ export default function OurServices() {
         </div>
       </section>
 
-      {/* ===================== MODAL ===================== */}
       {selectedIndex !== null && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-9999 px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-[#0F0F15] max-w-lg w-full rounded-2xl p-6 border border-white/10 text-white shadow-xl overflow-y-auto max-h-[90vh]"
+            className="max-w-lg w-full rounded-3xl p-6 text-white shadow-xl overflow-y-auto max-h-[90vh] brand-border"
+            style={{
+              background:
+                "linear-gradient(160deg, rgba(28,27,43,0.95) 0%, rgba(14,14,26,0.98) 100%) padding-box, linear-gradient(135deg, var(--accent-color), var(--accent-secondary-color)) border-box",
+            }}
           >
-            <h2 className="text-xl font-semibold mb-4 bg-linear-to-r from-[#4185DD] to-[#B425DA] bg-clip-text text-transparent">
+            <h2
+              className="gradient-shift text-xl font-semibold mb-4 bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+              }}
+            >
               {details[selectedIndex].title}
             </h2>
 
@@ -266,8 +276,8 @@ export default function OurServices() {
 
             <h3 className="font-semibold mt-4 mb-2">Key Features</h3>
             <ul className="list-disc ml-5 text-white/80 text-sm space-y-1">
-              {details[selectedIndex].features.map((f, k) => (
-                <li key={k}>{f}</li>
+              {details[selectedIndex].features.map((f) => (
+                <li key={f}>{f}</li>
               ))}
             </ul>
 
@@ -277,7 +287,8 @@ export default function OurServices() {
 
             <button
               onClick={() => setSelectedIndex(null)}
-              className="mt-6 w-full py-2 rounded-lg bg-linear-to-r from-[#4185DD] to-[#B425DA] text-white font-medium hover:opacity-90 transition cursor-pointer"
+              className="mt-6 w-full py-2 rounded-lg text-white font-medium hover:opacity-90 transition cursor-pointer"
+              style={{ background: "var(--btn-bg)" }}
             >
               Close
             </button>

@@ -9,6 +9,7 @@ interface ButtonProps {
   className?: string;
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export default function Button({ 
@@ -17,7 +18,8 @@ export default function Button({
   onClick, 
   className = '',
   variant = 'primary',
-  disabled = false
+  disabled = false,
+  type = 'button',
 }: ButtonProps) {
   const baseClasses = "px-6 py-3 rounded-4xl font-medium text-white transition-all duration-200 hover:scale-105";
   
@@ -45,6 +47,7 @@ export default function Button({
 
     return (
       <button 
+        type={type}
         onClick={disabled ? undefined : onClick} 
         disabled={disabled} 
         className={secondaryClasses}
@@ -75,6 +78,7 @@ export default function Button({
 
   return (
     <button
+      type={type}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       className={`${baseClasses} ${className}`}

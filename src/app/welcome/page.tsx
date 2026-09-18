@@ -3,32 +3,41 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { AuthSecureBadge } from "@/components/ui/AuthShell";
 
 export default function WelcomePage() {
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-[url('/images/welcome-signup.png')] bg-cover bg-center">
-      {/* Border Card */}
-      <div
-        className="relative z-10 w-[480px] p-10 rounded-2xl bg-transparent text-center"
-        style={{
-          borderImage: "linear-gradient(90deg, #4185DD, #5D207F, #B425DA) 1",
-          borderWidth: "1px",
-          borderStyle: "solid",
-        }}
-      >
-        {/* shield image */}
-        <div className="flex justify-center mb-5">
+    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden px-4 py-8">
+      <Image
+        src="/images/welcome-signup.png"
+        alt=""
+        fill
+        className="object-cover z-[-3]"
+        priority
+      />
+      <div className="fixed inset-0 bg-[#1C1B2B]/90 z-[-1]" />
+      <div className="security-grid pointer-events-none fixed inset-0 z-[-1] opacity-50" />
+
+      <div className="relative z-10 w-full max-w-[480px] p-8 sm:p-10 rounded-2xl glass-panel brand-border text-center">
+        <AuthSecureBadge />
+
+        <div className="relative flex justify-center mb-5 mx-auto w-fit">
+          <span className="pulse-ring absolute inset-0 rounded-full border-2 border-[var(--accent-color)]" />
           <Image
             src="/images/shield-icon.png"
             alt="Security Icon"
             width={60}
             height={60}
+            className="relative z-10"
           />
         </div>
 
-        {/* Title */}
         <motion.h2
-          className="text-4xl font-bold mb-4 text-white text-center tracking-wide"
+          className="text-3xl sm:text-4xl font-bold mb-4 text-center tracking-wide bg-clip-text text-transparent gradient-shift"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+          }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -36,15 +45,16 @@ export default function WelcomePage() {
           WELCOME TO iRES!
         </motion.h2>
 
-        {/* Description */}
         <p className="text-white text-xs mb-8 leading-relaxed">
-          Let’s start your onboarding to know more<br/> about your organization and
-          choose a<br/> recommended and suitable plan for you
+          Let&apos;s start your onboarding to know more<br /> about your organization and
+          choose a<br /> recommended and suitable plan for you
         </p>
 
-        {/* Get Started Button */}
         <Link href="/dashboard">
-          <button className="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA] hover:opacity-90 transition-all cursor-pointer">
+          <button
+            className="w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-all cursor-pointer"
+            style={{ background: "var(--btn-bg)" }}
+          >
             Get Started
           </button>
         </Link>
