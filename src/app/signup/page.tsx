@@ -30,7 +30,11 @@ export default function WelcomeSignupPage() {
       <div className="absolute inset-0 bg-[#1C1B2B]/90 -z-10" />
       <div className="security-grid pointer-events-none absolute inset-0 -z-[9] opacity-50" />
 
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20">
+      <Link
+        href="/"
+        aria-label="Go to homepage"
+        className="absolute top-4 left-4 sm:top-6 sm:left-8 z-20 transition hover:opacity-90"
+      >
         <Image
           src="/logos/ires-logo.svg"
           alt="iRES Logo"
@@ -38,7 +42,7 @@ export default function WelcomeSignupPage() {
           height={80}
           className="h-8 w-auto sm:h-10"
         />
-      </div>
+      </Link>
 
       <Link
         href="/"

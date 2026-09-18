@@ -1,77 +1,57 @@
 "use client";
 
+import DashboardPanel from "@/components/ui/DashboardPanel";
+
 export default function IndividualRisks() {
   const risks = [
     {
       risk: "Phishing",
       impact: "Medium",
-      impactColor: "bg-[#FF7143]",
-      mitigation: "MFA, Phishing training, Verify sender",
+      impactClass: "bg-[#F97316]/20 text-[#FDBA74] ring-[#F97316]/30",
+      mitigation: "MFA, phishing training, verify sender",
     },
     {
       risk: "Social media doxxing/scams",
       impact: "Low",
-      impactColor: "bg-[#4CB050]",
-      mitigation: "Privacy settings, Limit PII shares",
+      impactClass: "bg-[#22C55E]/20 text-[#86EFAC] ring-[#22C55E]/30",
+      mitigation: "Privacy settings, limit PII shares",
     },
     {
       risk: "Sim swap/SMS-OTP compromise",
       impact: "High",
-      impactColor: "bg-[#D00F24]",
-      mitigation: "Unique app 2FA, Contact telco lock",
+      impactClass: "bg-[#EF4444]/20 text-[#FCA5A5] ring-[#EF4444]/30",
+      mitigation: "App-based 2FA, contact telco lock",
     },
   ];
 
   return (
-    <div className="border border-white/10 bg-[#0E0E1A] rounded-xl p-4 sm:p-6">
-      {/* Header */}
-      <h2 className="text-white font-semibold text-center text-base sm:text-lg mb-4 sm:mb-6">
-        Individual-Level Risks
-      </h2>
-
-      {/* Sub Headers - Hidden on mobile, visible on desktop */}
-      <div className="hidden sm:grid grid-cols-3 gap-3 sm:gap-4 mb-3">
-        <p className="text-white text-xs font-semibold text-center">
-          Personal Risk
-        </p>
-        <p className="text-white text-xs font-semibold text-center">Impact</p>
-        <p className="text-white text-xs font-semibold text-center">
-          Quick Mitigation
-        </p>
+    <DashboardPanel title="Individual-Level Risks">
+      <div className="mb-3 hidden grid-cols-3 gap-3 text-[11px] font-semibold uppercase tracking-wider text-white/40 sm:grid">
+        <p>Personal risk</p>
+        <p className="text-center">Impact</p>
+        <p className="text-right">Quick mitigation</p>
       </div>
 
-      {/* Risk Rows */}
-      <div className="grid gap-3 sm:gap-4">
-        {risks.map((r, i) => (
-          <div key={i} className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
-            {/* Personal Risk */}
-            <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
-              <div>
-                <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Personal Risk:</span>
-              {r.risk}
-              </div>
+      <div className="space-y-2.5">
+        {risks.map((r) => (
+          <div
+            key={r.risk}
+            className="grid grid-cols-1 gap-2 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/5 sm:grid-cols-3 sm:items-center sm:gap-3"
+          >
+            <p className="text-sm font-medium text-white">{r.risk}</p>
+            <div className="flex sm:justify-center">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${r.impactClass}`}
+              >
+                {r.impact}
+              </span>
             </div>
-
-            {/* Impact */}
-            <div
-              className={`rounded-lg text-white font-semibold text-center flex items-center justify-center text-[10px] sm:text-xs ${r.impactColor} p-3 sm:p-4 min-h-[60px] sm:min-h-0`}
-            >
-              <div>
-                <span className="sm:hidden text-[9px] text-white/90 mb-1 block">Impact:</span>
-              {r.impact}
-              </div>
-            </div>
-
-            {/* Quick Mitigation */}
-            <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
-              <div>
-                <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Quick Mitigation:</span>
+            <p className="text-xs text-white/60 sm:text-right sm:text-sm">
               {r.mitigation}
-              </div>
-            </div>
+            </p>
           </div>
         ))}
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

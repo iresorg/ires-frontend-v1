@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import DashboardPanel from "@/components/ui/DashboardPanel";
 
 const data = [
   { sector: "Banking/Finance", phishing: 10, ransomware: 5, intrusion: 8 },
@@ -18,53 +19,43 @@ const data = [
 
 export default function IncidentChart() {
   return (
-    <div className="border border-white/10 bg-[#0E0E1A] rounded-xl p-4 sm:p-5 overflow-hidden">
-      <h2 className="text-white font-semibold mb-3 sm:mb-4 text-base sm:text-lg">
-        Nigeria Incident Breakdown (30 Days)
-      </h2>
-      <div className="w-full h-[200px] sm:h-[250px] md:h-[300px]">
+    <DashboardPanel title="Nigeria Incident Breakdown (30 Days)">
+      <div className="h-[200px] w-full sm:h-[250px] md:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{
-              top: 10,
-              right: 10,
-              left: -20,
-              bottom: 5
-            }}
+            margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
           >
             <XAxis
               dataKey="sector"
-              stroke="#aaa"
-              tick={{ fontSize: 10 }}
+              stroke="#6b7280"
+              tick={{ fill: "#9ca3af", fontSize: 10 }}
               angle={-45}
               textAnchor="end"
               height={60}
               interval={0}
             />
             <YAxis
-              stroke="#aaa"
-              tick={{ fontSize: 10 }}
+              stroke="#6b7280"
+              tick={{ fill: "#9ca3af", fontSize: 10 }}
               width={40}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1C1C2E",
+                backgroundColor: "#141327",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "8px",
+                borderRadius: "12px",
                 fontSize: "12px",
+                color: "#fff",
               }}
             />
-            <Legend
-              wrapperStyle={{ fontSize: "12px" }}
-              iconSize={12}
-            />
-            <Bar dataKey="phishing" stackId="a" fill="#3969DB" />
-            <Bar dataKey="ransomware" stackId="a" fill="#D82225" />
-            <Bar dataKey="intrusion" stackId="a" fill="#15CA40" />
+            <Legend wrapperStyle={{ fontSize: "12px" }} iconSize={12} />
+            <Bar dataKey="phishing" stackId="a" fill="#4185DD" radius={[0, 0, 0, 0]} />
+            <Bar dataKey="ransomware" stackId="a" fill="#B425DA" />
+            <Bar dataKey="intrusion" stackId="a" fill="#22C55E" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

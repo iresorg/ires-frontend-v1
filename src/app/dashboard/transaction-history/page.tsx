@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useAuthStore } from "@/store/auth";
 import { useSubscriptionStore } from "@/store/subscription";
 import { formatKoboToNaira } from "@/services/subscription";
 
@@ -30,11 +31,17 @@ const mapStatus = (status: string): string => {
 };
 
 export default function TransactionHistory() {
+  const { user } = useAuthStore();
   const { transactions, transactionsPagination, isLoading, fetchTransactions } =
     useSubscriptionStore();
-const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const limit = 10;
   const hasFetchedRef = useRef(false);
+
+  const plansHref =
+    user?.role === "organization"
+      ? "/dashboard/organization/subscription-plans"
+      : "/dashboard/subscription-plans";
 
   useEffect(() => {
     // Fetch transactions when page changes
@@ -43,17 +50,17 @@ const [page, setPage] = useState(1);
   }, [page, fetchTransactions]);
 
   const statusClasses: { [key: string]: string } = {
-    Success: "bg-[#15CA40]/75",
-    Pending: "bg-[#FBBF24]/80",
-    Failed: "bg-[#EF4444]/90",
+    Success: "bg-[#22C55E]/20 text-[#86EFAC] ring-1 ring-[#22C55E]/30",
+    Pending: "bg-[#EAB308]/20 text-[#FDE047] ring-1 ring-[#EAB308]/30",
+    Failed: "bg-[#EF4444]/20 text-[#FCA5A5] ring-1 ring-[#EF4444]/30",
   };
 
   if (isLoading && (!transactions || transactions.length === 0)) {
     return (
-      <div className="mt-2 ml-2 sm:ml-4 mr-2 sm:mr-4 flex items-center justify-center min-h-[400px]">
+      <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4185DD] mx-auto mb-4"></div>
-          <p className="text-gray-300">Loading transactions...</p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[var(--accent-color)]" />
+          <p className="text-white/60">Loading transactions...</p>
         </div>
       </div>
     );
@@ -61,33 +68,73 @@ const [page, setPage] = useState(1);
 
   if ((!transactions || transactions.length === 0) && !isLoading) {
     return (
-      <div className="mt-2 ml-2 sm:ml-4 mr-2 sm:mr-4 flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <p className="text-gray-300">No transactions found.</p>
+      <div>
+        <div className="mb-6">
+          <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Transaction history
+          </h1>
+          <p className="mt-1 text-sm text-white/50">
+            Subscription and pay-as-you-go charges
+          </p>
+        </div>
+
+        <div className="flex min-h-[360px] flex-col items-center justify-center rounded-2xl bg-[#141327]/90 px-6 py-12 text-center shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10">
+            <Image
+              src="/images/transaction.png"
+              alt=""
+              width={28}
+              height={28}
+              className="opacity-80"
+            />
+          </div>
+          <h2 className="text-lg font-semibold text-white">No transactions yet</h2>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-white/55">
+            You haven&apos;t made any payments. Subscribe to a plan or buy a
+            pay-as-you-go credit to get incident response cover — your charges
+            will show up here.
+          </p>
+          <Link
+            href={plansHref}
+            className="mt-6 inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
+            style={{ background: "var(--btn-bg)" }}
+          >
+            View subscription plans
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-2 ml-2 sm:ml-4 mr-2 sm:mr-4">
-      {/* Desktop Table - Hidden on md and below */}
-      <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-left table-auto border-collapse">
+    <div>
+      <div className="mb-6">
+        <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          Transaction history
+        </h1>
+        <p className="mt-1 text-sm text-white/50">
+          Subscription and pay-as-you-go charges
+        </p>
+      </div>
+
+      <div className="hidden overflow-hidden rounded-2xl bg-[#141327]/90 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 md:block">
+        <table className="w-full table-auto border-collapse text-left">
           <thead>
-            <tr className="border-b border-gray-100/20 text-gray-300">
-              <th className="px-4 py-3 font-medium">Transaction Reference</th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
+            <tr className="border-b border-white/10 text-white/50">
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider">
+                Transaction Reference
+              </th>
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">
                 Plan Name
               </th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">
                 Date & Time
               </th>
-              <th className="pl-10 px-4 py-3 font-medium text-center">
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">
                 Amount Paid
               </th>
-              <th className="pl-5 px-4 py-3 font-medium text-center">
-                Status Badge
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                Status
               </th>
             </tr>
           </thead>
@@ -97,27 +144,25 @@ const [page, setPage] = useState(1);
               return (
               <tr
                   key={transaction.id}
-                className="border-b border-gray-100/20 text-gray-300 hover:bg-neutral-900/50 transition"
+                className="border-b border-white/10 text-white/75 transition hover:bg-white/[0.03]"
               >
-                  <td className="px-4 py-3">{transaction.transactionReference}</td>
-                <td className="pl-10 px-4 py-3 text-center">
+                  <td className="px-4 py-3 font-medium text-white">{transaction.transactionReference}</td>
+                <td className="px-4 py-3 text-center">
                     {transaction.plan?.name || "N/A"}
                 </td>
-                <td className="pl-10 px-4 py-3 text-center">
+                <td className="px-4 py-3 text-center">
                     {formatDateTime(transaction.date)}
                 </td>
-                <td className="pl-10 px-4 py-3 text-center">
+                <td className="px-4 py-3 text-center">
                     {formatKoboToNaira(transaction.amount)}
                 </td>
                 <td className="px-4 py-3 text-center text-white">
-                  <Link href={`/dashboard/transaction-history/`}>
-                    <button
-                        className={`text-sm transition px-2 py-2 rounded-lg cursor-pointer ${statusClasses[displayStatus] || "bg-neutral-800"
+                    <span
+                        className={`inline-block rounded-lg px-2.5 py-1 text-xs font-medium ${statusClasses[displayStatus] || "bg-neutral-800"
                       }`}
                     >
                         {displayStatus}
-                    </button>
-                  </Link>
+                    </span>
                 </td>
               </tr>
               );
@@ -126,43 +171,40 @@ const [page, setPage] = useState(1);
         </table>
       </div>
 
-      {/* Mobile Card Layout - Visible on md and below */}
-      <div className="md:hidden space-y-3">
+      <div className="mt-4 space-y-3 md:hidden">
         {(transactions || []).map((transaction) => {
           const displayStatus = mapStatus(transaction.status);
           return (
             <div
               key={transaction.id}
-              className="border border-white/10 bg-[#0E0E1A] rounded-lg p-4 space-y-3"
+              className="space-y-3 rounded-xl bg-[#141327]/90 p-4 ring-1 ring-white/10"
             >
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <p className="text-xs text-white/70 mb-1">Transaction Reference</p>
-                  <p className="text-sm text-white font-medium">{transaction.transactionReference}</p>
+                  <p className="mb-1 text-xs text-white/50">Transaction Reference</p>
+                  <p className="text-sm font-medium text-white">{transaction.transactionReference}</p>
                 </div>
-                <Link href={`/dashboard/transaction-history/`}>
-                  <button
-                    className={`text-xs transition px-3 py-1.5 rounded-lg cursor-pointer ${statusClasses[displayStatus] || "bg-neutral-800"
+                  <span
+                    className={`rounded-lg px-3 py-1.5 text-xs font-medium ${statusClasses[displayStatus] || "bg-neutral-800"
                       }`}
                   >
                     {displayStatus}
-                  </button>
-                </Link>
+                  </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <p className="text-xs text-white/70 mb-1">Plan Name</p>
+                  <p className="mb-1 text-xs text-white/50">Plan Name</p>
                   <p className="text-sm text-white">{transaction.plan?.name || "N/A"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-white/70 mb-1">Amount Paid</p>
+                  <p className="mb-1 text-xs text-white/50">Amount Paid</p>
                   <p className="text-sm text-white">{formatKoboToNaira(transaction.amount)}</p>
                 </div>
               </div>
 
               <div>
-                <p className="text-xs text-white/70 mb-1">Date & Time</p>
+                <p className="mb-1 text-xs text-white/50">Date & Time</p>
                 <p className="text-sm text-white">{formatDateTime(transaction.date)}</p>
               </div>
             </div>

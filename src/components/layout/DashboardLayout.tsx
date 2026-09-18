@@ -12,7 +12,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated, isLoading, checkAuth, clearUser } = useAuthStore();
+  const { isAuthenticated, checkAuth, clearUser } = useAuthStore();
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
 
@@ -22,18 +22,16 @@ export default function DashboardLayout({
       const authenticated = await checkAuth();
 
       if (!authenticated) {
-      clearUser();
-      removeCookie("auth_token");
-      removeCookie("refresh_token");
+        clearUser();
+        removeCookie("auth_token");
+        removeCookie("refresh_token");
         router.push("/login");
         setIsChecking(false);
         return;
       }
 
-      // Get user from store after checkAuth
       const currentUser = useAuthStore.getState().user;
 
-      // Redirect based on role
       if (currentUser) {
         const currentPath = window.location.pathname;
         if (currentUser.role === "organization") {
@@ -56,15 +54,14 @@ export default function DashboardLayout({
 
     verifyAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount
+  }, []);
 
-  // Show loading state while checking authentication
-  if (isChecking || isLoading) {
+  if (isChecking) {
     return (
-      <div className="flex h-screen bg-[#0E0E1A] text-white items-center justify-center">
+      <div className="flex h-screen items-center justify-center bg-[var(--bg-color)] text-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Loading...</p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[var(--accent-color)]" />
+          <p className="text-sm text-white/70">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -73,16 +70,16 @@ export default function DashboardLayout({
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen bg-[#0E0E1A] text-white">
-      {/* Sidebar - Hidden on md and below, visible on lg and above */}
+    <div className="flex h-screen bg-[var(--bg-color)] text-white">
       <div className="hidden lg:block">
-      <Sidebar />
+        <Sidebar />
       </div>
 
-      {/* Main content area */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Navbar />
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto w-full max-w-[1400px]">{children}</div>
+        </main>
       </div>
     </div>
   );

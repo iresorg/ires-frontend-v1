@@ -279,13 +279,15 @@ function VerifyEmailContent() {
       <div className="relative z-10 w-full max-w-[500px] p-6 sm:p-8 rounded-2xl glass-panel brand-border">
         {/* Header */}
         <div className="flex justify-between items-start mb-4 sm:mb-5">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={55}
-            height={55}
-            className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
-          />
+          <Link href="/" aria-label="Go to homepage" className="shrink-0 transition hover:opacity-90">
+            <Image
+              src="/logos/ires-logo.svg"
+              alt="iRES Logo"
+              width={55}
+              height={55}
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-[55px] md:h-[55px]"
+            />
+          </Link>
           <Link href="/signup/individual" className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"

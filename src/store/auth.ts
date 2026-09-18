@@ -11,21 +11,20 @@ interface AuthState {
   setUser: (user: UserProfile | null) => void;
   clearUser: () => void;
   checkAuth: () => Promise<boolean>;
-  fetchUser: () => Promise<void>;
+  fetchUser: (opts?: { silent?: boolean }) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isAuthenticated: false,
       isLoading: false,
       setUser: (user) => set({ user, isAuthenticated: !!user }),
       clearUser: () => {
-        set({ user: null, isAuthenticated: false });
+        set({ user: null, isAuthenticated: false, isLoading: false });
       },
 
-      // Check authentication by fetching user profile
       checkAuth: async () => {
         const token = getCookie("auth_token");
         if (!token) {
@@ -36,25 +35,26 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ isLoading: true });
           const user = await profileService.getCurrentUser();
-
           set({ user, isAuthenticated: true, isLoading: false });
           return true;
-        } catch  {
+        } catch {
           set({ user: null, isAuthenticated: false, isLoading: false });
           return false;
         }
       },
 
-      // Fetch and update user profile
-      fetchUser: async () => {
+      fetchUser: async (opts) => {
         const token = getCookie("auth_token");
         if (!token) {
           set({ user: null, isAuthenticated: false });
           return;
         }
 
+        // Silent when we already have a user — avoids unmounting the dashboard
+        const silent = opts?.silent ?? !!get().user;
+
         try {
-          set({ isLoading: true });
+          if (!silent) set({ isLoading: true });
           const user = await profileService.getCurrentUser();
           set({ user, isAuthenticated: true, isLoading: false });
         } catch (error) {
@@ -65,6 +65,10 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-    }
-  )
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    },
+  ),
 );

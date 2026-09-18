@@ -160,8 +160,8 @@ export default function SubscriptionPlansPage() {
 
   if (!user?.role) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-white">
-        <p>Please log in to view subscription plans.</p>
+      <div className="flex min-h-[320px] items-center justify-center text-white">
+        <p className="text-white/60">Please log in to view subscription plans.</p>
       </div>
     );
   }
@@ -169,15 +169,52 @@ export default function SubscriptionPlansPage() {
   const showSkeletons = isLoading && plans.length === 0;
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center px-4 py-10 text-white">
-      {/* Billing status banner */}
-      <div className="mb-8 w-full max-w-4xl rounded-2xl p-5 glass-panel brand-border">
+    <div className="text-white">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Subscription plans
+          </h1>
+          <p className="mt-1 text-sm text-white/50">
+            Manage cover, pay-as-you-go credits, and billing
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              ["subscription", "Subscriptions"],
+              ["one_time", "Pay as you go"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setPaymentType(value)}
+              className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+                paymentType === value
+                  ? "text-white"
+                  : "bg-white/5 text-white/70 ring-1 ring-white/10 hover:bg-white/10"
+              }`}
+              style={
+                paymentType === value
+                  ? { background: "var(--btn-bg)" }
+                  : undefined
+              }
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-8 rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
         {isStatusLoading && !subscription && !payg ? (
-          <div className="h-16 animate-pulse rounded-xl bg-white/10" />
+          <div className="h-16 animate-pulse rounded-xl bg-white/5" />
         ) : (
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-wider text-white/50">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-white/40">
                 Billing status
               </p>
               <p className="mt-1 text-lg font-semibold text-white">
@@ -185,21 +222,21 @@ export default function SubscriptionPlansPage() {
               </p>
               <div className="mt-2 flex flex-wrap gap-2 text-xs">
                 {subscription && (
-                  <span className="rounded-full bg-white/10 px-3 py-1 capitalize text-white/80">
+                  <span className="rounded-lg bg-white/5 px-3 py-1 capitalize text-white/80 ring-1 ring-white/10">
                     Subscription · {subscription.status}
                     {subscription.cancelAtPeriodEnd ? " · ends soon" : ""}
                   </span>
                 )}
                 {subscription?.plan?.paymentType && (
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-white/80">
+                  <span className="rounded-lg bg-white/5 px-3 py-1 text-white/80 ring-1 ring-white/10">
                     {subscription.plan.name}
                   </span>
                 )}
-                <span className="rounded-full bg-white/10 px-3 py-1 text-white/80">
+                <span className="rounded-lg bg-white/5 px-3 py-1 text-white/80 ring-1 ring-white/10">
                   PAYG credits: {payg?.creditsAvailable ?? 0}
                 </span>
                 {subscription?.usage && (
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-white/80">
+                  <span className="rounded-lg bg-white/5 px-3 py-1 text-white/80 ring-1 ring-white/10">
                     Incidents used: {subscription.usage.usedIncidents}
                     {subscription.usage.remainingIncidents === null
                       ? " · Unlimited left"
@@ -216,7 +253,7 @@ export default function SubscriptionPlansPage() {
                     type="button"
                     disabled={isManaging}
                     onClick={handleResume}
-                    className="rounded-lg px-4 py-2 text-xs font-medium text-white disabled:opacity-50"
+                    className="rounded-xl px-4 py-2 text-xs font-medium text-white disabled:opacity-50"
                     style={{ background: "var(--btn-bg)" }}
                   >
                     {isManaging ? "Updating..." : "Resume plan"}
@@ -226,7 +263,7 @@ export default function SubscriptionPlansPage() {
                     type="button"
                     disabled={isManaging}
                     onClick={handleCancel}
-                    className="rounded-lg border border-white/20 px-4 py-2 text-xs font-medium text-white/90 hover:bg-white/5 disabled:opacity-50"
+                    className="rounded-xl px-4 py-2 text-xs font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/5 disabled:opacity-50"
                   >
                     {isManaging ? "Updating..." : "Cancel at period end"}
                   </button>
@@ -237,44 +274,18 @@ export default function SubscriptionPlansPage() {
         )}
       </div>
 
-      {/* Payment type filters */}
-      <div className="mb-8 flex flex-wrap justify-center gap-2">
-        {(
-          [
-            ["subscription", "Subscriptions"],
-            ["one_time", "Pay as you go"],
-          ] as const
-        ).map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => setPaymentType(value)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-              paymentType === value
-                ? "text-white"
-                : "bg-white/5 text-white/70 hover:bg-white/10"
-            }`}
-            style={
-              paymentType === value ? { background: "var(--btn-bg)" } : undefined
-            }
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
       {actionError && (
-        <p className="mb-4 text-center text-sm text-red-400">{actionError}</p>
+        <p className="mb-4 text-sm text-red-400">{actionError}</p>
       )}
 
       {showSkeletons ? (
         <PlansGridSkeleton count={3} />
       ) : sortedPlans.length === 0 ? (
-        <div className="rounded-2xl p-8 text-center glass-panel brand-border">
+        <div className="rounded-2xl bg-[#141327]/90 p-8 text-center text-white/60 ring-1 ring-white/10">
           <p>No plans available for this selection.</p>
         </div>
       ) : (
-        <div className="flex flex-wrap items-stretch justify-center gap-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {sortedPlans.map((plan) => {
             const isCurrentPlan =
               plan.paymentType === "subscription" && plan.id === currentPlanId;
@@ -293,38 +304,35 @@ export default function SubscriptionPlansPage() {
             return (
               <div
                 key={plan.id}
-                className={`relative flex w-[320px] flex-col rounded-2xl brand-border ${
-                  isDisabled ? "cursor-not-allowed opacity-50" : ""
-                }`}
+                className={`relative flex flex-col rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 ${
+                  isCurrentPlan
+                    ? "ring-[var(--accent-color)]/40"
+                    : ""
+                } ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`}
               >
                 {isCurrentPlan && (
-                  <div className="absolute -top-3 left-4 z-10 rounded-md px-3 py-1 text-xs font-semibold text-white"
+                  <div
+                    className="absolute -top-3 left-4 z-10 rounded-lg px-3 py-1 text-xs font-semibold text-white"
                     style={{ background: "var(--btn-bg)" }}
                   >
-                    Current Plan
+                    Current plan
                   </div>
                 )}
 
-                <div className="flex flex-1 flex-col justify-between space-y-1.5 rounded-2xl bg-[#1C1B2B] p-5">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#141327] px-4 py-2 ring-1 ring-white/10">
+                <div className="flex flex-1 flex-col">
+                  <div className="inline-flex w-fit items-center gap-2 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10">
                     <Image
                       src={getPlanIcon(plan.tier, plan.paymentType)}
                       alt={plan.name}
                       width={20}
                       height={20}
                     />
-                    <h3
-                      className="text-sm font-semibold bg-clip-text text-transparent"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(90deg, #70A4FF, #601474)",
-                      }}
-                    >
+                    <h3 className="text-sm font-semibold text-white">
                       {plan.name}
                     </h3>
                   </div>
 
-                  <p className="mt-3 text-xl font-semibold italic">
+                  <p className="mt-4 text-2xl font-semibold tracking-tight">
                     <motion.span
                       className="inline-block bg-clip-text text-transparent"
                       style={{
@@ -346,17 +354,15 @@ export default function SubscriptionPlansPage() {
                       {formatPlanPrice(plan)}
                     </motion.span>
                   </p>
-                  <p className="mt-1 text-xs italic text-gray-400">
-                    {plan.description}
-                  </p>
-                  <p className="text-xs text-white/60">
+                  <p className="mt-2 text-sm text-white/55">{plan.description}</p>
+                  <p className="mt-1 text-xs text-white/45">
                     {formatIncidentsLabel(plan.maxIncidents)}
                     {isCurrentPlan && subscription?.plan?.amount != null && (
                       <> · {formatKoboToNaira(subscription.plan.amount)}</>
                     )}
                   </p>
 
-                  <ul className="mt-4 space-y-2 text-sm text-gray-300">
+                  <ul className="mt-5 flex-1 space-y-2.5 text-sm text-white/70">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2">
                         <Image
@@ -364,6 +370,7 @@ export default function SubscriptionPlansPage() {
                           alt=""
                           width={14}
                           height={14}
+                          className="mt-0.5 shrink-0"
                         />
                         <span>{feature}</span>
                       </li>
@@ -371,20 +378,17 @@ export default function SubscriptionPlansPage() {
                   </ul>
 
                   {showExpiryAndRenew ? (
-                    <div className="mt-6 flex justify-between gap-2 text-xs font-medium">
-                      <button
-                        className="cursor-default rounded-md px-4 py-1 text-white"
+                    <div className="mt-6 flex gap-2 text-xs font-medium">
+                      <div
+                        className="flex-1 rounded-xl px-3 py-2 text-center text-white"
                         style={{ background: "var(--btn-bg)" }}
-                        disabled
                       >
-                        Expiry Date
-                        <br />
-                        <span className="text-[10px]">
-                          {formatDate(subscription!.currentPeriodEnd)}
-                        </span>
-                      </button>
+                        <p className="text-[10px] opacity-80">Expires</p>
+                        <p>{formatDate(subscription!.currentPeriodEnd)}</p>
+                      </div>
                       <button
-                        className={`rounded-md px-4 py-2 text-xs font-medium text-white ${
+                        type="button"
+                        className={`flex-1 rounded-xl px-3 py-2 text-white ${
                           canRenew
                             ? "cursor-pointer hover:opacity-90"
                             : "cursor-not-allowed opacity-50"
@@ -395,12 +399,13 @@ export default function SubscriptionPlansPage() {
                       >
                         {isInitializing === plan.id
                           ? "Processing..."
-                          : "Renew Plan"}
+                          : "Renew plan"}
                       </button>
                     </div>
                   ) : (
                     <button
-                      className={`mt-6 rounded-md px-4 py-2 text-xs font-medium text-white ${
+                      type="button"
+                      className={`mt-6 w-full rounded-xl px-4 py-2.5 text-sm font-medium text-white ${
                         isDisabled
                           ? "cursor-not-allowed opacity-50"
                           : "cursor-pointer hover:opacity-90"
@@ -420,10 +425,6 @@ export default function SubscriptionPlansPage() {
           })}
         </div>
       )}
-
-      <footer className="mt-10 text-center text-sm text-white">
-        Copyright © {new Date().getFullYear()} iRES. All Rights Reserved.
-      </footer>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
+import { isAppLoadComplete } from "@/lib/appLoad";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -59,11 +60,16 @@ const trustSignals = [
 ];
 
 export default function Hero() {
-  const [loadingComplete, setLoadingComplete] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(() => isAppLoadComplete());
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const { handleSignUpNavigation } = useAuthNavigation();
 
   useEffect(() => {
+    if (isAppLoadComplete()) {
+      setLoadingComplete(true);
+      return;
+    }
+
     const handleLoadingComplete = () => {
       setLoadingComplete(true);
     };

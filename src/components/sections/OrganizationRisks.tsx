@@ -1,89 +1,69 @@
 "use client";
 
+import DashboardPanel from "@/components/ui/DashboardPanel";
+
 export default function OrganizationRisks() {
   const risks = [
     {
       risk: "Network Intrusion",
       impact: "High",
-      impactColor: "bg-[#D00F24]",
-      mitigation: "Network segmentation, IDS/IPS, Regular audits",
+      impactClass: "bg-[#EF4444]/20 text-[#FCA5A5] ring-[#EF4444]/30",
+      mitigation: "Network segmentation, IDS/IPS, regular audits",
     },
     {
       risk: "Ransomware Attack",
       impact: "Critical",
-      impactColor: "bg-[#D00F24]",
-      mitigation: "Backup strategy, Endpoint protection, User training",
+      impactClass: "bg-[#EF4444]/20 text-[#FCA5A5] ring-[#EF4444]/30",
+      mitigation: "Backup strategy, endpoint protection, user training",
     },
     {
       risk: "Data Breach",
       impact: "High",
-      impactColor: "bg-[#D00F24]",
-      mitigation: "Encryption, Access controls, DLP solutions",
+      impactClass: "bg-[#EF4444]/20 text-[#FCA5A5] ring-[#EF4444]/30",
+      mitigation: "Encryption, access controls, DLP solutions",
     },
     {
       risk: "DDoS Attack",
       impact: "Medium",
-      impactColor: "bg-[#FF7143]",
-      mitigation: "CDN, Rate limiting, DDoS protection service",
+      impactClass: "bg-[#F97316]/20 text-[#FDBA74] ring-[#F97316]/30",
+      mitigation: "CDN, rate limiting, DDoS protection service",
     },
     {
       risk: "Insider Threat",
       impact: "Medium",
-      impactColor: "bg-[#FF7143]",
-      mitigation: "Access monitoring, Least privilege, Employee screening",
+      impactClass: "bg-[#F97316]/20 text-[#FDBA74] ring-[#F97316]/30",
+      mitigation: "Access monitoring, least privilege, screening",
     },
   ];
 
   return (
-    <div className="border border-white/10 bg-[#0E0E1A] rounded-xl p-4 sm:p-6">
-      {/* Header */}
-      <h2 className="text-white font-semibold text-center text-base sm:text-lg mb-4 sm:mb-6">
-        Organization-Level Risks
-      </h2>
-
-      {/* Sub Headers - Hidden on mobile, visible on desktop */}
-      <div className="hidden sm:grid grid-cols-3 gap-3 sm:gap-4 mb-3">
-        <p className="text-white text-xs font-semibold text-center">
-          Organizational Risk
-        </p>
-        <p className="text-white text-xs font-semibold text-center">Impact</p>
-        <p className="text-white text-xs font-semibold text-center">
-          Mitigation Strategy
-        </p>
+    <DashboardPanel title="Organization-Level Risks">
+      <div className="mb-3 hidden grid-cols-3 gap-3 text-[11px] font-semibold uppercase tracking-wider text-white/40 sm:grid">
+        <p>Organizational risk</p>
+        <p className="text-center">Impact</p>
+        <p className="text-right">Mitigation strategy</p>
       </div>
 
-      {/* Risk Rows */}
-      <div className="grid gap-3 sm:gap-4">
-        {risks.map((r, i) => (
-          <div key={i} className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
-            {/* Organizational Risk */}
-            <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
-              <div>
-                <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Organizational Risk:</span>
-                {r.risk}
-              </div>
-            </div>
-
-            {/* Impact */}
-            <div
-              className={`rounded-lg text-white font-semibold text-center flex items-center justify-center text-[10px] sm:text-xs ${r.impactColor} p-3 sm:p-4 min-h-[60px] sm:min-h-0`}
-            >
-              <div>
-                <span className="sm:hidden text-[9px] text-white/90 mb-1 block">Impact:</span>
+      <div className="space-y-2.5">
+        {risks.map((r) => (
+          <div
+            key={r.risk}
+            className="grid grid-cols-1 gap-2 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/5 sm:grid-cols-3 sm:items-center sm:gap-3"
+          >
+            <p className="text-sm font-medium text-white">{r.risk}</p>
+            <div className="flex sm:justify-center">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${r.impactClass}`}
+              >
                 {r.impact}
-              </div>
+              </span>
             </div>
-
-            {/* Mitigation Strategy */}
-            <div className="bg-[#D9D9D9]/50 rounded-lg text-white text-center flex items-center justify-center p-3 sm:p-4 font-semibold text-[10px] sm:text-xs min-h-[60px] sm:min-h-0">
-              <div>
-                <span className="sm:hidden text-[9px] text-white/70 mb-1 block">Mitigation Strategy:</span>
-                {r.mitigation}
-              </div>
-            </div>
+            <p className="text-xs text-white/60 sm:text-right sm:text-sm">
+              {r.mitigation}
+            </p>
           </div>
         ))}
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

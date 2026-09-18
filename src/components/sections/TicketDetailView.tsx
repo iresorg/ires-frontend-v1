@@ -50,10 +50,10 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
 
   if (isDetailLoading) {
     return (
-      <div className="mt-2 ml-2 mr-2 flex min-h-[400px] items-center justify-center sm:ml-4 sm:mr-4">
+      <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[#4185DD]" />
-          <p className="text-gray-300">Loading ticket details...</p>
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[var(--accent-color)]" />
+          <p className="text-white/60">Loading ticket details...</p>
         </div>
       </div>
     );
@@ -61,7 +61,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
 
   if (detailError || !selectedTicket) {
     return (
-      <div className="mt-2 ml-2 mr-2 sm:ml-4 sm:mr-4">
+      <div>
         <Link
           href={listPath}
           className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
@@ -86,7 +86,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
   const ticket = selectedTicket;
 
   return (
-    <div className="mt-2 ml-2 mr-2 space-y-6 sm:ml-4 sm:mr-4">
+    <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link
@@ -126,7 +126,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <section className="rounded-2xl border border-white/10 bg-[#0E0E1A] p-5">
+          <section className="rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/50">
               Description
             </h2>
@@ -136,7 +136,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
           </section>
 
           {ticket.attachments && ticket.attachments.length > 0 && (
-            <section className="rounded-2xl border border-white/10 bg-[#0E0E1A] p-5">
+            <section className="rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/50">
                 Attachments
               </h2>
@@ -158,7 +158,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
             </section>
           )}
 
-          <section className="rounded-2xl border border-white/10 bg-[#0E0E1A] p-5">
+          <section className="rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50">
                 Activity timeline
@@ -175,7 +175,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
                 {lifecycle.map((event) => (
                   <li key={event.id} className="relative pb-6 last:pb-0">
                     <span
-                      className="absolute -left-[1.4rem] top-1 h-3 w-3 rounded-full ring-4 ring-[#0E0E1A]"
+                      className="absolute -left-[1.4rem] top-1 h-3 w-3 rounded-full ring-4 ring-[#141327]"
                       style={{ background: "var(--accent-color)" }}
                     />
                     <div className="flex flex-wrap items-center gap-2">
@@ -238,7 +238,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
         </div>
 
         <aside className="space-y-4">
-          <section className="rounded-2xl border border-white/10 bg-[#0E0E1A] p-5">
+          <section className="rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/50">
               Details
             </h2>
@@ -283,7 +283,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
             </dl>
           </section>
 
-          <section className="rounded-2xl border border-white/10 bg-[#0E0E1A] p-5">
+          <section className="rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/50">
               Assigned responder
             </h2>

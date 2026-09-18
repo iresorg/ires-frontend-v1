@@ -92,13 +92,15 @@ export default function IndividualSignup() {
 
       <AuthShell maxWidthClass="max-w-[500px]">
         <div className="flex justify-between items-start mb-4 sm:mb-5">
-          <Image
-            src="/logos/ires-logo.svg"
-            alt="iRES Logo"
-            width={55}
-            height={55}
-            className="w-12 h-12 sm:w-[55px] sm:h-[55px]"
-          />
+          <Link href="/" aria-label="Go to homepage" className="shrink-0 transition hover:opacity-90">
+            <Image
+              src="/logos/ires-logo.svg"
+              alt="iRES Logo"
+              width={55}
+              height={55}
+              className="w-12 h-12 sm:w-[55px] sm:h-[55px]"
+            />
+          </Link>
           <Link href="/signup" className="w-6 h-6 shrink-0 opacity-80 transition hover:opacity-100">
             <Image
               src="/images/cancel-icon.png"

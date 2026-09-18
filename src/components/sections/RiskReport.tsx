@@ -1,5 +1,7 @@
 "use client";
 
+import DashboardPanel from "@/components/ui/DashboardPanel";
+
 export default function RisksReport() {
   const risks = [
     { industry: "Banking & Financial Services", score: 9.0 },
@@ -13,28 +15,31 @@ export default function RisksReport() {
     { industry: "Small & Micro Businesses", score: 6.8 },
   ];
 
+  const scoreColor = (score: number) => {
+    if (score >= 8.5) return "text-[#FCA5A5]";
+    if (score >= 7) return "text-[#FDBA74]";
+    return "text-[#86EFAC]";
+  };
+
   return (
-    <div className="bg-[#0E0E1A] border border-white/10 rounded-xl p-5">
-      <h3 className="text-white font-semibold mb-4 text-sm">Risk Reports</h3>
-
-      {/* Table Header */}
-      <div className="flex justify-between items-center mb-2 text-white text-xs font-semibold">
-        <span>Industry (Nigeria/West Africa)</span>
-        <span>Risk Score</span>
+    <DashboardPanel title="Risk Reports">
+      <div className="mb-3 flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-white/40">
+        <span>Industry</span>
+        <span>Score</span>
       </div>
-
-      {/* Divider */}
-      <hr className="border-white/10 mb-3" />
-
-      {/* Table Body */}
-      <div className="space-y-2 text-xs">
-        {risks.map((r, i) => (
-          <div key={i} className="flex justify-between items-center">
-            <p className="text-white">{r.industry}</p>
-            <p className="text-white font-semibold">{r.score}</p>
+      <div className="space-y-1.5">
+        {risks.map((r) => (
+          <div
+            key={r.industry}
+            className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 transition hover:bg-white/[0.04]"
+          >
+            <p className="text-xs text-white/80">{r.industry}</p>
+            <p className={`text-xs font-semibold tabular-nums ${scoreColor(r.score)}`}>
+              {r.score.toFixed(1)}
+            </p>
           </div>
         ))}
       </div>
-    </div>
+    </DashboardPanel>
   );
 }

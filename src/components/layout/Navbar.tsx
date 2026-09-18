@@ -5,6 +5,11 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { removeCookie } from "@/lib/api";
+import {
+  getDisplayName,
+  profileService,
+} from "@/services/profile";
+import UserAvatar from "@/components/ui/UserAvatar";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -41,55 +46,21 @@ export default function Navbar() {
     setShowMobileMenu(false);
   }, [pathname]);
 
-  const handleLogout = () => {
-    // Clear user data from store
+  const settingsHref =
+    user?.role === "organization"
+      ? "/dashboard/organization/settings"
+      : "/dashboard/settings";
+
+  const handleLogout = async () => {
+    try {
+      await profileService.logout();
+    } catch {
+      // Clear local session even if API fails
+    }
     clearUser();
-    // Remove auth tokens from cookies
     removeCookie("auth_token");
     removeCookie("refresh_token");
-    // Redirect to home page
     router.push("/");
-  };
-
-  // Get user display name based on role
-  const getUserDisplayName = () => {
-    if (!user) return "User";
-
-    if (user.role === "organization" && user.organizationProfile) {
-      return user.organizationProfile.organizationName;
-    }
-
-    if (user.role === "individual" && user.individualProfile) {
-      return `${user.individualProfile.firstName} ${user.individualProfile.lastName}`;
-    }
-
-    // Fallback to email username
-    return user.email.split("@")[0] || "User";
-  };
-
-  // Get profile picture URL
-  const getProfilePicture = () => {
-    if (!user) return "/images/avatar.png";
-
-    if (user.role === "individual" && user.individualProfile?.profilePicture) {
-      try {
-        const parsed = JSON.parse(user.individualProfile.profilePicture);
-        return parsed.url || "/images/avatar.png";
-      } catch {
-        return "/images/avatar.png";
-      }
-    }
-
-    if (user.role === "organization" && user.organizationProfile?.logoUrl) {
-      try {
-        const parsed = JSON.parse(user.organizationProfile.logoUrl);
-        return parsed.url || "/images/avatar.png";
-      } catch {
-        return "/images/avatar.png";
-      }
-    }
-
-    return "/images/avatar.png";
   };
 
   const individualMenu = [
@@ -108,6 +79,11 @@ export default function Navbar() {
       name: "Ticket Incident History",
       icon: "/images/ticket.png",
       href: "/dashboard/ticket-incident-history",
+    },
+    {
+      name: "Profile & Settings",
+      icon: "/images/overview.png",
+      href: "/dashboard/settings",
     },
   ];
 
@@ -128,28 +104,31 @@ export default function Navbar() {
       icon: "/images/ticket.png",
       href: "/dashboard/organization/ticket-incident-history",
     },
+    {
+      name: "Profile & Settings",
+      icon: "/images/overview.png",
+      href: "/dashboard/organization/settings",
+    },
   ];
 
   const supportItems = [
-    { name: "Call Now", icon: "/images/phone-call.png" },
-    { name: "Email", icon: "/images/email.png" },
+    { name: "Call Now", icon: "/images/phone-call.png", href: "tel:+2348100000000" },
+    { name: "Email", icon: "/images/email.png", href: "mailto:support@iresorg.com" },
   ];
 
   const menuItems = user?.role === "organization" ? organizationMenu : individualMenu;
 
   return (
     <>
-      <header className="h-16 flex items-center justify-between px-4 sm:px-6 border-b border-white/10 bg-[#0E0E1A] relative z-40">
-        {/* Left Side - Mobile Menu Button + Logo (mobile) / Search (desktop) */}
+      <header className="relative z-40 flex h-16 items-center justify-between border-b border-white/10 bg-[#141327]/95 px-4 shadow-[0_4px_24px_rgba(0,0,0,0.2)] backdrop-blur-md sm:px-6">
         <div className="flex items-center gap-3 sm:gap-4">
-          {/* Mobile Menu Button - Only visible on md and below */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="lg:hidden bg-[#1C1C2E] p-2 rounded-lg hover:bg-[#2A2A3E] transition-colors"
+            className="rounded-xl bg-white/5 p-2 ring-1 ring-white/10 transition-colors hover:bg-white/10 lg:hidden"
             aria-label="Toggle menu"
           >
             <svg
-              className="w-6 h-6 text-white"
+              className="h-6 w-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -172,7 +151,6 @@ export default function Navbar() {
             </svg>
           </button>
 
-          {/* Logo - Only visible on mobile */}
           <div className="lg:hidden">
             <Image
               src="/logos/ires-logo.svg"
@@ -183,27 +161,24 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Search Bar - Hidden on mobile, visible on desktop */}
-          <div className="hidden lg:flex items-center w-[300px] bg-[#1C1C2E] rounded-full px-4 py-2 text-sm">
+          <div className="hidden w-[300px] items-center rounded-full bg-white/5 px-4 py-2 text-sm ring-1 ring-white/10 lg:flex">
             <Image
               src="/images/search.png"
-              alt="Search Icon"
+              alt=""
               width={16}
               height={16}
-              className="opacity-70 mr-2"
+              className="mr-2 opacity-70"
             />
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent outline-none text-white/70 w-full placeholder-white/50"
+              className="w-full bg-transparent text-white/80 outline-none placeholder-white/40"
             />
           </div>
         </div>
 
-        {/* Right Side Icons */}
-        <div className="flex items-center gap-3 sm:gap-5">
-          {/* Notification Icon */}
-          <div className="bg-[#1C1C2E] p-2 rounded-full hover:bg-[#2A2A3E] transition-colors cursor-pointer">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="cursor-pointer rounded-full bg-white/5 p-2 ring-1 ring-white/10 transition-colors hover:bg-white/10">
             <Image
               src="/images/bell icon.png"
               alt="Notifications"
@@ -211,58 +186,56 @@ export default function Navbar() {
               height={20}
             />
           </div>
-          {/* Profile Section */}
           <div className="relative" ref={dropdownRef}>
             <div
-              className="flex items-center gap-2 cursor-pointer bg-[#1C1C2E] px-2 sm:px-3 py-1 rounded-full hover:bg-[#2A2A3E] transition-colors"
+              className="flex cursor-pointer items-center gap-2 rounded-full bg-white/5 px-2 py-1 ring-1 ring-white/10 transition-colors hover:bg-white/10 sm:px-3"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <Image
-                src={getProfilePicture()}
-                alt="Profile"
-                width={32}
-                height={32}
-                className="rounded-full object-cover"
-              />
-              <span className="hidden sm:inline text-sm font-medium text-white">
-                {getUserDisplayName()}
+              <UserAvatar user={user} size={32} />
+              <span className="hidden text-sm font-medium text-white sm:inline">
+                {getDisplayName(user)}
               </span>
               <Image
                 src="/images/white-dropdown.png"
-                alt="Dropdown"
+                alt=""
                 width={14}
                 height={14}
-                className={`hidden sm:block transition-transform ${showDropdown ? "rotate-180" : ""}`}
+                className={`hidden transition-transform sm:block ${showDropdown ? "rotate-180" : ""}`}
               />
             </div>
 
-            {/* Dropdown Menu */}
             {showDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-[#1C1C2E] rounded-lg border border-white/10 shadow-lg z-50">
-                <div className="p-2">
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md hover:text-red-400 transition-colors"
-                  >
-                    Logout
-                  </button>
-                </div>
+              <div className="absolute top-full right-0 z-50 mt-2 w-48 rounded-xl bg-[#141327] p-2 shadow-xl ring-1 ring-white/10">
+                <Link
+                  href={settingsHref}
+                  onClick={() => setShowDropdown(false)}
+                  className="block w-full rounded-lg px-4 py-2 text-left text-sm text-white transition-colors hover:bg-white/10"
+                >
+                  Profile & settings
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full rounded-lg px-4 py-2 text-left text-sm text-white transition-colors hover:bg-white/10 hover:text-red-400"
+                >
+                  Logout
+                </button>
               </div>
             )}
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {showMobileMenu && (
-        <div className="fixed inset-0 bg-black/50 z-50 lg:hidden" onClick={() => setShowMobileMenu(false)}>
+        <div
+          className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+          onClick={() => setShowMobileMenu(false)}
+        >
           <div
             ref={mobileMenuRef}
-            className="w-64 h-full bg-[#383754] flex flex-col py-6 px-4 border-r border-white/5 animate-in slide-in-from-left duration-300"
+            className="flex h-full w-64 flex-col border-r border-white/10 bg-[#141327] px-3 py-6"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Logo */}
-            <div className="flex items-center justify-between mb-8 pl-2">
+            <div className="mb-8 flex items-center justify-between px-2">
               <Image
                 src="/logos/ires-logo.svg"
                 alt="iRES Logo"
@@ -272,11 +245,11 @@ export default function Navbar() {
               />
               <button
                 onClick={() => setShowMobileMenu(false)}
-                className="lg:hidden bg-[#1C1C2E] p-2 rounded-lg hover:bg-[#2A2A3E] transition-colors"
+                className="rounded-xl bg-white/5 p-2 ring-1 ring-white/10"
                 aria-label="Close menu"
               >
                 <svg
-                  className="w-5 h-5 text-white"
+                  className="h-5 w-5 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -291,23 +264,27 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Menu */}
-            <nav className="space-y-2 flex-1">
+            <nav className="flex-1 space-y-1">
               {menuItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/dashboard" &&
+                    item.href !== "/dashboard/organization" &&
+                    pathname.startsWith(`${item.href}/`));
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={() => setShowMobileMenu(false)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-all ${isActive
-                        ? "bg-gradient-to-r from-[#4185DD] via-[#5D207F] to-[#B425DA]"
-                        : "text-white/70 hover:text-white hover:bg-white/10"
-                      }`}
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+                      isActive
+                        ? "bg-white/10 text-white"
+                        : "text-white/65 hover:bg-white/5 hover:text-white"
+                    }`}
                   >
                     <Image
                       src={item.icon}
-                      alt={item.name}
+                      alt=""
                       width={18}
                       height={18}
                       className="opacity-90"
@@ -318,16 +295,16 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Bottom Section (Support) */}
-            <div className="space-y-2 mt-auto">
+            <div className="mt-auto space-y-1 border-t border-white/10 pt-4">
               {supportItems.map((item) => (
-                <button
+                <a
                   key={item.name}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm text-white/70 hover:text-white hover:bg-white/10 cursor-pointer"
+                  href={item.href}
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/65 hover:bg-white/5 hover:text-white"
                 >
-                  <Image src={item.icon} alt={item.name} width={18} height={18} />
+                  <Image src={item.icon} alt="" width={18} height={18} />
                   {item.name}
-                </button>
+                </a>
               ))}
             </div>
           </div>

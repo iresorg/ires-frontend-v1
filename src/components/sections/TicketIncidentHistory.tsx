@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTicketsStore } from "@/store/tickets";
@@ -32,6 +32,90 @@ function TicketsSkeleton() {
   );
 }
 
+function StatusFilter({
+  value,
+  onChange,
+}: {
+  value: TicketStatus | "";
+  onChange: (value: TicketStatus | "") => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected =
+    TICKET_STATUS_FILTERS.find((option) => option.value === value) ??
+    TICKET_STATUS_FILTERS[0];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  return (
+    <div className="relative w-full sm:w-56" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 rounded-xl bg-[#141327] px-4 py-2.5 text-left text-sm text-white ring-1 ring-white/10 transition hover:bg-white/[0.04] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]/40"
+      >
+        <span className="truncate">{selected.label}</span>
+        <Image
+          src="/images/white-dropdown.png"
+          alt=""
+          width={12}
+          height={12}
+          className={`shrink-0 opacity-70 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          className="absolute top-full right-0 z-30 mt-2 max-h-72 w-full min-w-[220px] overflow-y-auto rounded-xl bg-[#141327] py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/10"
+        >
+          {TICKET_STATUS_FILTERS.map((option) => {
+            const isSelected = option.value === value;
+            return (
+              <li key={option.value || "all"}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  onClick={() => {
+                    onChange(option.value);
+                    setOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm transition ${
+                    isSelected
+                      ? "bg-white/10 text-white"
+                      : "text-white/70 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <span>{option.label}</span>
+                  {isSelected && (
+                    <span
+                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ background: "var(--accent-color)" }}
+                    />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 export default function TicketIncidentHistory({
   basePath,
 }: TicketIncidentHistoryProps) {
@@ -49,35 +133,25 @@ export default function TicketIncidentHistory({
     });
   }, [page, status, fetchTickets]);
 
-  const handleStatusChange = (value: string) => {
-    setStatus(value as TicketStatus | "");
+  const handleStatusChange = (value: TicketStatus | "") => {
+    setStatus(value);
     setPage(1);
   };
 
   return (
-    <div className="mt-2 ml-2 mr-2 sm:ml-4 sm:mr-4">
+    <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-white sm:text-2xl">
+          <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
             My incidents
           </h1>
-          <p className="mt-1 text-sm text-white/60">
+          <p className="mt-1 text-sm text-white/50">
             Track tickets opened for your account. Read-only — updates arrive by
             email as responders progress.
           </p>
         </div>
 
-        <select
-          value={status}
-          onChange={(e) => handleStatusChange(e.target.value)}
-          className="rounded-xl border border-white/10 bg-[#141327] px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-[var(--accent-color)]/40"
-        >
-          {TICKET_STATUS_FILTERS.map((option) => (
-            <option key={option.value || "all"} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <StatusFilter value={status} onChange={handleStatusChange} />
       </div>
 
       {error && (
@@ -89,7 +163,7 @@ export default function TicketIncidentHistory({
       {isLoading && tickets.length === 0 ? (
         <TicketsSkeleton />
       ) : !isLoading && tickets.length === 0 ? (
-        <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-white/10 bg-[#0E0E1A] px-4">
+        <div className="flex min-h-[320px] items-center justify-center rounded-2xl bg-[#141327]/90 px-4 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10">
           <div className="text-center">
             <Image
               src="/images/ticket.png"
@@ -107,24 +181,24 @@ export default function TicketIncidentHistory({
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden overflow-x-auto md:block">
+          <div className="hidden overflow-hidden rounded-2xl bg-[#141327]/90 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 md:block">
             <table className="w-full table-auto border-collapse text-left">
               <thead>
-                <tr className="border-b border-gray-100/20 text-gray-300">
-                  <th className="px-4 py-3 font-medium">Ticket</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium text-center">Severity</th>
-                  <th className="px-4 py-3 font-medium text-center">Opened</th>
-                  <th className="px-4 py-3 font-medium text-center">Category</th>
-                  <th className="px-4 py-3 font-medium text-center">Cover</th>
-                  <th className="px-4 py-3 font-medium text-center">Action</th>
+                <tr className="border-b border-white/10 text-white/50">
+                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider">Ticket</th>
+                  <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Severity</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Opened</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Category</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Cover</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {tickets.map((ticket) => (
                   <tr
                     key={ticket.ticketId}
-                    className="border-b border-gray-100/20 text-gray-300 transition hover:bg-neutral-900/50"
+                    className="border-b border-white/10 text-white/75 transition hover:bg-white/[0.03]"
                   >
                     <td className="px-4 py-3">
                       <p className="font-medium text-white">{ticket.title}</p>
@@ -179,7 +253,7 @@ export default function TicketIncidentHistory({
               <Link
                 key={ticket.ticketId}
                 href={`${basePath}/${encodeURIComponent(ticket.ticketId)}`}
-                className="block rounded-xl border border-white/10 bg-[#0E0E1A] p-4 transition hover:bg-white/[0.03]"
+                className="block rounded-xl bg-[#141327]/90 p-4 shadow-[0_8px_24px_rgba(0,0,0,0.2)] ring-1 ring-white/10 transition hover:bg-white/[0.04]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">

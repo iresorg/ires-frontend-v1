@@ -11,27 +11,31 @@ import EstimatedDirectLoss from "@/components/sections/EstimatedDirectLoss";
 
 export default function OrganizationDashboardPage() {
   return (
-    <div className="min-h-screen text-white pb-10">
-  
+    <div className="min-h-full pb-6 text-white">
+      <div className="mb-6">
+        <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          Organization overview
+        </h1>
+        <p className="mt-1 text-sm text-white/50">
+          Enterprise threat landscape, risk scores, and attack vectors
+        </p>
+      </div>
+
       <OrganizationMetricsGrid />
 
-   
-      <div className="grid grid-cols-1 lg:grid-cols-14 gap-6">
-        {/* left column */}
-        <div className="lg:col-span-5 flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-14 lg:gap-6">
+        <div className="flex flex-col gap-5 lg:col-span-5 lg:gap-6">
           <ThreatMap />
           <AttackerTTPs />
           <EstimatedDirectLoss />
         </div>
 
-        {/* middle column */}
-        <div className="lg:col-span-6 flex flex-col gap-6">
+        <div className="flex flex-col gap-5 lg:col-span-6 lg:gap-6">
           <IncidentChart />
           <AttackVectorDistribution />
         </div>
 
-        {/* right column */}
-        <div className="lg:col-span-3 flex flex-col gap-6">
+        <div className="flex flex-col gap-5 lg:col-span-3 lg:gap-6">
           <RisksReport />
           <EmergingThreats />
         </div>

@@ -6,6 +6,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
+import { isAppLoadComplete } from "@/lib/appLoad";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -71,14 +72,22 @@ export default function PageHero({
   demoVideoSrc = "/video/iRES_Cinematic_Demo (3).mp4",
   statusLabel = "Systems Online",
 }: PageHeroProps) {
-  const [loadingComplete, setLoadingComplete] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(() => isAppLoadComplete());
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const { handleSignUpNavigation } = useAuthNavigation();
 
   useEffect(() => {
+    if (isAppLoadComplete()) {
+      setLoadingComplete(true);
+      return;
+    }
+
     const handleLoadingComplete = () => setLoadingComplete(true);
     window.addEventListener("loadingComplete", handleLoadingComplete);
-    const fallbackTimer = setTimeout(() => setLoadingComplete(true), 2500);
+
+    // Secondary pages: don't wait on a splash that already finished (or never mounts again)
+    const fallbackTimer = setTimeout(() => setLoadingComplete(true), 400);
+
     return () => {
       window.removeEventListener("loadingComplete", handleLoadingComplete);
       clearTimeout(fallbackTimer);

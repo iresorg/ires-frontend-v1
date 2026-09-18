@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Public routes that don't require authentication
 const publicRoutes = [
   "/",
   "/login",
@@ -19,49 +18,53 @@ const publicRoutes = [
   "/organization",
 ];
 
-// Protected routes that require authentication
 const protectedRoutes = ["/dashboard"];
 
-// Helper to get user role from token (if token contains role in payload)
-// For now, we'll make an API call to verify and get user info
-async function getUserRole(
-  token: string
-): Promise<"individual" | "organization" | null> {
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-    const response = await fetch(`${apiUrl}/accounts/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+type AccountRole = "individual" | "organization";
 
-    if (response.ok) {
-      const user = await response.json();
-      return user.role || null;
+/** Decode role from JWT payload — no network call (Edge-safe). */
+function getRoleFromToken(token: string): AccountRole | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(
+      base64.length + ((4 - (base64.length % 4)) % 4),
+      "=",
+    );
+    const json =
+      typeof atob === "function"
+        ? atob(padded)
+        : Buffer.from(padded, "base64").toString("utf-8");
+    const payload = JSON.parse(json) as { role?: string; exp?: number };
+
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      return null;
+    }
+
+    if (payload.role === "individual" || payload.role === "organization") {
+      return payload.role;
     }
     return null;
-  } catch (error) {
-    console.error("Error fetching user role:", error);
+  } catch {
     return null;
   }
 }
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("auth_token")?.value;
 
-  // Check if route is public
   const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-  // Check if route is protected
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
-  // If accessing public route and authenticated, redirect to appropriate dashboard
+  // Authenticated users hitting login/signup → send to their dashboard
   if (
     token &&
     isPublicRoute &&
@@ -69,60 +72,44 @@ export async function middleware(request: NextRequest) {
       pathname === "/signup" ||
       pathname.startsWith("/signup"))
   ) {
-    try {
-      const role = await getUserRole(token);
-      if (role === "organization") {
-        return NextResponse.redirect(
-          new URL("/dashboard/organization", request.url)
-        );
-      } else if (role === "individual") {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
-      }
-    } catch {
-      // If token is invalid, allow access to public routes
-      return NextResponse.next();
+    const role = getRoleFromToken(token);
+    if (role === "organization") {
+      return NextResponse.redirect(
+        new URL("/dashboard/organization", request.url),
+      );
     }
+    if (role === "individual") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+    return NextResponse.next();
   }
 
-  // If accessing protected route without token, redirect to login
+  // Protected route without token → login
   if (!token && isProtectedRoute) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // If accessing protected route with token, verify and redirect based on role
+  // Protected route with token → role path guard (JWT only, no API fetch)
   if (token && isProtectedRoute) {
-    try {
-      const role = await getUserRole(token);
+    const role = getRoleFromToken(token);
 
-      // If accessing /dashboard/organization but user is individual
-      if (
-        pathname.startsWith("/dashboard/organization") &&
-        role === "individual"
-      ) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
-      }
-
-      // If accessing /dashboard (individual) but user is organization
-      if (pathname === "/dashboard" && role === "organization") {
-        return NextResponse.redirect(
-          new URL("/dashboard/organization", request.url)
-        );
-      }
-
-      // If token is invalid, redirect to login
-      if (!role) {
-        const loginUrl = new URL("/login", request.url);
-        loginUrl.searchParams.set("redirect", pathname);
-        return NextResponse.redirect(loginUrl);
-      }
-    } catch {
-      // If error verifying token, redirect to login
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
+    if (
+      role === "individual" &&
+      pathname.startsWith("/dashboard/organization")
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+
+    if (role === "organization" && pathname === "/dashboard") {
+      return NextResponse.redirect(
+        new URL("/dashboard/organization", request.url),
+      );
+    }
+
+    // Missing/unreadable role: let DashboardLayout verify via API
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -130,14 +117,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
-     */
     "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

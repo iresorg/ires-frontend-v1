@@ -61,10 +61,10 @@ export default function SubscriptionSuccess() {
 
   if (isStatusLoading && !subscription && !payg) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-4 py-8 text-white">
+      <div className="flex min-h-[480px] items-center justify-center py-8 text-white">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-b-2 border-[#4185DD] sm:h-12 sm:w-12" />
-          <p className="text-sm text-gray-300 sm:text-base">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-b-2 border-[var(--accent-color)] sm:h-12 sm:w-12" />
+          <p className="text-sm text-white/60 sm:text-base">
             Loading payment details...
           </p>
         </div>
@@ -73,14 +73,14 @@ export default function SubscriptionSuccess() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-6 text-white sm:py-8">
+    <div className="relative flex min-h-[480px] flex-col items-center justify-center py-6 text-white sm:py-8">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 flex w-full max-w-lg flex-col rounded-2xl brand-border"
+        className="relative z-10 flex w-full max-w-lg flex-col"
       >
-        <div className="flex flex-col space-y-4 rounded-2xl bg-[#1C1B2B] p-5 sm:space-y-5 sm:p-6 md:space-y-6 md:p-8">
+        <div className="flex flex-col space-y-4 rounded-2xl bg-[#141327]/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.25)] ring-1 ring-white/10 sm:space-y-5 sm:p-6 md:space-y-6 md:p-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -125,10 +125,10 @@ export default function SubscriptionSuccess() {
             </p>
           </div>
 
-          <div className="w-full space-y-2.5 rounded-lg border border-gray-700/50 bg-[#141327] p-4 sm:space-y-3 sm:p-5">
+          <div className="w-full space-y-2.5 rounded-xl bg-white/[0.03] p-4 ring-1 ring-white/10 sm:space-y-3 sm:p-5">
             {subscription ? (
               <>
-                <div className="flex items-center gap-2 border-b border-gray-700/50 pb-2 sm:gap-3 sm:pb-3">
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2 sm:gap-3 sm:pb-3">
                   <Image
                     src={getPlanIcon(subscription.plan.tier)}
                     alt={subscription.plan.name}
@@ -198,21 +198,17 @@ export default function SubscriptionSuccess() {
 
           <button
             onClick={handleBackToPlans}
-            className="w-full cursor-pointer rounded-md px-4 py-2.5 text-xs font-medium text-white transition-opacity hover:opacity-90 sm:px-6 sm:py-3 sm:text-sm"
+            className="w-full cursor-pointer rounded-xl px-4 py-2.5 text-xs font-medium text-white transition-opacity hover:opacity-90 sm:px-6 sm:py-3 sm:text-sm"
             style={{ background: "var(--btn-bg)" }}
           >
-            Back to Subscription Plans
+            Back to subscription plans
           </button>
 
-          <p className="px-2 text-center text-[10px] text-gray-400 sm:text-xs">
+          <p className="px-2 text-center text-[10px] text-white/45 sm:text-xs">
             You can manage billing from the subscription plans page.
           </p>
         </div>
       </motion.div>
-
-      <footer className="mt-6 px-4 text-center text-xs text-white sm:mt-8 sm:text-sm md:mt-10">
-        Copyright © {new Date().getFullYear()} iRES. All Rights Reserved.
-      </footer>
     </div>
   );
 }
