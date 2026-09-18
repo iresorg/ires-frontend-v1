@@ -40,7 +40,7 @@ const display = new Intl.NumberFormat("en-NG", {
 
 ```
 [ Individual | Organization ]          ← accountType
-[ Subscriptions | Pay as you go ]      ← paymentType
+[ Subscriptions | One-off plan ]      ← paymentType
 
 ┌─────────┐ ┌─────────┐ ┌─────────┐
 │ Plan    │ │ Plan    │ │ Plan    │
@@ -53,7 +53,7 @@ const display = new Intl.NumberFormat("en-NG", {
 | UI control | Query | Values |
 |---|---|---|
 | Individual / Organization | `accountType` | `individual` \| `organization` |
-| Subscriptions / Pay as you go | `paymentType` | `subscription` \| `one_time` |
+| Subscriptions / One-off plan | `paymentType` | `subscription` \| `one_time` |
 
 Defaults: `accountType=individual` (or logged-in account role), `paymentType=subscription`.
 
@@ -229,7 +229,7 @@ GET /api/v1/subscriptions/status
     "hasAccess": true,
     "sources": ["one_time"]
   },
-  "message": "No active subscription; pay-as-you-go credits available"
+  "message": "No active subscription; one-off plan credits available"
 }
 ```
 
@@ -259,7 +259,7 @@ GET /api/v1/subscriptions/status
 
 `remainingIncidents: null` = unlimited.
 
-Show on account/billing page: payment-type badge, incidents used, PAYG credits.
+Show on account/billing page: payment-type badge, incidents used, one-off credits.
 
 ---
 
@@ -295,7 +295,7 @@ Redirect to `authorizationUrl`.
 
 ---
 
-## B3. Pay as you go ⚠️ NEW
+## B3. One-off plan ⚠️ NEW
 
 Only when `paymentType === "one_time"`.
 
