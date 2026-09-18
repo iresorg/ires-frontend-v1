@@ -29,12 +29,17 @@ export default function ForgotPassword() {
     setShowError(false);
 
     try {
+      // POST {API}/api/v1/accounts/auth/forgot-password (backend — not Netlify)
       await authService.forgotPassword({ email: email.trim() });
       setEmailSent(true);
     } catch (err) {
       console.error("Forgot password error:", err);
       const axiosError = err as AxiosError<{ message?: string }>;
-      const errorMsg = axiosError.response?.data?.message || "Failed to send reset email. Please try again.";
+      const errorMsg =
+        axiosError.response?.data?.message ||
+        (err instanceof Error && err.message.includes("API base URL")
+          ? err.message
+          : "Failed to send reset email. Please try again.");
       setError(errorMsg);
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);

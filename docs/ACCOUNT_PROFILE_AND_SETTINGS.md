@@ -265,6 +265,12 @@ Always the same message (no email enumeration).
 
 ### Reset with token
 
+Email link opens the **frontend** page:
+
+`{PUBLIC_FRONTEND_URL}/reset-password?token=…&email=…`
+
+That page then calls the **backend** (not Netlify):
+
 ```http
 POST /api/v1/accounts/auth/reset-password
 Content-Type: application/json
@@ -272,6 +278,7 @@ Content-Type: application/json
 
 ```json
 {
+  "email": "user@example.com",
   "token": "<from-email-link>",
   "newPassword": "newSecurePass123"
 }
@@ -283,7 +290,7 @@ Content-Type: application/json
 }
 ```
 
-Token expires in **1 hour**.
+Token expires in **1 hour**. Do **not** POST to the Netlify origin — only use `{API}/api/v1/...`.
 
 ---
 
@@ -327,5 +334,5 @@ JWT is stateless — discard the token client-side after this call.
 | Update profile | `PUT` | `/accounts/auth/profile` | Account JWT | `multipart/form-data` |
 | Change password | `POST` | `/accounts/auth/change-password` | Account JWT | JSON |
 | Forgot password | `POST` | `/accounts/auth/forgot-password` | None | JSON `{ email }` |
-| Reset password | `POST` | `/accounts/auth/reset-password` | None | JSON `{ token, newPassword }` |
+| Reset password | `POST` | `/accounts/auth/reset-password` | None | JSON `{ email, token, newPassword }` |
 | Logout | `POST` | `/accounts/auth/logout` | Account JWT | — |
