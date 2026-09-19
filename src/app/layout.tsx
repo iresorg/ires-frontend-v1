@@ -80,7 +80,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.className} antialiased bg-white dark:bg-black text-gray-900 dark:text-gray-100`}>
+      <body
+        className={`${poppins.className} antialiased bg-white dark:bg-black text-gray-900 dark:text-gray-100`}
+        suppressHydrationWarning
+      >
         <LoadingScreen />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
