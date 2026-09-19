@@ -87,50 +87,28 @@ export default function OurStorySection() {
                   className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
-                  The story of iRES begins with a simple truth: most people and
-                  businesses don’t realize they are vulnerable until it’s too
-                  late.
+                  iRES (Incident Response Emergency System) was founded to
+                  address the critical gap in cybersecurity emergency response
+                  services available to Nigerian organizations and individuals.
                 </motion.p>
 
                 <motion.p
                   className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
-                  As founders, we saw it first-hand. Friends, small businesses,
-                  even established companies losing sensitive data, financial
-                  resources, and trust not because they didn’t care about
-                  security, but because they didn’t know where to begin. We knew
-                  cybersecurity had to be more than jargon, more than expensive
-                  tools reserved for the privileged few. It had to be human.
-                  Accessible. Proactive.
+                  We saw too many Nigerian businesses suffer devastating losses
+                  from cyber incidents because they had no clear plan, no expert
+                  support, and no immediate response capability when attacks
+                  struck. So we built iRES to be the first line of defense.
                 </motion.p>
 
                 <motion.p
                   className="text-sm lg:text-base text-white/90 leading-relaxed"
                   variants={itemVariants}
                 >
-                  That’s why iRES exists to close the gap between everyday
-                  people and complex cybersecurity solutions.
-                </motion.p>
-
-                <motion.p
-                  className="text-sm lg:text-base text-white/90 leading-relaxed"
-                  variants={itemVariants}
-                >
-                  We are building a future where your grandmother can understand
-                  the safety of her online banking, where a small business can
-                  operate without fear of hackers, where governments and
-                  corporations can trust the resilience of their defenses. Our
-                  story is not just about technology.
-                </motion.p>
-
-                <motion.p
-                  className="text-sm lg:text-base text-white/90 leading-relaxed"
-                  variants={itemVariants}
-                >
-                  It’s about protecting dreams, businesses, and people’s lives
-                  in the digital space. At iRES, we don’t just fight cyber
-                  threats. We fight for you.
+                  Today, we deliver coordinated, technology-driven incident
+                  response that helps organizations recover faster — with real
+                  humans on the ground, not just software dashboards.
                 </motion.p>
               </div>
             </motion.div>

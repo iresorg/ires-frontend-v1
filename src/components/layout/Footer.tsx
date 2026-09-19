@@ -78,7 +78,7 @@ export default function Footer() {
                 <Link
                   href="https://www.linkedin.com/company/iresorg/"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
+                  className="w-10 h-10 cursor-pointer rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
                 >
                   <Image
                     src="/icons/linkedin.svg"
@@ -93,7 +93,7 @@ export default function Footer() {
                 <Link
                   href="https://www.instagram.com/iresorgg/"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
+                  className="w-10 h-10 cursor-pointer rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
                 >
                   <Image
                     src="/icons/instagram.svg"
@@ -108,7 +108,7 @@ export default function Footer() {
                 <Link
                   href="https://x.com/iRESorg?t=L-aamPkbfZi06TbjYsXfjA&s=09"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
+                  className="w-10 h-10 cursor-pointer rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-color)]/15"
                 >
                   <Image
                     src="/icons/twitter.svg"
@@ -123,7 +123,7 @@ export default function Footer() {
                 <Link
                   href="https://www.youtube.com/@iresorg"
                   target="_blank"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
+                  className="w-10 h-10 cursor-pointer rounded-lg flex items-center justify-center transition-all hover:scale-110 hover:bg-[var(--accent-secondary-color)]/15"
                 >
                   <Image
                     src="/icons/youtube.svg"
@@ -143,14 +143,15 @@ export default function Footer() {
                 {[
                   { name: "Home", href: "/" },
                   { name: "About Us", href: "/about" },
-                  { name: "Pricing Plans", href: "/pricing" },
+                  { name: "Pricing", href: "/pricing" },
                   { name: "Organizations", href: "/organization" },
                   { name: "Individuals", href: "/individual" },
+                  { name: "FAQs", href: "/faq" },
                 ].map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/80 hover:text-white transition-colors text-sm"
+                      className="cursor-pointer text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {link.name}
                     </Link>
@@ -172,7 +173,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-white/80 hover:text-white transition-colors text-sm"
+                      className="cursor-pointer text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {link.name}
                     </Link>
@@ -207,22 +208,21 @@ export default function Footer() {
 
                 {/* Updated Emails */}
                 <div className="flex flex-col gap-2">
-                  {[
-                    "iresorgg@gmail.com",
-                    "techsupport@iresorg.com",
-                    "customersupport@iresorg.com",
-                  ].map((email) => (
-                    <div key={email} className="flex items-start gap-3">
-                      <Image
-                        src="/icons/mark_email_unread.svg"
-                        alt="email"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 mt-1"
-                      />
-                      <span className="text-white/80 text-sm">{email}</span>
-                    </div>
-                  ))}
+                  <div className="flex items-start gap-3">
+                    <Image
+                      src="/icons/mark_email_unread.svg"
+                      alt="email"
+                      width={20}
+                      height={20}
+                      className="mt-1 h-5 w-5"
+                    />
+                    <a
+                      href="mailto:support@iresorg.com"
+                      className="cursor-pointer text-sm text-white/80 transition hover:text-white"
+                    >
+                      support@iresorg.com
+                    </a>
+                  </div>
                 </div>
 
                 {/* Phone */}

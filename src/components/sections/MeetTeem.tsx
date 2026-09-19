@@ -23,6 +23,14 @@ const cardVariants = {
   },
 };
 
+const expertise = [
+  "Incident response and digital forensics",
+  "Threat intelligence and malware analysis",
+  "Security operations and monitoring",
+  "Regulatory compliance (NDPR, GDPR, industry standards)",
+  "Nigerian business and regulatory environment",
+];
+
 const teamMembers = [
   {
     name: "Dr Usman Bakare",
@@ -62,21 +70,36 @@ export default function MeetOurTeamSection() {
             <SectionTitle
               logo="/logos/ires-logo.svg"
               logoAlt="iRES Logo"
-              title="Meet Our Team"
+              title="Our Team"
             />
 
-            <h2 className="text-center text-lg lg:text-2xl font-light text-white leading-tight">
+            <h2 className="max-w-3xl text-center text-lg font-light leading-tight text-white lg:text-2xl">
+              Our cybersecurity professionals bring{" "}
               <span
-                className="gradient-shift mr-2 inline-block bg-clip-text font-bold text-transparent"
+                className="gradient-shift inline-block bg-clip-text font-bold text-transparent"
                 style={{
                   backgroundImage:
                     "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
                 }}
               >
-                Meet
+                decades of combined experience
               </span>
-              Our Core Team
             </h2>
+
+            <ul className="grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2">
+              {expertise.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-3 rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-white/75 ring-1 ring-white/10"
+                >
+                  <span
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ background: "var(--accent-color)" }}
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <motion.div

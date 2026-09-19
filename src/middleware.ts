@@ -16,6 +16,7 @@ const publicRoutes = [
   "/pricing",
   "/individual",
   "/organization",
+  "/faq",
 ];
 
 const protectedRoutes = ["/dashboard"];

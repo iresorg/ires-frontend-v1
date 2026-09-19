@@ -7,30 +7,28 @@ import MeetOurTeamSection from '@/components/sections/MeetTeem';
 import WhyWeExistSection from '@/components/sections/WeExist';
 
 export const metadata: Metadata = {
-  title: 'About Us - iRES Cybersecurity Emergency Response',
-  description: 'Learn about iRES - the leading 24/7 cybersecurity incident response emergency system. Our expert team provides real-time protection and rapid response to digital threats.',
+  title: 'About iRES - Cybersecurity Emergency Response',
+  description: 'iRES was founded to close the gap in cybersecurity emergency response for Nigerian organizations and individuals. Learn our story, mission, vision, values, and team.',
   openGraph: {
-    title: 'About iRES - Cybersecurity Emergency Response Team',
-    description: 'Meet the experts behind iRES cybersecurity emergency response system. Real Time. Real People. Real Protection.',
+    title: 'About iRES - Incident Response Emergency System',
+    description: 'Local presence, Nigerian regulatory expertise, and 24/7 incident response — Real Time. Real People. Real Protection.',
     url: 'https://iresorg.com/about',
   },
   twitter: {
-    title: 'About iRES - Cybersecurity Emergency Response Team',
-    description: 'Meet the experts behind iRES cybersecurity emergency response system.',
+    title: 'About iRES - Incident Response Emergency System',
+    description: 'Local presence, Nigerian regulatory expertise, and 24/7 incident response.',
   },
 };
 
 export default function AboutPage() {
   return (
-      <>
-    <AboutUsHero />
-     <ScrollingTicker />
-     <OurStorySection/>
-     <MissionVisionSection/>
-      <MeetOurTeamSection/>
-      <WhyWeExistSection/>
-      
-    
-     </>
+    <>
+      <AboutUsHero />
+      <ScrollingTicker />
+      <OurStorySection />
+      <MeetOurTeamSection />
+      <WhyWeExistSection />
+      <MissionVisionSection />
+    </>
   );
 }

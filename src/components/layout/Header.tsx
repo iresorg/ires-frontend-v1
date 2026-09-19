@@ -19,19 +19,25 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  // Avoid SSR/client mismatch from zustand persist rehydrating before hydrate()
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user, isAuthenticated, clearUser, fetchUser } = useAuthStore();
   const { handleSignUpNavigation } = useAuthNavigation();
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Fetch user profile when component mounts if authenticated but user is null
   useEffect(() => {
-    if (typeof document === "undefined") return;
+    if (!mounted) return;
     const hasToken = document.cookie.includes("auth_token");
     if (hasToken && !user && isAuthenticated) {
       fetchUser({ silent: true });
     }
-  }, [user, isAuthenticated, fetchUser]);
+  }, [mounted, user, isAuthenticated, fetchUser]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -56,21 +62,24 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
   useEffect(() => {
+    if (!mounted) return;
     const onScroll = () => {
       setIsScrolled(window.scrollY > 8);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [mounted]);
 
   const navItems = [
     { label: "About Us", href: "/about" },
     { label: "Organization", href: "/organization" },
     { label: "Individual", href: "/individual" },
-    { label: "Explore Plans", href: "/pricing" },
-    { label: "Our Services", href: "/services" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Services", href: "/services" },
+    { label: "Contact Us", href: "/contact" },
   ];
 
   const settingsHref =
@@ -91,13 +100,15 @@ export default function Header() {
     router.push("/");
   };
 
-  // Get dashboard route based on role
   const getDashboardRoute = () => {
     if (!user) return "/dashboard";
     return user.role === "organization"
       ? "/dashboard/organization"
       : "/dashboard";
   };
+
+  // Match SSR output until after mount (persist may already have a user on the client)
+  const showUserMenu = mounted && isAuthenticated && !!user;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-100 w-full bg-transparent transition-all duration-300">
@@ -111,7 +122,7 @@ export default function Header() {
             }`}
           >
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex cursor-pointer items-center">
               <Image
                 src="/logos/ires-logo.svg"
                 alt="iRES Logo"
@@ -123,10 +134,10 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav
-              className={`hidden lg:flex items-center gap-1 capitalize ${
+              className={`hidden items-center gap-0.5 capitalize lg:flex ${
                 !isScrolled
-                  ? "rounded-full px-2 py-1.5"
-                  : "rounded-full px-1 py-1"
+                  ? "rounded-full px-1.5 py-1"
+                  : "rounded-full px-1 py-0.5"
               }`}
               style={
                 !isScrolled
@@ -142,7 +153,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="rounded-full px-3.5 py-2 text-sm font-normal text-[#D1D1D1] transition-colors xl:px-4 xl:text-base hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]/50"
+                  className="cursor-pointer whitespace-nowrap rounded-full px-2 py-1.5 text-sm font-normal text-[#D1D1D1] transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]/50 xl:px-3.5 xl:py-2 xl:text-base 2xl:px-4 2xl:text-base"
                 >
                   {label}
                 </Link>
@@ -150,11 +161,11 @@ export default function Header() {
             </nav>
 
             {/* Desktop CTA Button or User Profile */}
-            <div className="hidden lg:flex items-center gap-3">
-              {isAuthenticated && user ? (
+            <div className="hidden items-center gap-2 lg:flex xl:gap-3">
+              {showUserMenu ? (
                 <div className="relative" ref={dropdownRef}>
                   <div
-                    className="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-full transition-colors hover:bg-white/10"
+                    className="flex max-w-[200px] cursor-pointer items-center gap-2 rounded-full px-2.5 py-1.5 transition-colors hover:bg-white/10 xl:max-w-none xl:px-3 xl:py-2"
                     style={{
                       background: isScrolled
                         ? "transparent"
@@ -164,17 +175,18 @@ export default function Header() {
                     }}
                     onClick={() => setShowUserDropdown(!showUserDropdown)}
                   >
-                    <UserAvatar user={user} size={32} />
-                    <span className="text-sm font-medium text-white">
+                    <UserAvatar user={user} size={28} />
+                    <span className="hidden truncate text-xs font-medium text-white xl:inline xl:text-sm 2xl:text-base">
                       {getDisplayName(user)}
                     </span>
                     <Image
                       src="/images/white-dropdown.png"
-                      alt="Dropdown"
-                      width={14}
-                      height={14}
-                      className={`transition-transform ${showUserDropdown ? "rotate-180" : ""
-                        }`}
+                      alt=""
+                      width={12}
+                      height={12}
+                      className={`hidden shrink-0 transition-transform xl:block ${
+                        showUserDropdown ? "rotate-180" : ""
+                      }`}
                     />
                   </div>
 
@@ -185,20 +197,20 @@ export default function Header() {
                         <Link
                           href={getDashboardRoute()}
                           onClick={() => setShowUserDropdown(false)}
-                          className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
+                          className="block w-full cursor-pointer rounded-md px-4 py-2 text-left text-sm text-white transition-colors hover:bg-white/10 xl:text-base"
                         >
                           Dashboard
                         </Link>
                         <Link
                           href={settingsHref}
                           onClick={() => setShowUserDropdown(false)}
-                          className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors mt-1"
+                          className="mt-1 block w-full cursor-pointer rounded-md px-4 py-2 text-left text-sm text-white transition-colors hover:bg-white/10 xl:text-base"
                         >
                           Profile & settings
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 rounded-md hover:text-red-400 transition-colors mt-1"
+                          className="mt-1 w-full cursor-pointer rounded-md px-4 py-2 text-left text-sm text-white transition-colors hover:bg-white/10 hover:text-red-400 xl:text-base"
                         >
                           Logout
                         </button>
@@ -210,13 +222,13 @@ export default function Header() {
                 <>
                   <Link
                     href="/login"
-                    className="text-sm xl:text-base font-medium px-4 py-2 text-white hover:text-white/80 transition-colors"
+                    className="cursor-pointer px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:text-white/80 xl:px-3 xl:text-sm 2xl:text-base"
                   >
                     Login
                   </Link>
                   <Button
                     onClick={handleSignUpNavigation}
-                    className="rounded-4xl text-sm xl:text-base cursor-pointer"
+                    className="rounded-4xl px-3 py-1.5 text-xs xl:px-4 xl:text-sm 2xl:text-base"
                   >
                     Sign Up
                   </Button>
@@ -227,7 +239,7 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 rounded-lg transition-all duration-200 bg-(--btn-bg)"
+              className="rounded-lg p-2 transition-all duration-200 lg:hidden"
               aria-label={
                 isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"
               }
@@ -270,56 +282,28 @@ export default function Header() {
           {/* Mobile Menu Dropdown */}
           {isMobileMenuOpen && (
             <div
-              className="lg:hidden mt-4 p-4 rounded-lg"
+              className="mt-3 max-h-[min(70vh,520px)] overflow-y-auto rounded-2xl p-3 sm:mt-4 sm:p-4 lg:hidden"
               style={{ background: "var(--btn-bg)" }}
             >
-              <div className="flex flex-col space-y-3">
-                <Link
-                  href="/about"
-                  className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--foreground)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="/organization"
-                  className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--foreground)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Organization
-                </Link>
-                <Link
-                  href="/individual"
-                  className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--foreground)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Individual
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--foreground)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Explore Plans
-                </Link>
-                <Link
-                  href="/services"
-                  className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--foreground)" }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Our Services
-                </Link>
-                {isAuthenticated && user ? (
-                  <div className="pt-2 space-y-2">
-                    <div className="flex items-center gap-2 px-4 py-2">
+              <nav className="flex flex-col gap-1">
+                {navItems.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="cursor-pointer rounded-lg px-3 py-2.5 text-base font-medium transition-colors hover:bg-white/10"
+                    style={{ color: "var(--foreground)" }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+              {showUserMenu ? (
+                  <div className="mt-3 space-y-1 border-t border-white/15 pt-3">
+                    <div className="flex items-center gap-2 px-3 py-2">
                       <UserAvatar user={user} size={32} />
                       <span
-                        className="text-sm font-medium"
+                        className="truncate text-sm font-medium"
                         style={{ color: "var(--foreground)" }}
                       >
                         {getDisplayName(user)}
@@ -328,7 +312,7 @@ export default function Header() {
                     <Link
                       href={getDashboardRoute()}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      className="block cursor-pointer rounded-lg px-3 py-2.5 text-md font-medium transition-colors hover:bg-white/10"
                       style={{ color: "var(--foreground)" }}
                     >
                       Dashboard
@@ -336,7 +320,7 @@ export default function Header() {
                     <Link
                       href={settingsHref}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      className="block cursor-pointer rounded-lg px-3 py-2.5 text-md font-medium transition-colors hover:bg-white/10"
                       style={{ color: "var(--foreground)" }}
                     >
                       Profile & settings
@@ -346,18 +330,18 @@ export default function Header() {
                         handleLogout();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full text-left text-sm font-medium px-4 py-2 rounded-lg transition-colors hover:text-red-400"
+                      className="w-full cursor-pointer rounded-lg px-3 py-2.5 text-left text-md font-medium transition-colors hover:bg-white/10 hover:text-red-300"
                       style={{ color: "var(--foreground)" }}
                     >
                       Logout
                     </button>
                   </div>
                 ) : (
-                  <div className="pt-2 space-y-3 w-full">
+                  <div className="mt-3 space-y-2 border-t border-white/15 pt-3">
                     <Link
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-base font-medium px-4 py-3 rounded-lg transition-colors text-center text-white hover:bg-white/10"
+                      className="block cursor-pointer rounded-lg px-3 py-3 text-center text-md font-medium text-white transition-colors hover:bg-white/10"
                       style={{
                         background: "transparent",
                         border: "1px solid rgba(255, 255, 255, 0.2)",
@@ -368,7 +352,7 @@ export default function Header() {
                     <Link
                       href="/signup"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-base font-medium px-4 py-3 rounded-lg transition-colors text-center text-white hover:opacity-90"
+                      className="block cursor-pointer rounded-lg px-3 py-3 text-center text-md font-medium text-white transition-opacity hover:opacity-90"
                       style={{
                         background: "var(--btn-bg)",
                       }}
@@ -377,7 +361,6 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </div>
             </div>
           )}
         </Section>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
@@ -246,7 +247,14 @@ export default function ContactUsSection() {
               </h2>
               <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed">
                 Want to learn more about our services or need immediate
-                assistance? Connect with us
+                assistance? Connect with us.{" "}
+                <Link
+                  href="/faq"
+                  className="cursor-pointer font-medium underline-offset-2 transition hover:underline"
+                  style={{ color: "var(--accent-color)" }}
+                >
+                  Need help? View FAQs
+                </Link>
               </p>
             </motion.div>
 

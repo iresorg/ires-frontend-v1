@@ -1,34 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import PublicLayout from "@/components/layout/PublicLayout";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
+import { contactService } from "@/services/contact";
+import type { AxiosError } from "axios";
+
+const SUPPORT_EMAIL = "support@iresorg.com";
+
+const SUBJECT_OPTIONS = [
+  { value: "general", label: "General Inquiry" },
+  { value: "partnership", label: "Partnership Opportunity" },
+  { value: "support", label: "Technical Support" },
+] as const;
 
 const contactInfo = [
   {
     name: "Email",
     description: "Get in touch with our team",
     icon: EnvelopeIcon,
-    value: "contact@ires.org",
-    href: "mailto:contact@ires.org",
+    value: SUPPORT_EMAIL,
+    href: `mailto:${SUPPORT_EMAIL}`,
   },
   {
     name: "Phone",
     description: "Call us directly",
     icon: PhoneIcon,
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "+234 810 000 0000",
+    href: "tel:+2348100000000",
   },
   {
     name: "Office",
     description: "Visit our headquarters",
     icon: MapPinIcon,
-    value: "123 Emergency Lane, Response City, RC 12345",
-    href: "https://maps.google.com",
+    value: "Plot 1606 Okay Akoko Close Off Lagos Street Garki Abuja",
+    href: "https://maps.google.com/?q=Plot+1606+Okay+Akoko+Close+Off+Lagos+Street+Garki+Abuja",
   },
 ];
 
@@ -43,23 +54,82 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
+  const [subjectOpen, setSubjectOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const subjectRef = useRef<HTMLDivElement>(null);
+
+  const selectedSubject = SUBJECT_OPTIONS.find(
+    (option) => option.value === formData.subject,
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        subjectRef.current &&
+        !subjectRef.current.contains(event.target as Node)
+      ) {
+        setSubjectOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    if (!selectedSubject) {
+      setErrorMessage("Please select a subject.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // POST /contact — public (NEXT_PUBLIC_API_URL already includes /api/v1)
+      const response = await contactService.submit({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: selectedSubject.label,
+        message: formData.message,
+      });
+
+      setSuccessMessage(
+        response.message ||
+          "Message sent. Our team will get back to you soon.",
+      );
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      setErrorMessage(
+        axiosError.response?.data?.message ||
+          "Failed to send message. Please try again or email support@iresorg.com.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <PublicLayout>
       <div className="relative overflow-hidden">
         <div className="security-grid pointer-events-none absolute inset-0 opacity-40" />
 
@@ -87,8 +157,8 @@ export default function ContactPage() {
               </span>
             </h1>
             <p className="mt-6 text-base leading-relaxed text-[#d1d1d1] sm:text-lg">
-              Have questions about our services or want to learn more about
-              becoming a responder? We&apos;re here to help.
+              Have questions about our services or need help getting started?
+              We&apos;re here to help.
             </p>
           </motion.div>
         </Section>
@@ -136,37 +206,89 @@ export default function ContactPage() {
                 </div>
               ))}
 
-              <div>
+              <div ref={subjectRef} className="relative">
                 <label
-                  htmlFor="subject"
+                  id="subject-label"
                   className="mb-2 block text-sm font-medium text-white"
                 >
                   Subject
                 </label>
-                <select
-                  name="subject"
-                  id="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className={inputClass}
+                <button
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={subjectOpen}
+                  aria-labelledby="subject-label"
+                  onClick={() => setSubjectOpen((open) => !open)}
+                  className={`${inputClass} flex cursor-pointer items-center justify-between gap-3 text-left`}
                 >
-                  <option value="" className="bg-[#1c1b2b]">
-                    Select a subject
-                  </option>
-                  <option value="general" className="bg-[#1c1b2b]">
-                    General Inquiry
-                  </option>
-                  <option value="responder" className="bg-[#1c1b2b]">
-                    Become a Responder
-                  </option>
-                  <option value="partnership" className="bg-[#1c1b2b]">
-                    Partnership Opportunity
-                  </option>
-                  <option value="support" className="bg-[#1c1b2b]">
-                    Technical Support
-                  </option>
-                </select>
+                  <span
+                    className={
+                      selectedSubject ? "text-white" : "text-white/40"
+                    }
+                  >
+                    {selectedSubject?.label ?? "Select a subject"}
+                  </span>
+                  <Image
+                    src="/images/white-dropdown.png"
+                    alt=""
+                    width={12}
+                    height={12}
+                    className={`shrink-0 transition-transform ${
+                      subjectOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Hidden required input so native form validation still applies */}
+                <input
+                  tabIndex={-1}
+                  required
+                  value={formData.subject}
+                  onChange={() => undefined}
+                  className="pointer-events-none absolute h-0 w-0 opacity-0"
+                  aria-hidden
+                />
+
+                {subjectOpen && (
+                  <ul
+                    role="listbox"
+                    aria-labelledby="subject-label"
+                    className="absolute z-20 mt-2 w-full overflow-hidden rounded-xl bg-[#141327] py-1 shadow-xl ring-1 ring-white/15"
+                  >
+                    {SUBJECT_OPTIONS.map((option) => {
+                      const isSelected = formData.subject === option.value;
+                      return (
+                        <li key={option.value} role="option" aria-selected={isSelected}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                subject: option.value,
+                              }));
+                              setSubjectOpen(false);
+                            }}
+                            className={`flex w-full cursor-pointer items-center justify-between px-4 py-2.5 text-left text-sm transition hover:bg-white/10 ${
+                              isSelected
+                                ? "bg-white/5 text-white"
+                                : "text-white/80"
+                            }`}
+                          >
+                            {option.label}
+                            {isSelected && (
+                              <span
+                                className="text-xs"
+                                style={{ color: "var(--accent-color)" }}
+                              >
+                                ✓
+                              </span>
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
 
               <div>
@@ -187,8 +309,29 @@ export default function ContactPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full rounded-xl py-3">
-                Send Message
+              {successMessage && (
+                <p
+                  role="status"
+                  className="rounded-xl bg-emerald-500/15 px-4 py-3 text-sm text-emerald-300 ring-1 ring-emerald-400/30"
+                >
+                  {successMessage}
+                </p>
+              )}
+              {errorMessage && (
+                <p
+                  role="alert"
+                  className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-300 ring-1 ring-red-400/30"
+                >
+                  {errorMessage}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full rounded-xl py-3"
+              >
+                {isLoading ? "Sending..." : "Send Message"}
               </Button>
             </motion.form>
 
@@ -209,8 +352,8 @@ export default function ContactPage() {
                 We&apos;re here to help
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[#d1d1d1]">
-                Have questions about our services or want to learn more about
-                becoming a responder? Reach out through any of these channels.
+                Have questions about our services or need support? Reach out
+                through any of these channels.
               </p>
               <dl className="mt-10 space-y-5">
                 {contactInfo.map((item) => (
@@ -231,7 +374,7 @@ export default function ContactPage() {
                     <dd>
                       <a
                         href={item.href}
-                        className="font-medium text-white transition hover:opacity-80"
+                        className="cursor-pointer font-medium text-white transition hover:opacity-80"
                       >
                         {item.value}
                       </a>
@@ -242,10 +385,24 @@ export default function ContactPage() {
                   </div>
                 ))}
               </dl>
+
+              <div className="mt-8 rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
+                <p className="text-sm font-semibold text-white">Need help?</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+                  Browse answers about plans, response times, coverage, and
+                  compliance before you write in.
+                </p>
+                <Link
+                  href="/faq"
+                  className="mt-4 inline-flex cursor-pointer rounded-xl px-4 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
+                  style={{ background: "var(--btn-bg)" }}
+                >
+                  View FAQs
+                </Link>
+              </div>
             </motion.div>
           </div>
         </Section>
       </div>
-    </PublicLayout>
   );
 }

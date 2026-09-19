@@ -29,13 +29,13 @@ export default function WhyWeExistSection() {
   return (
     <div className="relative w-full overflow-hidden">
       <div
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 h-full w-full"
         style={{
           background: "var(--bg-c)",
           backgroundImage: "var(--bg-shape)",
         }}
       />
-      <div className="security-grid absolute inset-0 opacity-30 pointer-events-none" />
+      <div className="security-grid pointer-events-none absolute inset-0 opacity-30" />
 
       <Section className="relative z-10 py-14 lg:py-20">
         <motion.div
@@ -43,13 +43,21 @@ export default function WhyWeExistSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
-          className="flex justify-center"
+          className="mx-auto max-w-3xl text-center"
         >
-          <SectionTitle
-            logo="/logos/ires-logo.svg"
-            logoAlt="iRES Logo"
-            title="Why We Exist"
-          />
+          <div className="flex justify-center">
+            <SectionTitle
+              logo="/logos/ires-logo.svg"
+              logoAlt="iRES Logo"
+              title="Our Commitment"
+            />
+          </div>
+          <p className="mt-6 text-sm leading-relaxed text-white/80 sm:text-base lg:text-lg">
+            Based in Lagos, Nigeria, we understand the unique cybersecurity
+            challenges facing Nigerian businesses. We&apos;re committed to
+            providing world-class incident response services at accessible price
+            points for the Nigerian market.
+          </p>
         </motion.div>
 
         <motion.div
@@ -64,7 +72,7 @@ export default function WhyWeExistSection() {
           }}
           whileHover={{ y: -6, transition: { duration: 0.28 } }}
         >
-          <div className="relative rounded-3xl overflow-hidden">
+          <div className="relative overflow-hidden rounded-3xl">
             <video
               ref={videoRef}
               className="h-65 w-full rounded-3xl object-cover md:h-85 lg:h-105"
@@ -81,6 +89,7 @@ export default function WhyWeExistSection() {
 
             {!playing && (
               <button
+                type="button"
                 onClick={handlePlay}
                 className="absolute inset-0 flex items-center justify-center bg-black/40 transition hover:bg-black/30"
               >

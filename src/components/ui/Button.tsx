@@ -21,7 +21,11 @@ export default function Button({
   disabled = false,
   type = 'button',
 }: ButtonProps) {
-  const baseClasses = "px-6 py-3 rounded-4xl font-medium text-white transition-all duration-200 hover:scale-105";
+  const baseClasses =
+    "cursor-pointer rounded-4xl font-medium text-white transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:hover:scale-100";
+  const defaultPadding = className.includes("px-") ? "" : "px-6";
+  const defaultPy = className.includes("py-") ? "" : "py-3";
+  const defaultText = className.includes("text-") ? "" : "text-sm";
   
   const buttonStyle = {
     background: variant === 'primary' ? 'var(--btn-bg)' : 'transparent',
@@ -33,13 +37,22 @@ export default function Button({
     color: 'white'
   };
 
+  const mergedClassName = [baseClasses, defaultPadding, defaultPy, defaultText, className]
+    .filter(Boolean)
+    .join(" ");
+
   // For secondary variant with gradient border
   if (variant === 'secondary') {
-    const secondaryClasses = `${baseClasses} btn-default btn-highlighted ${className}`;
+    const secondaryClasses = `${mergedClassName} btn-default btn-highlighted`;
     
     if (href) {
       return (
-        <Link href={href} className={secondaryClasses}>
+        <Link
+          href={href}
+          className={secondaryClasses}
+          aria-disabled={disabled || undefined}
+          onClick={disabled ? (e) => e.preventDefault() : undefined}
+        >
           {children}
         </Link>
       );
@@ -51,6 +64,7 @@ export default function Button({
         onClick={disabled ? undefined : onClick} 
         disabled={disabled} 
         className={secondaryClasses}
+        style={disabled ? { opacity: 0.5 } : undefined}
       >
         {children}
       </button>
@@ -62,13 +76,15 @@ export default function Button({
     return (
       <Link
         href={href}
-        className={`${baseClasses} ${className}`}
-        style={buttonStyle}
+        className={mergedClassName}
+        style={disabled ? { ...buttonStyle, opacity: 0.5, cursor: "not-allowed" } : buttonStyle}
+        aria-disabled={disabled || undefined}
+        onClick={disabled ? (e) => e.preventDefault() : undefined}
         onMouseEnter={(e) => {
-          Object.assign(e.currentTarget.style, hoverStyle);
+          if (!disabled) Object.assign(e.currentTarget.style, hoverStyle);
         }}
         onMouseLeave={(e) => {
-          Object.assign(e.currentTarget.style, buttonStyle);
+          if (!disabled) Object.assign(e.currentTarget.style, buttonStyle);
         }}
       >
         {children}
@@ -81,8 +97,8 @@ export default function Button({
       type={type}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`${baseClasses} ${className}`}
-      style={disabled ? { ...buttonStyle, opacity: 0.5, cursor: 'not-allowed' } : buttonStyle}
+      className={mergedClassName}
+      style={disabled ? { ...buttonStyle, opacity: 0.5 } : buttonStyle}
       onMouseEnter={(e) => {
         if (!disabled) {
           Object.assign(e.currentTarget.style, hoverStyle);
