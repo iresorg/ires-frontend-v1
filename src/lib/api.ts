@@ -8,6 +8,8 @@ const PUBLIC_AUTH_PATHS = [
   "/accounts/auth/reset-password",
   "/accounts/auth/verify-email",
   "/accounts/auth/resend-otp",
+  "/contact",
+  "/newsletter/subscribe",
 ];
 
 function resolveApiBaseUrl(): string {

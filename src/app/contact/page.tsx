@@ -8,6 +8,8 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
+import { contactService } from "@/services/contact";
+import type { AxiosError } from "axios";
 
 const SUPPORT_EMAIL = "support@iresorg.com";
 
@@ -53,6 +55,9 @@ export default function ContactPage() {
     message: "",
   });
   const [subjectOpen, setSubjectOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const subjectRef = useRef<HTMLDivElement>(null);
 
   const selectedSubject = SUBJECT_OPTIONS.find(
@@ -73,27 +78,48 @@ export default function ContactPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSuccessMessage("");
+    setErrorMessage("");
 
-    const subjectLabel = selectedSubject?.label ?? "Contact inquiry";
-    const mailtoSubject = encodeURIComponent(
-      `[iRES Contact] ${subjectLabel} — ${formData.name}`,
-    );
-    const mailtoBody = encodeURIComponent(
-      [
-        `Name: ${formData.name}`,
-        `Email: ${formData.email}`,
-        formData.phone ? `Phone: ${formData.phone}` : null,
-        `Subject: ${subjectLabel}`,
-        "",
-        formData.message,
-      ]
-        .filter(Boolean)
-        .join("\n"),
-    );
+    if (!selectedSubject) {
+      setErrorMessage("Please select a subject.");
+      return;
+    }
 
-    window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${mailtoSubject}&body=${mailtoBody}`;
+    setIsLoading(true);
+
+    try {
+      // POST /contact — public (NEXT_PUBLIC_API_URL already includes /api/v1)
+      const response = await contactService.submit({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: selectedSubject.label,
+        message: formData.message,
+      });
+
+      setSuccessMessage(
+        response.message ||
+          "Message sent. Our team will get back to you soon.",
+      );
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      setErrorMessage(
+        axiosError.response?.data?.message ||
+          "Failed to send message. Please try again or email support@iresorg.com.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
@@ -283,8 +309,29 @@ export default function ContactPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full rounded-xl py-3">
-                Send Message
+              {successMessage && (
+                <p
+                  role="status"
+                  className="rounded-xl bg-emerald-500/15 px-4 py-3 text-sm text-emerald-300 ring-1 ring-emerald-400/30"
+                >
+                  {successMessage}
+                </p>
+              )}
+              {errorMessage && (
+                <p
+                  role="alert"
+                  className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-300 ring-1 ring-red-400/30"
+                >
+                  {errorMessage}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full rounded-xl py-3"
+              >
+                {isLoading ? "Sending..." : "Send Message"}
               </Button>
             </motion.form>
 
