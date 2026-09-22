@@ -13,6 +13,10 @@ import SuccessToast from "@/components/sections/SucessToast";
 import ErrorToast from "@/components/sections/ErrorToast";
 import type { AxiosError } from "axios";
 import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
+import {
+  PROFILE_PHOTO_ACCEPT,
+  PROFILE_PHOTO_HINT,
+} from "@/lib/profilePhoto";
 
 const countries = [
   { name: "Nigeria", code: "+234", flag: "/images/nigeria-flag.png" },
@@ -282,14 +286,30 @@ export default function IndividualSignup() {
             )}
           </div>
 
-          {/* Profile Picture (Optional) */}
+          {/* User profile photo (Optional) */}
           <div>
+            <label
+              htmlFor="profilePicture"
+              className="mb-1.5 block text-xs font-medium text-white/80 sm:text-sm"
+            >
+              User profile photo{" "}
+              <span className="font-normal text-white/45">(optional)</span>
+            </label>
             <input
+              id="profilePicture"
               type="file"
-              accept="image/*"
+              accept={PROFILE_PHOTO_ACCEPT}
               {...register("profilePicture")}
               className="w-full bg-white/10 text-white placeholder-white/60 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg outline-none ring-1 ring-white/5 transition focus:ring-[var(--accent-color)]/40 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-white/20 file:text-white file:cursor-pointer hover:file:bg-white/30 text-xs sm:text-sm"
             />
+            <p className="mt-1.5 text-[11px] text-white/45 sm:text-xs">
+              {PROFILE_PHOTO_HINT}
+            </p>
+            {errors.profilePicture && (
+              <p className="mt-1 ml-0 text-xs text-red-400 sm:ml-1">
+                {String(errors.profilePicture.message || "Invalid image file")}
+              </p>
+            )}
           </div>
 
           <button
