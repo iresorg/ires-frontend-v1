@@ -13,6 +13,11 @@ import type { AxiosError } from "axios";
 // import ErrorToast from "@/components/sections/ErrorToast";
 import CustomSelect from "@/components/ui/CustomSelect";
 import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
+import {
+  PROFILE_PHOTO_ACCEPT,
+  PROFILE_PHOTO_HINT,
+  validateProfilePhoto,
+} from "@/lib/profilePhoto";
 
 const countries = [
   { name: "Nigeria", code: "+234", flag: "/images/nigeria-flag.png" },
@@ -73,19 +78,39 @@ export default function OrganizationSignup() {
     handleSubmit,
     formState: { errors },
     control,
+    setError,
+    clearErrors,
+    setValue,
   } = useForm<OrganizationRegistrationFormData>({
     resolver: zodResolver(organizationRegistrationSchema),
   });
 
- const handleFileChange = (file: File) => {
-   if (file) {
-     setFileName(file.name);
+ const handleFileChange = (file: File | undefined) => {
+   if (!file) {
+     setFileName(null);
+     clearErrors("profilePicture");
+     setValue("profilePicture", undefined);
+     return;
    }
+
+   const result = validateProfilePhoto(file);
+   if (!result.ok) {
+     setFileName(null);
+     setError("profilePicture", { type: "manual", message: result.message });
+     setValue("profilePicture", undefined);
+     return;
+   }
+
+   setFileName(file.name);
+   clearErrors("profilePicture");
+   setValue("profilePicture", file, { shouldValidate: true });
  };
 
  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
    if (e.target.files && e.target.files.length > 0) {
      handleFileChange(e.target.files[0]);
+   } else {
+     handleFileChange(undefined);
    }
  };
 
@@ -481,10 +506,11 @@ export default function OrganizationSignup() {
 
           {/* Logo and Password */}
           <label
-            htmlFor="company-logo"
-            className="block text-gray-500 text-sm sm:text-base mt-2 mb-2"
+            htmlFor="dropzone-file"
+            className="mt-2 mb-2 block text-sm text-white/80 sm:text-base"
           >
-            Upload your company logo
+            Company logo{" "}
+            <span className="font-normal text-white/45">(optional)</span>
           </label>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-3">
@@ -517,11 +543,12 @@ export default function OrganizationSignup() {
                     </p>
                   )}
                   <p className="text-[10px] sm:text-xs text-gray-500 text-center">
-                    Max file size: 15MB
+                    {PROFILE_PHOTO_HINT}
                   </p>
                   <input
                     id="dropzone-file"
                     type="file"
+                    accept={PROFILE_PHOTO_ACCEPT}
                     className="hidden"
                     {...register("profilePicture")}
                     onChange={(e) => {
@@ -530,6 +557,11 @@ export default function OrganizationSignup() {
                     }}
                   />
                 </label>
+                {errors.profilePicture && (
+                  <p className="mt-2 text-center text-xs text-red-400">
+                    {String(errors.profilePicture.message || "Invalid image file")}
+                  </p>
+                )}
               </div>
             </div>
 

@@ -1,5 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import type { ApiResponse } from "@/types";
+import { getAccessToken } from "@/lib/accessToken";
+import { clearClientSession } from "@/lib/session";
 
 const PUBLIC_AUTH_PATHS = [
   "/accounts/auth/login",
@@ -25,30 +26,27 @@ function resolveApiBaseUrl(): string {
 
 const API_BASE_URL = resolveApiBaseUrl();
 
-// Simple cookie helpers
-const getCookie = (name: string): string | null => {
-  if (typeof document === "undefined") return null;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
-  return null;
-};
-
-const setCookie = (name: string, value: string, days = 7): void => {
-  if (typeof document === "undefined") return;
-  const expires = new Date();
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
-};
-
-const removeCookie = (name: string): void => {
-  if (typeof document === "undefined") return;
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-};
-
 function isPublicAuthRequest(config: InternalAxiosRequestConfig): boolean {
   const url = config.url || "";
   return PUBLIC_AUTH_PATHS.some((path) => url.includes(path));
+}
+
+function redirectToLogin(): void {
+  if (typeof window === "undefined") return;
+  const path = window.location.pathname;
+  if (path.startsWith("/login")) return;
+  window.location.href = "/login";
+}
+
+async function handleUnauthorizedSession(): Promise<void> {
+  clearClientSession();
+  try {
+    const { useAuthStore } = await import("@/store/auth");
+    useAuthStore.getState().clearUser();
+  } catch {
+    // Store may be unavailable during early bootstrap
+  }
+  redirectToLogin();
 }
 
 const api = axios.create({
@@ -58,7 +56,6 @@ const api = axios.create({
   },
 });
 
-// Request interceptor
 api.interceptors.request.use(
   (config) => {
     if (!API_BASE_URL) {
@@ -71,7 +68,7 @@ api.interceptors.request.use(
 
     // Public auth endpoints must not send a stale portal JWT
     if (!isPublicAuthRequest(config)) {
-      const token = getCookie("auth_token");
+      const token = getAccessToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -82,7 +79,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -94,34 +90,23 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Never run refresh/redirect logic on public auth routes
+    // Never run session-ended redirect on public auth routes
     if (isPublicAuthRequest(originalRequest)) {
       return Promise.reject(error);
     }
 
+    // Server invalidates JWTs on logout / password change / reset.
+    // Do not retry with the same token.
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshToken = getCookie("refresh_token");
-        if (refreshToken) {
-          const response = await api.post<ApiResponse<{ token: string }>>(
-            "/auth/refresh",
-            { refreshToken },
-          );
-
-          const { token } = response.data.data;
-          setCookie("auth_token", token);
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return api(originalRequest);
-        }
-      } catch {
-        removeCookie("auth_token");
-        removeCookie("refresh_token");
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
+      // Wrong current password returns 401 — leave that to the settings UI
+      const url = originalRequest.url || "";
+      if (url.includes("/accounts/auth/change-password")) {
+        return Promise.reject(error);
       }
+
+      await handleUnauthorizedSession();
     }
 
     return Promise.reject(error);
@@ -129,4 +114,4 @@ api.interceptors.response.use(
 );
 
 export default api;
-export { getCookie, setCookie, removeCookie, API_BASE_URL };
+export { API_BASE_URL };

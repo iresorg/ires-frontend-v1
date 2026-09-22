@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { removeCookie } from "@/lib/api";
+import { clearClientSession } from "@/lib/session";
 import {
   COMPANY_SIZE_OPTIONS,
   getDisplayName,
@@ -14,6 +14,11 @@ import {
   profileService,
   type CompanySize,
 } from "@/services/profile";
+import {
+  PROFILE_PHOTO_ACCEPT,
+  PROFILE_PHOTO_HINT,
+  validateProfilePhoto,
+} from "@/lib/profilePhoto";
 
 type Tab = "profile" | "security";
 
@@ -129,8 +134,24 @@ export default function AccountSettings() {
 
   const handleFileChange = (next: File | null) => {
     if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+
+    if (!next) {
+      setFile(null);
+      setPreviewUrl(null);
+      return;
+    }
+
+    const result = validateProfilePhoto(next);
+    if (!result.ok) {
+      setFile(null);
+      setPreviewUrl(null);
+      setError(result.message);
+      return;
+    }
+
+    setError(null);
     setFile(next);
-    setPreviewUrl(next ? URL.createObjectURL(next) : null);
+    setPreviewUrl(URL.createObjectURL(next));
   };
 
   const handleProfileSubmit = async (e: FormEvent) => {
@@ -187,12 +208,10 @@ export default function AccountSettings() {
         currentPassword: passwordForm.currentPassword,
         newPassword: passwordForm.newPassword,
       });
-      setPasswordForm({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      setPasswordMessage("Password changed successfully");
+      // Server invalidates all sessions on password change
+      clearUser();
+      clearClientSession();
+      router.push("/login");
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response
         ?.status;
@@ -214,8 +233,7 @@ export default function AccountSettings() {
       // Still clear local session if API fails
     }
     clearUser();
-    removeCookie("auth_token");
-    removeCookie("refresh_token");
+    clearClientSession();
     router.push("/");
   };
 
@@ -330,16 +348,17 @@ export default function AccountSettings() {
 
             <div className="mb-5">
               <label className={labelClass}>
-                {isOrg ? "Organization logo" : "Profile photo"}
+                {isOrg ? "Organization logo" : "User profile photo"}{" "}
+                <span className="font-normal text-white/35">(optional)</span>
               </label>
               <input
                 type="file"
-                accept="image/*"
+                accept={PROFILE_PHOTO_ACCEPT}
                 onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
                 className="w-full rounded-xl bg-white/5 px-3 py-2.5 text-xs text-white ring-1 ring-white/10 file:mr-3 file:rounded-lg file:border-0 file:bg-white/15 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-white"
               />
               <p className="mt-1.5 text-[11px] text-white/40">
-                Optional. Email cannot be changed here.
+                {PROFILE_PHOTO_HINT} Email cannot be changed here.
               </p>
             </div>
 

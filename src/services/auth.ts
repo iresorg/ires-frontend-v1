@@ -1,4 +1,6 @@
-import api, { setCookie } from "@/lib/api";
+import api from "@/lib/api";
+import { setAccessToken } from "@/lib/accessToken";
+import { clearLegacyAuthCookies } from "@/lib/session";
 import { profileService } from "@/services/profile";
 import { useAuthStore } from "@/store/auth";
 
@@ -191,9 +193,10 @@ export const authService = {
       password: data.password,
     });
 
-    // Save token to cookies
+    // Save token in memory only (never cookies / IndexedDB / localStorage)
     if (response.data.token) {
-      setCookie("auth_token", response.data.token);
+      clearLegacyAuthCookies();
+      setAccessToken(response.data.token);
 
       // Fetch user profile after login
       try {

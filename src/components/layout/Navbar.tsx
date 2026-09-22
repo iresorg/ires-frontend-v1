@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { removeCookie } from "@/lib/api";
+import { clearClientSession } from "@/lib/session";
 import {
   getDisplayName,
   profileService,
@@ -58,8 +58,7 @@ export default function Navbar() {
       // Clear local session even if API fails
     }
     clearUser();
-    removeCookie("auth_token");
-    removeCookie("refresh_token");
+    clearClientSession();
     router.push("/");
   };
 

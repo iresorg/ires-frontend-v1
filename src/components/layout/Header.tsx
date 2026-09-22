@@ -8,7 +8,8 @@ import Button from "@/components/ui/Button";
 import Section from "@/components/ui/Section";
 import { useAuthStore } from "@/store/auth";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
-import { removeCookie } from "@/lib/api";
+import { getAccessToken } from "@/lib/accessToken";
+import { clearClientSession } from "@/lib/session";
 import {
   getDisplayName,
   profileService,
@@ -19,7 +20,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  // Avoid SSR/client mismatch from zustand persist rehydrating before hydrate()
+  // Avoid SSR/client mismatch until after mount
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function Header() {
   // Fetch user profile when component mounts if authenticated but user is null
   useEffect(() => {
     if (!mounted) return;
-    const hasToken = document.cookie.includes("auth_token");
+    const hasToken = !!getAccessToken();
     if (hasToken && !user && isAuthenticated) {
       fetchUser({ silent: true });
     }
@@ -94,8 +95,7 @@ export default function Header() {
       // Clear local session even if API fails
     }
     clearUser();
-    removeCookie("auth_token");
-    removeCookie("refresh_token");
+    clearClientSession();
     setShowUserDropdown(false);
     router.push("/");
   };

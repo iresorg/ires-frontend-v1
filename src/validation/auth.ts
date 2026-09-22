@@ -1,4 +1,18 @@
 import { z } from "zod";
+import { validateProfilePhotoInput } from "@/lib/profilePhoto";
+
+const optionalProfilePhotoSchema = z
+  .any()
+  .optional()
+  .superRefine((value, ctx) => {
+    const result = validateProfilePhotoInput(value);
+    if (!result.ok) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: result.message,
+      });
+    }
+  });
 
 export const individualRegistrationSchema = z
   .object({
@@ -8,7 +22,7 @@ export const individualRegistrationSchema = z
     phoneNumber: z.string().min(1, "Phone number is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    profilePicture: z.any().optional(),
+    profilePicture: optionalProfilePhotoSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -68,7 +82,7 @@ export const organizationRegistrationSchema = z
       .min(1, "Primary contact phone number is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    profilePicture: z.any().optional(),
+    profilePicture: optionalProfilePhotoSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

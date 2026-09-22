@@ -9,6 +9,8 @@ import { authService } from "@/services/auth";
 import PasswordResetToast from "@/components/sections/PasswordResetToast";
 import type { AxiosError } from "axios";
 import { AuthShell, AuthSecureBadge } from "@/components/ui/AuthShell";
+import { clearClientSession } from "@/lib/session";
+import { useAuthStore } from "@/store/auth";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
@@ -99,6 +101,10 @@ function ResetPasswordContent() {
         token: token.trim(),
         newPassword: password,
       });
+
+      // Server invalidates all sessions on password reset
+      clearClientSession();
+      useAuthStore.getState().clearUser();
 
       setPasswordReset(true);
       setTimeout(() => {

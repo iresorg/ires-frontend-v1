@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { removeCookie } from "@/lib/api";
+import { clearClientSession } from "@/lib/session";
 import Sidebar from "./SideBar";
 import Navbar from "./Navbar";
 
@@ -23,8 +23,7 @@ export default function DashboardLayout({
 
       if (!authenticated) {
         clearUser();
-        removeCookie("auth_token");
-        removeCookie("refresh_token");
+        clearClientSession();
         router.push("/login");
         setIsChecking(false);
         return;
@@ -52,7 +51,7 @@ export default function DashboardLayout({
       setIsChecking(false);
     };
 
-    verifyAuth();
+    void verifyAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
