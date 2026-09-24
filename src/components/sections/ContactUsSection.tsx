@@ -334,9 +334,12 @@ export default function ContactUsSection() {
                       className="w-4 sm:w-5 h-4 sm:h-5"
                     />
                   </div>
-                  <span className="text-white text-xs sm:text-sm lg:text-base">
-                    iresorg@gmail.com
-                  </span>
+                  <a
+                    href="mailto:support@iresorg.com"
+                    className="cursor-pointer text-xs text-white transition hover:opacity-80 sm:text-sm lg:text-base"
+                  >
+                    support@iresorg.com
+                  </a>
                 </div>
               </motion.div>
 
