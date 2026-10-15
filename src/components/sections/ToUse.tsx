@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
+import { PRIMARY_SUPPORT_PHONE, SUPPORT_PHONES } from "@/lib/supportContact";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,7 +38,7 @@ export default function ToUseServices() {
     },
     {
       title: "Call Hotline",
-      text: "Put a call through our hotline for all your cyber emergencies we’re available 24/7.",
+      text: `Put a call through our hotline for all your cyber emergencies. We're available 24/7 on ${SUPPORT_PHONES.map((phone) => phone.display).join(" or ")}.`,
       button: "Call Now",
     },
     {
@@ -144,7 +145,7 @@ export default function ToUseServices() {
                     }
 
                     if (step.button === "Call Now") {
-                      window.location.href = "tel:+1234567890";
+                      window.location.href = PRIMARY_SUPPORT_PHONE.href;
                       return;
                     }
                   }}

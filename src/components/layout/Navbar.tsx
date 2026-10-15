@@ -11,6 +11,7 @@ import {
 } from "@/services/profile";
 import UserAvatar from "@/components/ui/UserAvatar";
 import Link from "next/link";
+import { SUPPORT_PHONES } from "@/lib/supportContact";
 
 export default function Navbar() {
   const { user, clearUser } = useAuthStore();
@@ -111,7 +112,11 @@ export default function Navbar() {
   ];
 
   const supportItems = [
-    { name: "Call Now", icon: "/images/phone-call.png", href: "tel:+2348100000000" },
+    ...SUPPORT_PHONES.map((phone) => ({
+      name: phone.display,
+      icon: "/images/phone-call.png",
+      href: phone.href,
+    })),
     { name: "Email", icon: "/images/email.png", href: "mailto:support@iresorg.com" },
   ];
 

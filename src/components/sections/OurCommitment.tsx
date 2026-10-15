@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
+import { PRIMARY_SUPPORT_PHONE } from "@/lib/supportContact";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -154,7 +155,7 @@ export default function OurCommitment() {
 
         <div className="w-full flex justify-center lg:justify-end lg:absolute lg:top-16 lg:right-8 mb-12 lg:mb-0">
           <Button
-            href="tel:+1234567890"
+            href={PRIMARY_SUPPORT_PHONE.href}
             className="flex items-center gap-2 px-5 py-2 text-sm"
           >
             <div className="relative w-6 h-6 rounded-full flex items-center justify-center">

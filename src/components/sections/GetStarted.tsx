@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
+import { PRIMARY_SUPPORT_PHONE } from "@/lib/supportContact";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -150,7 +151,7 @@ export default function GetStartedSection() {
 
         <div className="mt-6 lg:mt-0 flex justify-center lg:justify-end lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-[-2rem]">
           <Button
-            href="tel:+1234567890"
+            href={PRIMARY_SUPPORT_PHONE.href}
             className="flex items-center gap-2 px-6 py-2 text-sm"
           >
             <div className="relative w-6 h-6 rounded-full flex items-center justify-center">

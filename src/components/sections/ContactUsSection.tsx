@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { newsletterService } from "@/services/newsletter";
 import type { AxiosError } from "axios";
+import { SUPPORT_PHONES } from "@/lib/supportContact";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -319,9 +320,17 @@ export default function ContactUsSection() {
                       className="w-4 sm:w-5 h-4 sm:h-5"
                     />
                   </div>
-                  <span className="text-white text-xs sm:text-sm lg:text-base">
-                    +234 810 000 0000
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    {SUPPORT_PHONES.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={phone.href}
+                        className="cursor-pointer text-xs text-white transition hover:opacity-80 sm:text-sm lg:text-base"
+                      >
+                        {phone.display}
+                      </a>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 sm:gap-4">

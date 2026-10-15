@@ -10,6 +10,7 @@ import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline
 import { motion } from "framer-motion";
 import { contactService } from "@/services/contact";
 import type { AxiosError } from "axios";
+import { SUPPORT_PHONES } from "@/lib/supportContact";
 
 const SUPPORT_EMAIL = "support@iresorg.com";
 
@@ -27,13 +28,13 @@ const contactInfo = [
     value: SUPPORT_EMAIL,
     href: `mailto:${SUPPORT_EMAIL}`,
   },
-  {
+  ...SUPPORT_PHONES.map((phone) => ({
     name: "Phone",
     description: "Call us directly",
     icon: PhoneIcon,
-    value: "+234 810 000 0000",
-    href: "tel:+2348100000000",
-  },
+    value: phone.display,
+    href: phone.href,
+  })),
   {
     name: "Office",
     description: "Visit our headquarters",
@@ -358,7 +359,7 @@ export default function ContactPage() {
               <dl className="mt-10 space-y-5">
                 {contactInfo.map((item) => (
                   <div
-                    key={item.name}
+                    key={item.href}
                     className="flex gap-4 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 transition hover:bg-white/[0.07]"
                   >
                     <dt className="flex-none">

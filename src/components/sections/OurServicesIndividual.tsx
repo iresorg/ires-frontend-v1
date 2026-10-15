@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Button from "@/components/ui/Button";
+import { PRIMARY_SUPPORT_PHONE } from "@/lib/supportContact";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -147,7 +148,7 @@ export default function OurServicesForIndividuals() {
 
         <div className="w-full flex justify-center lg:justify-end lg:absolute lg:bottom-0 lg:right-8 mt-12 lg:mt-0">
           <Button
-            href="tel:+1234567890"
+            href={PRIMARY_SUPPORT_PHONE.href}
             className="flex items-center gap-2 px-5 py-2 text-sm"
           >
             <div className="relative w-6 h-6 rounded-full flex items-center justify-center">
