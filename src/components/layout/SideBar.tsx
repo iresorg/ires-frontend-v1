@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
+import { SUPPORT_PHONES } from "@/lib/supportContact";
 
 function isRouteActive(pathname: string, href: string) {
   if (href === "/dashboard" || href === "/dashboard/organization") {
@@ -69,7 +70,11 @@ export default function Sidebar() {
   ];
 
   const supportItems = [
-    { name: "Call Now", icon: "/images/phone-call.png", href: "tel:+2348100000000" },
+    ...SUPPORT_PHONES.map((phone) => ({
+      name: phone.display,
+      icon: "/images/phone-call.png",
+      href: phone.href,
+    })),
     { name: "Email", icon: "/images/email.png", href: "mailto:support@iresorg.com" },
   ];
 

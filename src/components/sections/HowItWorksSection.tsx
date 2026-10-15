@@ -6,6 +6,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { useAuthNavigation } from "@/hooks/useAuthNavigation";
+import { PRIMARY_SUPPORT_PHONE, SUPPORT_PHONES } from "@/lib/supportContact";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -85,10 +86,9 @@ const serviceCards = [
   },
   {
     title: "Call Hotline",
-    description:
-      "Put a call through our hotline, for all your cyber emergencies, we're available 24/7",
+    description: `Put a call through our hotline, for all your cyber emergencies, we're available 24/7. Call ${SUPPORT_PHONES.map((phone) => phone.display).join(" or ")}.`,
     buttonText: "Call Now",
-    buttonHref: "tel:+1234567890",
+    buttonHref: PRIMARY_SUPPORT_PHONE.href,
     icon: "/images/call.png",
   },
   {

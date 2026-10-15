@@ -15,7 +15,7 @@ export default function IndividualHero() {
       }
       showGetProtected
       showWatchDemo
-      demoVideoSrc="/video/hero-video.mp4"
+      demoVideoSrc="/video/demo.mp4"
       statusLabel="Personal Cover Active"
     />
   );

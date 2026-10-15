@@ -6,6 +6,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { PRIMARY_SUPPORT_PHONE } from "@/lib/supportContact";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -376,7 +377,7 @@ export default function TestimonialsSection() {
 
           <motion.div className="flex justify-center" variants={itemVariants}>
             <Button
-              href="tel:+1234567890"
+              href={PRIMARY_SUPPORT_PHONE.href}
               className="flex items-center gap-3 px-8 py-4 text-lg rounded-xl"
             >
               <svg

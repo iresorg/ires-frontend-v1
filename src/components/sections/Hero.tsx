@@ -375,7 +375,7 @@ export default function Hero() {
               </button>
               <video
                 className="w-full rounded-xl"
-                src="/video/iRES_Cinematic_Demo (3).mp4"
+                src="/video/demo.mp4"
                 controls
                 autoPlay
                 playsInline

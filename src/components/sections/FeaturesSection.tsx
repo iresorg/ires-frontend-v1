@@ -6,6 +6,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { motion } from "framer-motion";
+import { PRIMARY_SUPPORT_PHONE } from "@/lib/supportContact";
 
 const features = [
   "Rapid emergency response, anytime, anywhere",
@@ -268,7 +269,7 @@ export default function FeaturesSection() {
         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       >
         <Button
-          href="tel:+1234567890"
+          href={PRIMARY_SUPPORT_PHONE.href}
           className="flex items-center gap-1 px-4 sm:px-6 py-1 sm:py-2"
         >
           <div className="relative w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">

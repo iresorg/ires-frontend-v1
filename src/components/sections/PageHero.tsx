@@ -69,7 +69,7 @@ export default function PageHero({
   showWatchDemo = true,
   showGetProtected = false,
   bgVideoSrc = "/video/hero-video.mp4",
-  demoVideoSrc = "/video/iRES_Cinematic_Demo (3).mp4",
+  demoVideoSrc = "/video/demo.mp4",
   statusLabel = "Systems Online",
 }: PageHeroProps) {
   const [loadingComplete, setLoadingComplete] = useState(() => isAppLoadComplete());

@@ -81,7 +81,7 @@ export default function WhyWeExistSection() {
               playsInline
             >
               <source
-                src="/video/iRES_Cinematic_Demo (3).mp4"
+                src="/video/demo.mp4"
                 type="video/mp4"
               />
               Your browser does not support the video tag.

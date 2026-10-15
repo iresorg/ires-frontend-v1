@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { SUPPORT_PHONES } from "@/lib/supportContact";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -234,9 +235,17 @@ export default function Footer() {
                     height={20}
                     className="w-5 h-5 mt-1"
                   />
-                  <span className="text-white/80 text-sm">
-                    +234 810 000 0000
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    {SUPPORT_PHONES.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={phone.href}
+                        className="cursor-pointer text-sm text-white/80 transition hover:text-white"
+                      >
+                        {phone.display}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>
