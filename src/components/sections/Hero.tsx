@@ -311,6 +311,15 @@ export default function Hero() {
                     Watch Demo
                   </Button>
                 </motion.div>
+                <motion.div
+                  variants={buttonVariants}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Button href="/report" variant="secondary">
+                    Report an incident
+                  </Button>
+                </motion.div>
               </motion.div>
 
               <motion.div

@@ -147,6 +147,7 @@ export default function Footer() {
                   { name: "Pricing", href: "/pricing" },
                   { name: "Organizations", href: "/organization" },
                   { name: "Individuals", href: "/individual" },
+                  { name: "Report incident", href: "/report" },
                   { name: "FAQs", href: "/faq" },
                 ].map((link) => (
                   <li key={link.name}>
