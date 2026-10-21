@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
@@ -53,6 +54,72 @@ function FilterPill({
     >
       {children}
     </button>
+  );
+}
+
+function PlansEmptyState({
+  accountType,
+  paymentType,
+  onSwitchPaymentType,
+}: {
+  accountType: AccountType;
+  paymentType: PaymentType;
+  onSwitchPaymentType: () => void;
+}) {
+  const audience =
+    accountType === "organization" ? "organizations" : "individuals";
+  const coverName =
+    paymentType === "one_time" ? "one-off plans" : "subscriptions";
+  const otherCoverName =
+    paymentType === "one_time" ? "subscriptions" : "one-off plans";
+  const selectionLabel =
+    accountType === "organization" ? "Organization" : "Individual";
+  const coverLabel = paymentType === "one_time" ? "One-off plan" : "Subscriptions";
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl px-6 py-12 text-center glass-panel brand-border sm:px-10 sm:py-16">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent-color) 28%, transparent), transparent 58%)",
+        }}
+      />
+      <div className="relative mx-auto flex max-w-lg flex-col items-center">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icons/shield.svg" alt="" width={32} height={32} />
+        </div>
+        <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-white/70 ring-1 ring-white/10">
+          <span>{selectionLabel}</span>
+          <span className="text-white/30">·</span>
+          <span>{coverLabel}</span>
+        </p>
+        <h3 className="text-lg font-semibold text-white sm:text-xl">
+          No {coverName} for {audience} yet
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">
+          This combination has no published plans. Browse {otherCoverName}, or
+          talk to the team and we&apos;ll match the right cover to you.
+        </p>
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={onSwitchPaymentType}
+            className="rounded-full px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
+            style={{ background: "var(--btn-bg)" }}
+          >
+            View {otherCoverName}
+          </button>
+          <Link
+            href="/contact"
+            className="rounded-full bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 ring-1 ring-white/10 transition hover:bg-white/10 hover:text-white"
+          >
+            Talk to us
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -223,11 +290,15 @@ export default function PublicPlansSection() {
             </button>
           </div>
         ) : plans.length === 0 ? (
-          <div className="rounded-2xl p-8 text-center glass-panel brand-border">
-            <p className="text-white/80">
-              No plans available for this selection.
-            </p>
-          </div>
+          <PlansEmptyState
+            accountType={accountType}
+            paymentType={paymentType}
+            onSwitchPaymentType={() =>
+              setPaymentType(
+                paymentType === "one_time" ? "subscription" : "one_time",
+              )
+            }
+          />
         ) : (
           <div className="flex flex-wrap items-stretch justify-center gap-6">
             {plans.map((plan, index) => (

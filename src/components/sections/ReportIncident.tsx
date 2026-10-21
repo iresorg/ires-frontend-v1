@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
-import { contactService } from "@/services/contact";
+import { incidentReportService } from "@/services/incidentReport";
 import { newsletterService } from "@/services/newsletter";
 import { SUPPORT_PHONES } from "@/lib/supportContact";
 import type { AxiosError } from "axios";
@@ -75,6 +75,13 @@ type FormState = {
   confirmed: boolean;
   companyWebsite: string;
 };
+
+function internationalPhone(href: string) {
+  const digits = href.replace(/^tel:\+/, "");
+  if (!digits.startsWith("234") || digits.length < 13) return href.replace(/^tel:/, "");
+  const local = digits.slice(3);
+  return `+234 ${local.slice(0, 3)} ${local.slice(3, 6)} ${local.slice(6)}`;
+}
 
 const emptyForm: FormState = {
   severity: "",
@@ -203,7 +210,9 @@ export default function ReportIncident() {
       return;
     }
 
-    if (!form.severity || !form.incidentType || !form.ongoing) {
+    const severity = SEVERITY_OPTIONS.find((option) => option.value === form.severity);
+    const ongoing = ONGOING_OPTIONS.find((option) => option === form.ongoing);
+    if (!severity || !form.incidentType.trim() || !ongoing) {
       setError("Choose a severity, incident type, and whether it is ongoing.");
       return;
     }
@@ -214,33 +223,25 @@ export default function ReportIncident() {
 
     setIsSubmitting(true);
     try {
-      const message = [
-        `Severity: ${form.severity}`,
-        `Incident type: ${form.incidentType}`,
-        `Ongoing: ${form.ongoing}`,
-        `Organization: ${form.organization}`,
-        form.detectedAt ? `Detected: ${form.detectedAt}` : null,
-        form.affectedSystems ? `Affected systems: ${form.affectedSystems}` : null,
-        "",
-        form.description,
-      ]
-        .filter((line) => line !== null)
-        .join("\n");
-
-      await contactService.submit({
+      await incidentReportService.submit({
+        severity: severity.value,
+        incidentType: form.incidentType,
+        ongoing,
         name: form.name,
-        email: form.email,
+        organization: form.organization,
         phone: form.phone,
-        subject: `Incident report — ${form.severity} — ${form.incidentType}`,
-        message,
+        email: form.email,
+        detectedAt: form.detectedAt,
+        affectedSystems: form.affectedSystems,
+        description: form.description,
+        confirmed: true,
       });
       setSubmitted(true);
     } catch (err) {
-      const axiosError = err as AxiosError<{ message?: string }>;
-      setError(
-        axiosError.response?.data?.message ||
-          "Could not send the report. Call the hotline if this is urgent.",
-      );
+      const axiosError = err as AxiosError<{ message?: string | string[] }>;
+      const message = axiosError.response?.data?.message;
+      const text = Array.isArray(message) ? message.filter(Boolean).join(" ") : message;
+      setError(text || "Could not send the report. Call the hotline if this is urgent.");
     } finally {
       setIsSubmitting(false);
     }
@@ -287,52 +288,84 @@ export default function ReportIncident() {
             <span className="mx-2">/</span>
             Report an incident
           </p>
-          <p
-            className="mt-6 text-sm font-semibold uppercase tracking-[0.16em]"
-            style={{ color: "var(--accent-color)" }}
-          >
-            iRES portal
-          </p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl">
-            Report a{" "}
-            <span
-              className="gradient-shift bg-clip-text font-bold text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
-              }}
-            >
-              cyber incident
-            </span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#d1d1d1] sm:text-lg">
-            Tell us what is happening and an iRES incident handler will call
-            you. For critical incidents that are stopping operations, call the
-            hotline first.
-          </p>
-          <div className="mt-8 inline-flex flex-col gap-2 rounded-2xl bg-white/5 px-5 py-4 ring-1 ring-white/10">
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/50">
-              24/7 emergency hotline
-            </p>
-            {SUPPORT_PHONES.map((phone) => (
-              <a
-                key={phone.href}
-                href={phone.href}
-                className="cursor-pointer text-lg font-semibold text-white transition hover:opacity-80"
-              >
-                {phone.display}
-              </a>
-            ))}
+
+          <div className="mt-6 grid items-center gap-8 lg:mt-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,420px)] lg:gap-10 xl:gap-14">
+            <div>
+              <div className="flex items-center gap-3">
+                <span
+                  className="h-0.5 w-8 shrink-0 rounded-full"
+                  style={{ background: "var(--accent-secondary-color)" }}
+                />
+                <p
+                  className="text-xs font-semibold uppercase tracking-[0.18em] sm:text-sm"
+                  style={{ color: "var(--accent-secondary-color)" }}
+                >
+                  iRES portal
+                </p>
+              </div>
+              <h1 className="mt-4 max-w-3xl text-4xl font-light leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+                Report a{" "}
+                <span
+                  className="gradient-shift bg-clip-text font-bold text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, var(--accent-color) 0%, var(--accent-secondary-color) 50%, var(--accent-color) 100%)",
+                  }}
+                >
+                  cyber incident
+                </span>
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#d1d1d1] sm:text-lg">
+                Tell us what is happening and an iRES incident handler will call
+                you. For critical incidents that are stopping operations, call the
+                hotline first.
+              </p>
+            </div>
+
+            <div className="w-full rounded-[28px] bg-[#e54848] p-5 text-white shadow-[0_20px_40px_rgba(180,40,40,0.28)] sm:p-6">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#ff8f8a] sm:h-16 sm:w-16">
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden
+                    className="h-7 w-7 text-white sm:h-8 sm:w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90 sm:text-xs">
+                    24/7 emergency hotline
+                  </p>
+                  <div className="mt-1.5 flex flex-col gap-0.5">
+                    {SUPPORT_PHONES.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={phone.href}
+                        className="cursor-pointer text-lg font-bold leading-tight tracking-tight text-white transition hover:text-white/80 sm:text-xl lg:text-2xl"
+                      >
+                        {internationalPhone(phone.href)}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </Section>
       </section>
 
-      <Section className="relative z-10 pb-16 lg:pb-24">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.8fr)] lg:gap-10">
+      <Section className="relative z-10 pt-16 pb-16 lg:pt-24 lg:pb-24">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.7fr)] lg:gap-14">
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="relative rounded-3xl p-6 glass-panel brand-border sm:p-8"
+            className="relative"
           >
             <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
               <label htmlFor="companyWebsite">Leave this field empty</label>
@@ -371,114 +404,156 @@ export default function ReportIncident() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-5">
-                <div data-select>
-                  <FieldSelect
-                    id="severity"
-                    label="Severity"
-                    required
-                    placeholder="Select a severity"
-                    value={form.severity}
-                    open={openField === "severity"}
-                    onToggle={() =>
-                      setOpenField((current) => (current === "severity" ? null : "severity"))
-                    }
-                    onSelect={(value) => {
-                      setField("severity", value);
-                      setOpenField(null);
-                    }}
-                    options={SEVERITY_OPTIONS}
-                  />
-                </div>
-                <div data-select>
-                  <FieldSelect
-                    id="incidentType"
-                    label="Incident type"
-                    required
-                    placeholder="Select an option"
-                    value={form.incidentType}
-                    open={openField === "incidentType"}
-                    onToggle={() =>
-                      setOpenField((current) =>
-                        current === "incidentType" ? null : "incidentType",
-                      )
-                    }
-                    onSelect={(value) => {
-                      setField("incidentType", value);
-                      setOpenField(null);
-                    }}
-                    options={INCIDENT_TYPES.map((value) => ({ value }))}
-                  />
-                </div>
-                <div data-select>
-                  <FieldSelect
-                    id="ongoing"
-                    label="Is the incident ongoing?"
-                    required
-                    placeholder="Select an option"
-                    value={form.ongoing}
-                    open={openField === "ongoing"}
-                    onToggle={() =>
-                      setOpenField((current) => (current === "ongoing" ? null : "ongoing"))
-                    }
-                    onSelect={(value) => {
-                      setField("ongoing", value);
-                      setOpenField(null);
-                    }}
-                    options={ONGOING_OPTIONS.map((value) => ({ value }))}
-                  />
+              <div className="space-y-6">
+                <div>
+                  <p className="mb-3 text-sm font-medium text-white">
+                    Severity
+                    <span className="text-[#ef4444]"> *</span>
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {SEVERITY_OPTIONS.map((option) => {
+                      const selected = form.severity === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setField("severity", option.value)}
+                          className={`cursor-pointer rounded-xl px-3 py-3 text-left transition ${
+                            selected
+                              ? "bg-white/10 ring-2 ring-[var(--accent-color)]"
+                              : "bg-white/5 ring-1 ring-white/10 hover:bg-white/10"
+                          }`}
+                        >
+                          <span className="block text-sm font-semibold text-white">
+                            {option.value}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-white/50">
+                            {option.hint}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                {(
-                  [
-                    { id: "name", label: "Your name", type: "text", required: true },
-                    { id: "organization", label: "Organization", type: "text", required: true },
-                    { id: "phone", label: "Phone (we will call this number)", type: "tel", required: true },
-                    { id: "email", label: "Email (use a trusted account)", type: "email", required: true },
-                  ] as const
-                ).map((field) => (
-                  <div key={field.id}>
-                    <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-white">
-                      {field.label}
-                      <span className="text-[#ef4444]"> *</span>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div data-select>
+                    <FieldSelect
+                      id="incidentType"
+                      label="Incident type"
+                      required
+                      placeholder="Select an option"
+                      value={form.incidentType}
+                      open={openField === "incidentType"}
+                      onToggle={() =>
+                        setOpenField((current) =>
+                          current === "incidentType" ? null : "incidentType",
+                        )
+                      }
+                      onSelect={(value) => {
+                        setField("incidentType", value);
+                        setOpenField(null);
+                      }}
+                      options={INCIDENT_TYPES.map((value) => ({ value }))}
+                    />
+                  </div>
+                  <div data-select>
+                    <FieldSelect
+                      id="ongoing"
+                      label="Is the incident ongoing?"
+                      required
+                      placeholder="Select an option"
+                      value={form.ongoing}
+                      open={openField === "ongoing"}
+                      onToggle={() =>
+                        setOpenField((current) => (current === "ongoing" ? null : "ongoing"))
+                      }
+                      onSelect={(value) => {
+                        setField("ongoing", value);
+                        setOpenField(null);
+                      }}
+                      options={ONGOING_OPTIONS.map((value) => ({ value }))}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {(
+                    [
+                      { id: "name", label: "Your name", type: "text" },
+                      { id: "organization", label: "Organization", type: "text" },
+                    ] as const
+                  ).map((field) => (
+                    <div key={field.id}>
+                      <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-white">
+                        {field.label}
+                        <span className="text-[#ef4444]"> *</span>
+                      </label>
+                      <input
+                        id={field.id}
+                        name={field.id}
+                        type={field.type}
+                        required
+                        value={form[field.id]}
+                        onChange={(event) => setField(field.id, event.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {(
+                    [
+                      { id: "phone", label: "Phone (we will call this number)", type: "tel" },
+                      { id: "email", label: "Email (use a trusted account)", type: "email" },
+                    ] as const
+                  ).map((field) => (
+                    <div key={field.id}>
+                      <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-white">
+                        {field.label}
+                        <span className="text-[#ef4444]"> *</span>
+                      </label>
+                      <input
+                        id={field.id}
+                        name={field.id}
+                        type={field.type}
+                        required
+                        value={form[field.id]}
+                        onChange={(event) => setField(field.id, event.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="detectedAt" className="mb-2 block text-sm font-medium text-white">
+                      When was it detected?{" "}
+                      <span className="font-normal text-white/40">(optional)</span>
                     </label>
                     <input
-                      id={field.id}
-                      name={field.id}
-                      type={field.type}
-                      required={field.required}
-                      value={form[field.id]}
-                      onChange={(event) => setField(field.id, event.target.value)}
+                      id="detectedAt"
+                      type="datetime-local"
+                      value={form.detectedAt}
+                      onChange={(event) => setField("detectedAt", event.target.value)}
+                      className={`${inputClass} [color-scheme:dark]`}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="affectedSystems" className="mb-2 block text-sm font-medium text-white">
+                      Affected systems{" "}
+                      <span className="font-normal text-white/40">(optional)</span>
+                    </label>
+                    <input
+                      id="affectedSystems"
+                      placeholder="For example: email, file server, website"
+                      value={form.affectedSystems}
+                      onChange={(event) => setField("affectedSystems", event.target.value)}
                       className={inputClass}
                     />
                   </div>
-                ))}
-
-                <div>
-                  <label htmlFor="detectedAt" className="mb-2 block text-sm font-medium text-white">
-                    When was it detected?{" "}
-                    <span className="font-normal text-white/40">(optional)</span>
-                  </label>
-                  <input
-                    id="detectedAt"
-                    type="datetime-local"
-                    value={form.detectedAt}
-                    onChange={(event) => setField("detectedAt", event.target.value)}
-                    className={`${inputClass} [color-scheme:dark]`}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="affectedSystems" className="mb-2 block text-sm font-medium text-white">
-                    Affected systems{" "}
-                    <span className="font-normal text-white/40">(optional)</span>
-                  </label>
-                  <input
-                    id="affectedSystems"
-                    value={form.affectedSystems}
-                    onChange={(event) => setField("affectedSystems", event.target.value)}
-                    className={inputClass}
-                  />
                 </div>
 
                 <div>
@@ -490,6 +565,7 @@ export default function ReportIncident() {
                     id="description"
                     required
                     rows={5}
+                    placeholder="Describe what you observed, any messages or ransom notes, and actions already taken."
                     value={form.description}
                     onChange={(event) => setField("description", event.target.value)}
                     className={inputClass}
@@ -514,14 +590,14 @@ export default function ReportIncident() {
                   </p>
                 ) : null}
 
-                <Button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-3">
+                <Button type="submit" disabled={isSubmitting} className="w-full rounded-full px-6 py-3 sm:w-auto">
                   {isSubmitting ? "Sending..." : "Submit incident report"}
                 </Button>
               </div>
             )}
           </form>
 
-          <aside className="rounded-3xl p-6 glass-panel brand-border sm:p-8">
+          <aside className="rounded-3xl bg-[#14132a] p-6 sm:p-8">
             <p className="text-sm font-semibold text-white">While you wait</p>
             <ol className="mt-6 space-y-5">
               {WAIT_STEPS.map((step, index) => (
@@ -542,76 +618,54 @@ export default function ReportIncident() {
           </aside>
         </div>
 
-        <div className="mt-8 rounded-3xl p-6 glass-panel brand-border sm:p-8">
-          <p
-            className="text-sm font-semibold"
-            style={{ color: "var(--accent-color)" }}
-          >
-            Existing iRES clients
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            Sign in to track an investigation
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60">
-            Use the secure portal to track investigations, communicate with
-            responders, and view response updates.
-          </p>
-          <ul className="mt-5 space-y-2 text-sm text-white/75">
-            <li>Track investigations</li>
-            <li>Communicate with responders</li>
-            <li>View response updates</li>
-          </ul>
-          <Link
-            href="/login"
-            className="mt-6 inline-flex cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
-            style={{ background: "var(--btn-bg)" }}
-          >
-            Go to the client portal
-          </Link>
-        </div>
+        <div className="mt-20 lg:mt-28">
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] lg:gap-16">
+            <div>
+              <div className="flex items-center gap-3">
+                <span
+                  className="h-0.5 w-8 shrink-0 rounded-full"
+                  style={{ background: "var(--accent-secondary-color)" }}
+                />
+                <p
+                  className="text-xs font-semibold uppercase tracking-[0.18em]"
+                  style={{ color: "var(--accent-secondary-color)" }}
+                >
+                  Stay informed
+                </p>
+              </div>
+              <h2 className="mt-4 max-w-xl text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl">
+                Incident guidance in your inbox
+              </h2>
+            </div>
 
-        <div className="relative mt-8 overflow-hidden rounded-3xl p-6 glass-panel brand-border sm:p-10">
-          <div className="grid-lines grid-lines-hero pointer-events-none absolute inset-0 opacity-80" />
-          <div className="relative z-10 mx-auto max-w-xl text-center">
-            <p
-              className="text-sm font-semibold"
-              style={{ color: "var(--accent-color)" }}
-            >
-              Stay informed
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
-              Incident guidance in your inbox
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/60">
-              Practical notes on cyber incidents, response, and how to stay
-              protected. Monthly. No spam. Unsubscribe any time.
-            </p>
-            <form
-              onSubmit={handleSubscribe}
-              className="mt-6 flex flex-col gap-3 sm:flex-row"
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="Email address"
-                className={inputClass}
-                required
-              />
-              <Button
-                type="submit"
-                disabled={subscribeState === "loading"}
-                className="rounded-xl px-6 py-3"
-              >
-                {subscribeState === "loading" ? "Subscribing..." : "Subscribe"}
-              </Button>
+            <form onSubmit={handleSubscribe} className="w-full">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:bg-[#1a1a2e] sm:p-1.5 sm:pl-5">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Your email"
+                  required
+                  className="w-full rounded-full bg-[#1a1a2e] px-5 py-3 text-sm text-white outline-none placeholder:text-white/40 sm:flex-1 sm:bg-transparent sm:px-0 sm:py-2.5"
+                />
+                <Button
+                  type="submit"
+                  disabled={subscribeState === "loading"}
+                  className="w-full shrink-0 rounded-full px-6 py-3 sm:w-auto"
+                >
+                  {subscribeState === "loading" ? "Subscribing..." : "Subscribe"}
+                </Button>
+              </div>
+              <p className="mt-3 text-xs text-white/45 sm:pl-5">
+                Monthly. No spam. Unsubscribe any time.
+              </p>
+              {subscribeState === "done" ? (
+                <p className="mt-2 text-sm text-emerald-300 sm:pl-5">You are subscribed.</p>
+              ) : null}
+              {subscribeState === "error" ? (
+                <p className="mt-2 text-sm text-red-300 sm:pl-5">{subscribeError}</p>
+              ) : null}
             </form>
-            {subscribeState === "done" ? (
-              <p className="mt-3 text-sm text-emerald-300">You are subscribed.</p>
-            ) : null}
-            {subscribeState === "error" ? (
-              <p className="mt-3 text-sm text-red-300">{subscribeError}</p>
-            ) : null}
           </div>
         </div>
       </Section>
