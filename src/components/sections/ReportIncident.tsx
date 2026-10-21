@@ -639,19 +639,19 @@ export default function ReportIncident() {
             </div>
 
             <form onSubmit={handleSubscribe} className="w-full">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:bg-[#1a1a2e] sm:p-1.5 sm:pl-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:bg-[#2a2940] sm:p-1.5 sm:pl-5 sm:ring-1 sm:ring-white/25">
                 <input
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="Your email"
                   required
-                  className="w-full rounded-full bg-[#1a1a2e] px-5 py-3 text-sm text-white outline-none placeholder:text-white/40 sm:flex-1 sm:bg-transparent sm:px-0 sm:py-2.5"
+                  className="w-full rounded-full bg-[#2a2940] px-5 py-3.5 text-sm text-white outline-none ring-1 ring-white/30 placeholder:text-white/75 focus:ring-2 focus:ring-[var(--accent-color)] sm:flex-1 sm:bg-transparent sm:px-0 sm:py-2.5 sm:ring-0"
                 />
                 <Button
                   type="submit"
                   disabled={subscribeState === "loading"}
-                  className="w-full shrink-0 rounded-full px-6 py-3 sm:w-auto"
+                  className="w-full shrink-0 rounded-full px-6 py-3.5 sm:w-auto sm:py-3"
                 >
                   {subscribeState === "loading" ? "Subscribing..." : "Subscribe"}
                 </Button>
