@@ -183,6 +183,7 @@ export default function ReportIncident() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [email, setEmail] = useState("");
   const [subscribeState, setSubscribeState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [subscribeError, setSubscribeError] = useState("");
@@ -201,12 +202,26 @@ export default function ReportIncident() {
     setForm((current) => ({ ...current, [key]: value }));
   };
 
+  const canSubmit =
+    Boolean(form.severity) &&
+    Boolean(form.incidentType.trim()) &&
+    Boolean(form.ongoing) &&
+    Boolean(form.name.trim()) &&
+    Boolean(form.organization.trim()) &&
+    Boolean(form.phone.trim()) &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
+    Boolean(form.description.trim()) &&
+    form.confirmed;
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
 
+    if (isSubmitting || submitted || !canSubmit) return;
+
     if (form.companyWebsite.trim()) {
       setSubmitted(true);
+      setShowSuccess(true);
       return;
     }
 
@@ -237,6 +252,7 @@ export default function ReportIncident() {
         confirmed: true,
       });
       setSubmitted(true);
+      setShowSuccess(true);
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string | string[] }>;
       const message = axiosError.response?.data?.message;
@@ -379,32 +395,7 @@ export default function ReportIncident() {
               />
             </div>
 
-            {submitted ? (
-              <div className="py-8">
-                <p className="text-sm font-semibold uppercase tracking-wider text-emerald-300">
-                  Report received
-                </p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">
-                  An incident handler will call you
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
-                  If operations are stopped, call the hotline now. Keep affected
-                  systems isolated and do not delete evidence.
-                </p>
-                <div className="mt-6 flex flex-col gap-2">
-                  {SUPPORT_PHONES.map((phone) => (
-                    <a
-                      key={phone.href}
-                      href={phone.href}
-                      className="cursor-pointer text-base font-semibold text-white hover:opacity-80"
-                    >
-                      {phone.display}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-6">
+            <div className="space-y-6">
                 <div>
                   <p className="mb-3 text-sm font-medium text-white">
                     Severity
@@ -590,11 +581,20 @@ export default function ReportIncident() {
                   </p>
                 ) : null}
 
-                <Button type="submit" disabled={isSubmitting} className="w-full rounded-full px-6 py-3 sm:w-auto">
-                  {isSubmitting ? "Sending..." : "Submit incident report"}
+                <Button
+                  type="submit"
+                  disabled={!canSubmit || isSubmitting || submitted}
+                  className="w-full rounded-full px-6 py-3 disabled:opacity-40 sm:w-auto"
+                >
+                  {submitted ? "Report sent" : "Submit incident report"}
                 </Button>
+                {submitted ? (
+                  <p className="text-sm text-white/55">
+                    This report has been sent. Wait for our support team to reply
+                    before sending another.
+                  </p>
+                ) : null}
               </div>
-            )}
           </form>
 
           <aside className="rounded-3xl bg-[#14132a] p-6 sm:p-8">
@@ -669,6 +669,68 @@ export default function ReportIncident() {
           </div>
         </div>
       </Section>
+
+      {isSubmitting ? (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b0b16]/80 px-4 backdrop-blur-sm"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex w-full max-w-sm flex-col items-center rounded-3xl bg-[#14132a] px-8 py-10 text-center">
+            <span className="h-11 w-11 animate-spin rounded-full border-2 border-white/15 border-t-white" />
+            <p className="mt-5 text-lg font-semibold text-white">Sending your report</p>
+            <p className="mt-2 text-sm leading-relaxed text-white/55">
+              Please wait. Keep this page open.
+            </p>
+          </div>
+        </div>
+      ) : null}
+
+      {showSuccess ? (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b0b16]/80 px-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-success-title"
+        >
+          <div className="w-full max-w-md rounded-3xl bg-[#14132a] p-6 text-center sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
+              Report received
+            </p>
+            <h2 id="report-success-title" className="mt-3 text-2xl font-semibold text-white">
+              An incident handler will call you
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              You only need to send this report once. Wait for our support team
+              to reply. Sending the same incident again will not speed up the
+              response.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/50">
+              If operations are stopped, call the hotline now. Keep affected
+              systems isolated and do not delete evidence.
+            </p>
+            <div className="mt-5 flex flex-col gap-1">
+              {SUPPORT_PHONES.map((phone) => (
+                <a
+                  key={phone.href}
+                  href={phone.href}
+                  className="cursor-pointer text-base font-semibold text-white hover:opacity-80"
+                >
+                  {phone.display}
+                </a>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowSuccess(false)}
+              className="mt-6 cursor-pointer rounded-full px-6 py-2.5 text-sm font-medium text-white"
+              style={{ background: "var(--btn-bg)" }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
