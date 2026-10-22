@@ -80,6 +80,7 @@ export default function Header() {
     { label: "Individual", href: "/individual" },
     { label: "Pricing", href: "/pricing" },
     { label: "Services", href: "/services" },
+    { label: "Report incident", href: "/report" },
     { label: "Contact Us", href: "/contact" },
   ];
 

@@ -388,6 +388,21 @@ export default function ContactPage() {
               </dl>
 
               <div className="mt-8 rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
+                <p className="text-sm font-semibold text-white">Report an incident</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/55">
+                  An active cyber incident needs a handler, not a general
+                  enquiry. Tell us what is happening and we will call you.
+                </p>
+                <Link
+                  href="/report"
+                  className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white ring-1 ring-white/15 transition hover:bg-white/5"
+                >
+                  <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
+                  Report an incident
+                </Link>
+              </div>
+
+              <div className="mt-4 rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
                 <p className="text-sm font-semibold text-white">Need help?</p>
                 <p className="mt-1.5 text-sm leading-relaxed text-white/55">
                   Browse answers about plans, response times, coverage, and
