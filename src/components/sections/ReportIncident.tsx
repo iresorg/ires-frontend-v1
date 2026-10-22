@@ -184,6 +184,7 @@ export default function ReportIncident() {
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [formKey, setFormKey] = useState(0);
   const [email, setEmail] = useState("");
   const [subscribeState, setSubscribeState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [subscribeError, setSubscribeError] = useState("");
@@ -245,7 +246,10 @@ export default function ReportIncident() {
         description: form.description,
         confirmed: true,
       });
-      setSubmitted(true);
+      setForm(emptyForm);
+      setOpenField(null);
+      setSubmitted(false);
+      setFormKey((key) => key + 1);
       setShowSuccess(true);
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string | string[] }>;
@@ -373,9 +377,11 @@ export default function ReportIncident() {
       <Section className="relative z-10 pt-16 pb-16 lg:pt-24 lg:pb-24">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.7fr)] lg:gap-14">
           <form
+            key={formKey}
             ref={formRef}
             onSubmit={handleSubmit}
             className="relative"
+            autoComplete="off"
           >
             <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
               <label htmlFor="companyWebsite">Leave this field empty</label>
