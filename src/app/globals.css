@@ -237,6 +237,19 @@ input[type="password"] {
   justify-content: center;
 }
 
+/* Hero grid used on the incident report page */
+.grid-lines {
+  background-image:
+    linear-gradient(90deg, #ffffff0d 1px, transparent 1px),
+    linear-gradient(#ffffff0d 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.grid-lines-hero {
+  -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000, transparent 70%);
+  mask-image: radial-gradient(ellipse at 70% 30%, #000, transparent 70%);
+}
+
 /* Security UI — ambient grid & motion */
 .security-grid {
   background-image:

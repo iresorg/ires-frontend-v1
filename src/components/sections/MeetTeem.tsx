@@ -35,15 +35,10 @@ const teamMembers = [
   {
     name: "Dr Usman Bakare",
     role: "Founder / CEO",
-    image: "/images/Mr Usman.png",
+    image: "/images/usman.jpg",
     linkedin: "https://www.linkedin.com/in/dr-usman-bakare-626a1136",
   },
-  {
-    name: "Simisola Olubodun",
-    role: "Co-Founder / CTO",
-    image: "/images/simisola.PNG",
-    linkedin: "https://www.linkedin.com/in/ceemin/",
-  },
+
 ];
 
 export default function MeetOurTeamSection() {

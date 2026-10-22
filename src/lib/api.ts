@@ -10,6 +10,7 @@ const PUBLIC_AUTH_PATHS = [
   "/accounts/auth/verify-email",
   "/accounts/auth/resend-otp",
   "/contact",
+  "/incident-reports",
   "/newsletter/subscribe",
 ];
 
