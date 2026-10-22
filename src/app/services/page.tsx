@@ -5,9 +5,16 @@ import Service from '@/components/sections/Service';
 import ToUse from '@/components/sections/ToUse';
 import ContactUsSection from "@/components/sections/ContactUsSection";
 export const metadata: Metadata = {
-  title: 'Our Services - Cybersecurity Emergency Response Services',
-  description: 'Comprehensive cybersecurity services including incident response, threat detection, data breach response, malware removal, and 24/7 security monitoring.',
-  keywords: ['cybersecurity services', 'incident response services', 'threat detection', 'data breach response', 'malware removal', 'security monitoring'],
+  title: 'Our Services - SOC, Incident Response, Forensics and CISO-as-a-Service',
+  description:
+    'iRES services you can take on their own or together: SOC monitoring, 24/7 cyber incident response, digital forensics, and CISO-as-a-Service.',
+  keywords: [
+    'iRES SOC',
+    'cyber incident response',
+    'digital forensics',
+    'CISO as a service',
+    'cybersecurity services',
+  ],
   openGraph: {
     title: 'Cybersecurity Services - iRES Emergency Response',
     description: 'Comprehensive cybersecurity services including 24/7 monitoring, incident response, and threat mitigation.',

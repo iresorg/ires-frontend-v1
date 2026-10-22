@@ -8,8 +8,8 @@ export default function ServiceHero() {
       title="Our Services"
       subtitle={
         <p>
-          Explore our cybersecurity incident response services — built for
-          speed, trust, and human-led protection when every second counts.
+          SOC monitoring, 24/7 incident response, digital forensics, and
+          CISO-as-a-Service. Take one service, or coordinate them together.
         </p>
       }
       primaryLabel="View Plans"
