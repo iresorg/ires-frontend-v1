@@ -219,12 +219,6 @@ export default function ReportIncident() {
 
     if (isSubmitting || submitted || !canSubmit) return;
 
-    if (form.companyWebsite.trim()) {
-      setSubmitted(true);
-      setShowSuccess(true);
-      return;
-    }
-
     const severity = SEVERITY_OPTIONS.find((option) => option.value === form.severity);
     const ongoing = ONGOING_OPTIONS.find((option) => option === form.ongoing);
     if (!severity || !form.incidentType.trim() || !ongoing) {
