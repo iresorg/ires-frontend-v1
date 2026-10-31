@@ -31,14 +31,24 @@ const expertise = [
   "Nigerian business and regulatory environment",
 ];
 
-const teamMembers = [
+const teamMembers: {
+  name: string;
+  image: string;
+  role?: string;
+  linkedin?: string;
+}[] = [
   {
     name: "Dr Usman Bakare",
     role: "Founder / CEO",
     image: "/images/usman.jpg",
     linkedin: "https://www.linkedin.com/in/dr-usman-bakare-626a1136",
   },
-
+  {
+    name: "Abdulmalik Lawal",
+    role: "Cybersecurity Engineer",
+    image: "/images/malik.jpeg",
+    linkedin: "https://www.linkedin.com/in/abdulmaliklawal225",
+  },
 ];
 
 export default function MeetOurTeamSection() {
@@ -98,7 +108,7 @@ export default function MeetOurTeamSection() {
           </div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-items-center"
+            className="flex flex-wrap justify-center gap-8"
             variants={containerVariants}
           >
             {teamMembers.map((member) => (
@@ -106,7 +116,7 @@ export default function MeetOurTeamSection() {
                 key={member.name}
                 variants={cardVariants}
                 whileHover={{ y: -6, transition: { duration: 0.28 } }}
-                className="relative w-full max-w-70"
+                className="relative w-full max-w-[320px]"
               >
                 <div
                   className="rounded-[22px] overflow-hidden brand-border"
@@ -135,7 +145,9 @@ export default function MeetOurTeamSection() {
                   >
                     {member.name}
                   </h3>
-                  <p className="text-white/80 text-sm mb-3">{member.role}</p>
+                  {member.role ? (
+                    <p className="text-white/80 text-sm mb-3">{member.role}</p>
+                  ) : null}
                   {member.linkedin && (
                     <Link
                       href={member.linkedin}
