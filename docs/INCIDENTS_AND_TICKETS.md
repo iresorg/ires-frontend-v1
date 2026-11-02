@@ -155,6 +155,53 @@ Same body and same `201` as the public form. Same account lookup.
 
 ---
 
+## Customer dashboard — Overview
+
+Auth: account token.
+
+`GET /api/v1/accounts/overview`
+
+`200`
+
+```json
+{
+  "message": "Overview fetched",
+  "incidents": { "total": 4, "open": 2, "closed": 2 },
+  "tickets": {
+    "total": 3,
+    "open": 2,
+    "resolved": 1,
+    "closed": 0,
+    "byStatus": {
+      "CREATED": 0,
+      "PENDING": 0,
+      "ANALYSING": 1,
+      "ASSIGNED": 0,
+      "REASSIGNED": 0,
+      "IN_PROGRESS": 1,
+      "RESOLVED": 1,
+      "CLOSED": 0,
+      "ESCALATED": 0
+    }
+  },
+  "coverage": {
+    "eligible": true,
+    "source": "subscription",
+    "planName": "Individual Monthly",
+    "maxIncidents": 5,
+    "usedIncidents": 2,
+    "remainingIncidents": 3,
+    "paygCreditsAvailable": 0
+  }
+}
+```
+
+`tickets.open` is every ticket that is not `RESOLVED` or `CLOSED`.
+
+`coverage.source` is `"subscription"`, `"payg"`, or `null`.
+
+`remainingIncidents` is `null` when there is no active subscription, and also `null` when the plan is unlimited (`maxIncidents` is `null`). `usedIncidents` is `0` when there is no active subscription.
+
 ## Customer dashboard — Incidents tab
 
 Auth: account token.
