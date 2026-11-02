@@ -65,6 +65,7 @@ export interface LoginData {
 
 export interface LoginResponse {
   token: string;
+  mustChangePassword?: boolean;
 }
 
 export interface ForgotPasswordData {
@@ -201,7 +202,11 @@ export const authService = {
       // Fetch user profile after login
       try {
         const user = await profileService.getCurrentUser();
-        useAuthStore.getState().setUser(user);
+        useAuthStore.getState().setUser({
+          ...user,
+          mustChangePassword:
+            response.data.mustChangePassword ?? user.mustChangePassword,
+        });
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       }

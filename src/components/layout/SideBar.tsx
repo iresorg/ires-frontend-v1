@@ -30,6 +30,11 @@ export default function Sidebar() {
       href: "/dashboard/transaction-history",
     },
     {
+      name: "Incidents",
+      icon: "/images/ticket.png",
+      href: "/dashboard/incidents",
+    },
+    {
       name: "Ticket Incident History",
       icon: "/images/ticket.png",
       href: "/dashboard/ticket-incident-history",
@@ -56,6 +61,11 @@ export default function Sidebar() {
       name: "Transaction History",
       icon: "/images/transaction.png",
       href: "/dashboard/organization/transaction-history",
+    },
+    {
+      name: "Incidents",
+      icon: "/images/ticket.png",
+      href: "/dashboard/organization/incidents",
     },
     {
       name: "Ticket Incident History",

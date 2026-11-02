@@ -31,6 +31,12 @@ export default function DashboardLayout({
 
       const currentUser = useAuthStore.getState().user;
 
+      if (currentUser?.mustChangePassword) {
+        router.push("/change-password");
+        setIsChecking(false);
+        return;
+      }
+
       if (currentUser) {
         const currentPath = window.location.pathname;
         if (currentUser.role === "organization") {
