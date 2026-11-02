@@ -5,17 +5,26 @@ import { createPortal } from "react-dom";
 import { useAuthStore } from "@/store/auth";
 import { getDisplayName } from "@/services/profile";
 import {
-  incidentReportService,
-  type IncidentReportResponse,
-  type IncidentOngoing,
-  type IncidentSeverity,
-} from "@/services/incidentReport";
+  incidentsService,
+  type CreateAccountIncidentResponse,
+} from "@/services/incidents";
+import type { IncidentOngoing, IncidentSeverity } from "@/services/incidentReport";
 
 const SEVERITIES: IncidentSeverity[] = ["Critical", "High", "Medium", "Low"];
 const ONGOING: IncidentOngoing[] = ["Yes", "No", "Not sure"];
 
 const fieldClass =
   "mt-1.5 w-full rounded-xl bg-[#1c1b2b] px-4 py-2.5 text-sm text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-[var(--accent-color)]/40";
+const fieldErrorClass =
+  "mt-1.5 w-full rounded-xl bg-[#1c1b2b] px-4 py-2.5 text-sm text-white outline-none ring-1 ring-red-400/60 focus:ring-2 focus:ring-red-400/40";
+
+type FieldErrors = Partial<
+  Record<"severity" | "incidentType" | "ongoing" | "name" | "phone" | "description" | "confirmed", string>
+>;
+
+function RequiredMark() {
+  return <span className="text-[#ef4444]"> *</span>;
+}
 
 function apiMessage(error: unknown) {
   const message = (error as { response?: { data?: { message?: string | string[] } } })
@@ -64,7 +73,8 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
   const [confirmed, setConfirmed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<IncidentReportResponse | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [result, setResult] = useState<CreateAccountIncidentResponse | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -90,8 +100,18 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
     setPhone(defaults.phone);
   }, [defaults]);
 
+  const clearFieldError = (field: keyof FieldErrors) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
   const openModal = () => {
     setError("");
+    setFieldErrors({});
     setResult(null);
     setOpen(true);
   };
@@ -101,23 +121,50 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
     setOpen(false);
   };
 
+  const validate = (): FieldErrors => {
+    const next: FieldErrors = {};
+    if (!severity) next.severity = "Select a severity.";
+    if (!incidentType.trim()) next.incidentType = "Incident type is required.";
+    else if (incidentType.trim().length > 200) {
+      next.incidentType = "Incident type must be 200 characters or fewer.";
+    }
+    if (!ongoing) next.ongoing = "Select whether the incident is ongoing.";
+    if (!name.trim()) next.name = "Name is required.";
+    else if (name.trim().length > 120) next.name = "Name must be 120 characters or fewer.";
+    if (!phone.trim()) next.phone = "Phone is required.";
+    else if (phone.trim().length > 40) next.phone = "Phone must be 40 characters or fewer.";
+    if (!description.trim()) next.description = "Describe what happened.";
+    else if (description.trim().length > 8000) {
+      next.description = "Description must be 8000 characters or fewer.";
+    }
+    if (!confirmed) next.confirmed = "Confirm the information is accurate before submitting.";
+    return next;
+  };
+
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!severity || !ongoing || !defaults.email || saving) return;
-    setSaving(true);
+    if (saving) return;
+    const nextErrors = validate();
+    setFieldErrors(nextErrors);
     setError("");
+    if (Object.keys(nextErrors).length > 0) {
+      setError("Fix the highlighted fields before submitting.");
+      return;
+    }
+    if (!severity || !ongoing) return;
+
+    setSaving(true);
     try {
-      const response = await incidentReportService.submit({
+      const response = await incidentsService.create({
         severity,
-        incidentType,
+        incidentType: incidentType.trim(),
         ongoing,
-        name,
+        name: name.trim(),
         organization,
-        phone,
-        email: defaults.email,
+        phone: phone.trim(),
         detectedAt,
         affectedSystems,
-        description,
+        description: description.trim(),
         confirmed: true,
       });
       setResult(response);
@@ -128,6 +175,7 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
       setAffectedSystems("");
       setDescription("");
       setConfirmed(false);
+      setFieldErrors({});
       onCreated();
     } catch (err) {
       setError(apiMessage(err));
@@ -135,6 +183,9 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
       setSaving(false);
     }
   };
+
+  const reference =
+    result?.incidentReference || result?.incident?.reference || null;
 
   return (
     <div className="mb-6">
@@ -167,8 +218,9 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                       Create an incident
                     </h2>
                     <p className="mt-1 text-sm text-white/55">
-                      Filed on {defaults.email || "your account"}. A handler will call the
-                      number you enter.
+                      This is saved on your signed-in account
+                      {defaults.email ? ` (${defaults.email})` : ""}. No new account is
+                      created. A handler will call the number you enter.
                     </p>
                   </div>
                   <button
@@ -184,21 +236,20 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                   </button>
                 </div>
 
-                <form
-                  onSubmit={onSubmit}
-                  className="flex min-h-0 flex-1 flex-col"
-                >
+                <form onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col" noValidate>
                   <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-5 sm:px-6">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <label className="text-xs text-white/50">
                         Severity
+                        <RequiredMark />
                         <select
-                          required
                           value={severity}
-                          onChange={(event) =>
-                            setSeverity(event.target.value as IncidentSeverity)
-                          }
-                          className={fieldClass}
+                          onChange={(event) => {
+                            setSeverity(event.target.value as IncidentSeverity);
+                            clearFieldError("severity");
+                          }}
+                          aria-invalid={Boolean(fieldErrors.severity)}
+                          className={fieldErrors.severity ? fieldErrorClass : fieldClass}
                         >
                           <option value="">Choose</option>
                           {SEVERITIES.map((option) => (
@@ -207,16 +258,21 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                             </option>
                           ))}
                         </select>
+                        {fieldErrors.severity ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.severity}</p>
+                        ) : null}
                       </label>
                       <label className="text-xs text-white/50">
                         Ongoing
+                        <RequiredMark />
                         <select
-                          required
                           value={ongoing}
-                          onChange={(event) =>
-                            setOngoing(event.target.value as IncidentOngoing)
-                          }
-                          className={fieldClass}
+                          onChange={(event) => {
+                            setOngoing(event.target.value as IncidentOngoing);
+                            clearFieldError("ongoing");
+                          }}
+                          aria-invalid={Boolean(fieldErrors.ongoing)}
+                          className={fieldErrors.ongoing ? fieldErrorClass : fieldClass}
                         >
                           <option value="">Choose</option>
                           {ONGOING.map((option) => (
@@ -225,50 +281,75 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                             </option>
                           ))}
                         </select>
+                        {fieldErrors.ongoing ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.ongoing}</p>
+                        ) : null}
                       </label>
                       <label className="text-xs text-white/50 sm:col-span-2">
                         Incident type
+                        <RequiredMark />
                         <input
-                          required
                           maxLength={200}
                           value={incidentType}
-                          onChange={(event) => setIncidentType(event.target.value)}
+                          onChange={(event) => {
+                            setIncidentType(event.target.value);
+                            clearFieldError("incidentType");
+                          }}
                           placeholder="Ransomware, phishing, data breach..."
-                          className={fieldClass}
+                          aria-invalid={Boolean(fieldErrors.incidentType)}
+                          className={fieldErrors.incidentType ? fieldErrorClass : fieldClass}
                         />
+                        {fieldErrors.incidentType ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.incidentType}</p>
+                        ) : null}
                       </label>
                       <label className="text-xs text-white/50">
                         Name
+                        <RequiredMark />
                         <input
-                          required
                           maxLength={120}
                           value={name}
-                          onChange={(event) => setName(event.target.value)}
-                          className={fieldClass}
+                          onChange={(event) => {
+                            setName(event.target.value);
+                            clearFieldError("name");
+                          }}
+                          aria-invalid={Boolean(fieldErrors.name)}
+                          className={fieldErrors.name ? fieldErrorClass : fieldClass}
                         />
+                        {fieldErrors.name ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.name}</p>
+                        ) : null}
                       </label>
                       <label className="text-xs text-white/50">
-                        Organization
+                        Organization{" "}
+                        <span className="font-normal text-white/40">(optional)</span>
                         <input
-                          required
                           maxLength={200}
                           value={organization}
                           onChange={(event) => setOrganization(event.target.value)}
                           className={fieldClass}
                         />
                       </label>
-                      <label className="text-xs text-white/50">
+                      <label className="text-xs text-white/50 sm:col-span-2">
                         Phone
+                        <RequiredMark />
                         <input
-                          required
                           maxLength={40}
                           value={phone}
-                          onChange={(event) => setPhone(event.target.value)}
-                          className={fieldClass}
+                          onChange={(event) => {
+                            setPhone(event.target.value);
+                            clearFieldError("phone");
+                          }}
+                          aria-invalid={Boolean(fieldErrors.phone)}
+                          className={fieldErrors.phone ? fieldErrorClass : fieldClass}
                         />
+                        {fieldErrors.phone ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.phone}</p>
+                        ) : null}
                       </label>
                       <label className="text-xs text-white/50">
-                        Detected at
+                        Detected at{" "}
+                        <span className="font-normal text-white/40">(optional)</span>
                         <input
                           type="datetime-local"
                           value={detectedAt}
@@ -276,8 +357,9 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                           className={fieldClass}
                         />
                       </label>
-                      <label className="text-xs text-white/50 sm:col-span-2">
-                        Affected systems
+                      <label className="text-xs text-white/50">
+                        Affected systems{" "}
+                        <span className="font-normal text-white/40">(optional)</span>
                         <input
                           maxLength={2000}
                           value={affectedSystems}
@@ -287,32 +369,49 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                       </label>
                       <label className="text-xs text-white/50 sm:col-span-2">
                         What happened
+                        <RequiredMark />
                         <textarea
-                          required
                           maxLength={8000}
                           rows={4}
                           value={description}
-                          onChange={(event) => setDescription(event.target.value)}
-                          className={fieldClass}
+                          onChange={(event) => {
+                            setDescription(event.target.value);
+                            clearFieldError("description");
+                          }}
+                          aria-invalid={Boolean(fieldErrors.description)}
+                          className={fieldErrors.description ? fieldErrorClass : fieldClass}
                         />
+                        {fieldErrors.description ? (
+                          <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.description}</p>
+                        ) : null}
                       </label>
                     </div>
-                    <label className="flex items-start gap-3 text-sm text-white/75">
-                      <input
-                        type="checkbox"
-                        checked={confirmed}
-                        onChange={(event) => setConfirmed(event.target.checked)}
-                        className="mt-1"
-                        required
-                      />
-                      The information above is accurate.
-                    </label>
+                    <div>
+                      <label className="flex items-start gap-3 text-sm text-white/75">
+                        <input
+                          type="checkbox"
+                          checked={confirmed}
+                          onChange={(event) => {
+                            setConfirmed(event.target.checked);
+                            clearFieldError("confirmed");
+                          }}
+                          className="mt-1"
+                          aria-invalid={Boolean(fieldErrors.confirmed)}
+                        />
+                        <span>
+                          The information above is accurate.
+                          <RequiredMark />
+                        </span>
+                      </label>
+                      {fieldErrors.confirmed ? (
+                        <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.confirmed}</p>
+                      ) : null}
+                    </div>
                     {error ? <p className="text-sm text-red-300">{error}</p> : null}
                     {result ? (
                       <p className="text-sm text-emerald-300">
-                        Incident received
-                        {result.incidentReference ? ` · ${result.incidentReference}` : ""}.
-                        A handler will call you. You only need to send it once.
+                        Incident received{reference ? ` · ${reference}` : ""}. A handler
+                        will call you. You only need to send it once.
                       </p>
                     ) : null}
                   </div>
@@ -328,7 +427,7 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                     </button>
                     <button
                       type="submit"
-                      disabled={saving || !confirmed}
+                      disabled={saving}
                       className="cursor-pointer rounded-full px-5 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
                       style={{ background: "var(--btn-bg)" }}
                     >

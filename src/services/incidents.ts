@@ -1,5 +1,9 @@
 import api from "@/lib/api";
-import type { IncidentOngoing, IncidentSeverity } from "@/services/incidentReport";
+import type {
+  IncidentOngoing,
+  IncidentReportResponse,
+  IncidentSeverity,
+} from "@/services/incidentReport";
 
 export interface IncidentAgent {
   id: string;
@@ -47,11 +51,60 @@ export interface IncidentUpdate {
   description?: string;
 }
 
+/** Same fields as the public report, without email (signed-in account is used). */
+export interface CreateAccountIncidentRequest {
+  severity: IncidentSeverity;
+  incidentType: string;
+  ongoing: IncidentOngoing;
+  name: string;
+  organization?: string;
+  phone: string;
+  detectedAt?: string;
+  affectedSystems?: string;
+  description: string;
+  confirmed: true;
+}
+
+export interface CreateAccountIncidentResponse extends IncidentReportResponse {
+  accountCreated?: false;
+  incident?: Incident;
+}
+
 export function incidentCanBeEdited(incident: Incident) {
   return incident.status === "OPEN" && incident.ticketStatus !== "CLOSED";
 }
 
 export const incidentsService = {
+  /** POST /accounts/incidents — account token; no new account / temp password email */
+  create: async (
+    data: CreateAccountIncidentRequest,
+  ): Promise<CreateAccountIncidentResponse> => {
+    const payload: CreateAccountIncidentRequest = {
+      severity: data.severity,
+      incidentType: data.incidentType.trim(),
+      ongoing: data.ongoing,
+      name: data.name.trim(),
+      phone: data.phone.trim(),
+      description: data.description.trim(),
+      confirmed: true,
+    };
+
+    const organization = data.organization?.trim();
+    if (organization) payload.organization = organization;
+
+    const detectedAt = data.detectedAt?.trim();
+    if (detectedAt) payload.detectedAt = detectedAt;
+
+    const affectedSystems = data.affectedSystems?.trim();
+    if (affectedSystems) payload.affectedSystems = affectedSystems;
+
+    const response = await api.post<CreateAccountIncidentResponse>(
+      "/accounts/incidents",
+      payload,
+    );
+    return response.data;
+  },
+
   list: async (params: {
     page?: number;
     limit?: number;

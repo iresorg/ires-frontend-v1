@@ -122,7 +122,7 @@ Paginated lists:
 
 `POST /api/v1/incident-reports`
 
-No auth. Body is the public report (`severity`, `incidentType`, `ongoing`, `name`, `organization`, `phone`, `email`, optional `detectedAt` and `affectedSystems`, `description`, `confirmed: true`).
+No auth. Body is the public report (`severity`, `incidentType`, `ongoing`, `name`, `phone`, `email`, optional `organization`, `detectedAt` and `affectedSystems`, `description`, `confirmed: true`).
 
 `201`
 
@@ -158,6 +158,25 @@ Same body and same `201` as the public form. Same account lookup.
 ## Customer dashboard — Incidents tab
 
 Auth: account token.
+
+### Create from the dashboard
+
+`POST /api/v1/accounts/incidents`
+
+Same body as the public form. `email` can be left out; if it is sent, it is ignored and the signed-in account email is used.
+
+The incident is saved on that account. No new account is created, and the temporary-password email is not sent. Support still gets the incident report. The customer still gets the “we received your report” confirmation.
+
+`201`
+
+```json
+{
+  "message": "Incident report received",
+  "incidentReference": "IR-20261102-A1B2C3",
+  "accountCreated": false,
+  "incident": {}
+}
+```
 
 ### List
 

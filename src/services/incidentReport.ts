@@ -8,7 +8,7 @@ export interface IncidentReportRequest {
   incidentType: string;
   ongoing: IncidentOngoing;
   name: string;
-  organization: string;
+  organization?: string;
   phone: string;
   email: string;
   detectedAt?: string;
@@ -31,12 +31,14 @@ export const incidentReportService = {
       incidentType: data.incidentType.trim(),
       ongoing: data.ongoing,
       name: data.name.trim(),
-      organization: data.organization.trim(),
       phone: data.phone.trim(),
       email: data.email.trim(),
       description: data.description.trim(),
       confirmed: true,
     };
+
+    const organization = data.organization?.trim();
+    if (organization) payload.organization = organization;
 
     const detectedAt = data.detectedAt?.trim();
     if (detectedAt) payload.detectedAt = detectedAt;

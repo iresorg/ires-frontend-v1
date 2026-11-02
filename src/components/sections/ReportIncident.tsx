@@ -10,6 +10,7 @@ import {
 } from "@/services/incidentReport";
 import { newsletterService } from "@/services/newsletter";
 import { SUPPORT_PHONES } from "@/lib/supportContact";
+import { isValidEmail } from "@/lib/email";
 import type { AxiosError } from "axios";
 
 const SEVERITY_OPTIONS = [
@@ -64,6 +65,9 @@ const WAIT_STEPS = [
 const inputClass =
   "block w-full rounded-xl border-0 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none ring-1 ring-white/10 transition focus:ring-2 focus:ring-[var(--accent-color)]/50";
 
+const inputErrorClass =
+  "block w-full rounded-xl border-0 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none ring-1 ring-red-400/60 transition focus:ring-2 focus:ring-red-400/40";
+
 type FormState = {
   severity: string;
   incidentType: string;
@@ -78,6 +82,24 @@ type FormState = {
   confirmed: boolean;
   companyWebsite: string;
 };
+
+type FieldErrors = Partial<
+  Record<
+    | "severity"
+    | "incidentType"
+    | "ongoing"
+    | "name"
+    | "phone"
+    | "email"
+    | "description"
+    | "confirmed",
+    string
+  >
+>;
+
+function RequiredMark() {
+  return <span className="text-[#ef4444]"> *</span>;
+}
 
 function internationalPhone(href: string) {
   const digits = href.replace(/^tel:\+/, "");
@@ -111,6 +133,7 @@ function FieldSelect({
   open,
   onToggle,
   onSelect,
+  error,
 }: {
   id: string;
   label: string;
@@ -121,6 +144,7 @@ function FieldSelect({
   open: boolean;
   onToggle: () => void;
   onSelect: (value: string) => void;
+  error?: string;
 }) {
   const selected = options.find((option) => option.value === value);
 
@@ -128,15 +152,16 @@ function FieldSelect({
     <div className="relative">
       <label id={`${id}-label`} className="mb-2 block text-sm font-medium text-white">
         {label}
-        {required ? <span className="text-[#ef4444]"> *</span> : null}
+        {required ? <RequiredMark /> : null}
       </label>
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-labelledby={`${id}-label`}
+        aria-invalid={Boolean(error)}
         onClick={onToggle}
-        className={`${inputClass} flex cursor-pointer items-center justify-between gap-3 text-left`}
+        className={`${error ? inputErrorClass : inputClass} flex cursor-pointer items-center justify-between gap-3 text-left`}
       >
         <span className={selected ? "text-white" : "text-white/40"}>
           {selected
@@ -176,6 +201,11 @@ function FieldSelect({
           })}
         </ul>
       )}
+      {error ? (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs text-red-300">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -188,6 +218,7 @@ export default function ReportIncident() {
   const [submitted, setSubmitted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [reportResult, setReportResult] = useState<IncidentReportResponse | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formKey, setFormKey] = useState(0);
   const [email, setEmail] = useState("");
   const [subscribeState, setSubscribeState] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -203,35 +234,69 @@ export default function ReportIncident() {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
-    setForm((current) => ({ ...current, [key]: value }));
+  const clearFieldError = (field: keyof FieldErrors) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   };
 
-  const canSubmit =
-    Boolean(form.severity) &&
-    Boolean(form.incidentType.trim()) &&
-    Boolean(form.ongoing) &&
-    Boolean(form.name.trim()) &&
-    Boolean(form.organization.trim()) &&
-    Boolean(form.phone.trim()) &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
-    Boolean(form.description.trim()) &&
-    form.confirmed;
+  const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+    setForm((current) => ({ ...current, [key]: value }));
+    if (
+      key === "severity" ||
+      key === "incidentType" ||
+      key === "ongoing" ||
+      key === "name" ||
+      key === "phone" ||
+      key === "email" ||
+      key === "description" ||
+      key === "confirmed"
+    ) {
+      clearFieldError(key);
+    }
+  };
+
+  const validate = (state: FormState): FieldErrors => {
+    const next: FieldErrors = {};
+    if (!state.severity) next.severity = "Select a severity.";
+    if (!state.incidentType.trim()) next.incidentType = "Select an incident type.";
+    if (!state.ongoing) next.ongoing = "Select whether the incident is ongoing.";
+    if (!state.name.trim()) next.name = "Your name is required.";
+    else if (state.name.trim().length > 120) next.name = "Name must be 120 characters or fewer.";
+    if (!state.phone.trim()) next.phone = "Phone is required.";
+    else if (state.phone.trim().length > 40) next.phone = "Phone must be 40 characters or fewer.";
+    if (!state.email.trim()) next.email = "Email is required.";
+    else if (!isValidEmail(state.email)) next.email = "Enter a valid email address.";
+    if (!state.description.trim()) next.description = "Describe what happened.";
+    else if (state.description.trim().length > 8000) {
+      next.description = "Description must be 8000 characters or fewer.";
+    }
+    if (!state.confirmed) {
+      next.confirmed = "Confirm the information is accurate before submitting.";
+    }
+    return next;
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
 
-    if (isSubmitting || submitted || !canSubmit) return;
+    if (isSubmitting || submitted) return;
+
+    const nextErrors = validate(form);
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      setError("Fix the highlighted fields before submitting.");
+      return;
+    }
 
     const severity = SEVERITY_OPTIONS.find((option) => option.value === form.severity);
     const ongoing = ONGOING_OPTIONS.find((option) => option === form.ongoing);
-    if (!severity || !form.incidentType.trim() || !ongoing) {
-      setError("Choose a severity, incident type, and whether it is ongoing.");
-      return;
-    }
-    if (!form.confirmed) {
-      setError("Confirm the information is accurate before submitting.");
+    if (!severity || !ongoing) {
+      setError("Choose a severity and whether it is ongoing.");
       return;
     }
 
@@ -244,7 +309,7 @@ export default function ReportIncident() {
         name: form.name,
         organization: form.organization,
         phone: form.phone,
-        email: form.email,
+        email: form.email.trim().toLowerCase(),
         detectedAt: form.detectedAt,
         affectedSystems: form.affectedSystems,
         description: form.description,
@@ -252,6 +317,7 @@ export default function ReportIncident() {
       });
       setReportResult(result);
       setForm(emptyForm);
+      setFieldErrors({});
       setOpenField(null);
       setSubmitted(false);
       setFormKey((key) => key + 1);
@@ -404,7 +470,7 @@ export default function ReportIncident() {
                 <div>
                   <p className="mb-3 text-sm font-medium text-white">
                     Severity
-                    <span className="text-[#ef4444]"> *</span>
+                    <RequiredMark />
                   </p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {SEVERITY_OPTIONS.map((option) => {
@@ -417,7 +483,9 @@ export default function ReportIncident() {
                           className={`cursor-pointer rounded-xl px-3 py-3 text-left transition ${
                             selected
                               ? "bg-white/10 ring-2 ring-[var(--accent-color)]"
-                              : "bg-white/5 ring-1 ring-white/10 hover:bg-white/10"
+                              : fieldErrors.severity
+                                ? "bg-white/5 ring-1 ring-red-400/60 hover:bg-white/10"
+                                : "bg-white/5 ring-1 ring-white/10 hover:bg-white/10"
                           }`}
                         >
                           <span className="block text-sm font-semibold text-white">
@@ -430,6 +498,11 @@ export default function ReportIncident() {
                       );
                     })}
                   </div>
+                  {fieldErrors.severity ? (
+                    <p role="alert" className="mt-1.5 text-xs text-red-300">
+                      {fieldErrors.severity}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -440,6 +513,7 @@ export default function ReportIncident() {
                       required
                       placeholder="Select an option"
                       value={form.incidentType}
+                      error={fieldErrors.incidentType}
                       open={openField === "incidentType"}
                       onToggle={() =>
                         setOpenField((current) =>
@@ -460,6 +534,7 @@ export default function ReportIncident() {
                       required
                       placeholder="Select an option"
                       value={form.ongoing}
+                      error={fieldErrors.ongoing}
                       open={openField === "ongoing"}
                       onToggle={() =>
                         setOpenField((current) => (current === "ongoing" ? null : "ongoing"))
@@ -474,53 +549,107 @@ export default function ReportIncident() {
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
-                  {(
-                    [
-                      { id: "name", label: "Your name", type: "text" },
-                      { id: "organization", label: "Organization", type: "text" },
-                    ] as const
-                  ).map((field) => (
-                    <div key={field.id}>
-                      <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-white">
-                        {field.label}
-                        <span className="text-[#ef4444]"> *</span>
-                      </label>
-                      <input
-                        id={field.id}
-                        name={field.id}
-                        type={field.type}
-                        required
-                        value={form[field.id]}
-                        onChange={(event) => setField(field.id, event.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-                  ))}
+                  <div>
+                    <label htmlFor="name" className="mb-2 block text-sm font-medium text-white">
+                      Your name
+                      <RequiredMark />
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      maxLength={120}
+                      value={form.name}
+                      onChange={(event) => setField("name", event.target.value)}
+                      aria-invalid={Boolean(fieldErrors.name)}
+                      className={fieldErrors.name ? inputErrorClass : inputClass}
+                    />
+                    {fieldErrors.name ? (
+                      <p role="alert" className="mt-1.5 text-xs text-red-300">
+                        {fieldErrors.name}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="organization"
+                      className="mb-2 block text-sm font-medium text-white"
+                    >
+                      Organization{" "}
+                      <span className="font-normal text-white/45">(optional)</span>
+                    </label>
+                    <input
+                      id="organization"
+                      name="organization"
+                      type="text"
+                      maxLength={200}
+                      value={form.organization}
+                      onChange={(event) => setField("organization", event.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
-                  {(
-                    [
-                      { id: "phone", label: "Phone (we will call this number)", type: "tel" },
-                      { id: "email", label: "Email (use a trusted account)", type: "email" },
-                    ] as const
-                  ).map((field) => (
-                    <div key={field.id}>
-                      <label htmlFor={field.id} className="mb-2 block text-sm font-medium text-white">
-                        {field.label}
-                        <span className="text-[#ef4444]"> *</span>
-                      </label>
-                      <input
-                        id={field.id}
-                        name={field.id}
-                        type={field.type}
-                        required
-                        value={form[field.id]}
-                        onChange={(event) => setField(field.id, event.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
-                  ))}
+                  <div>
+                    <label htmlFor="phone" className="mb-2 block text-sm font-medium text-white">
+                      Phone (we will call this number)
+                      <RequiredMark />
+                    </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      maxLength={40}
+                      value={form.phone}
+                      onChange={(event) => setField("phone", event.target.value)}
+                      aria-invalid={Boolean(fieldErrors.phone)}
+                      className={fieldErrors.phone ? inputErrorClass : inputClass}
+                    />
+                    {fieldErrors.phone ? (
+                      <p role="alert" className="mt-1.5 text-xs text-red-300">
+                        {fieldErrors.phone}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="mb-2 block text-sm font-medium text-white">
+                      Email (use a trusted account)
+                      <RequiredMark />
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      inputMode="email"
+                      value={form.email}
+                      onChange={(event) => setField("email", event.target.value)}
+                      onBlur={() => {
+                        if (!form.email.trim()) {
+                          setFieldErrors((prev) => ({ ...prev, email: "Email is required." }));
+                        } else if (!isValidEmail(form.email)) {
+                          setFieldErrors((prev) => ({
+                            ...prev,
+                            email: "Enter a valid email address.",
+                          }));
+                        }
+                      }}
+                      aria-invalid={Boolean(fieldErrors.email)}
+                      aria-describedby="email-help email-error"
+                      className={fieldErrors.email ? inputErrorClass : inputClass}
+                    />
+                    <p id="email-help" className="mt-2 text-xs leading-relaxed text-white/55">
+                      This email is used to create or find your iRES account so you can
+                      follow the incident. If you are new, we will send a temporary
+                      password to it.
+                    </p>
+                    {fieldErrors.email ? (
+                      <p id="email-error" role="alert" className="mt-1.5 text-xs text-red-300">
+                        {fieldErrors.email}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -555,30 +684,47 @@ export default function ReportIncident() {
                 <div>
                   <label htmlFor="description" className="mb-2 block text-sm font-medium text-white">
                     What happened?
-                    <span className="text-[#ef4444]"> *</span>
+                    <RequiredMark />
                   </label>
                   <textarea
                     id="description"
-                    required
                     rows={5}
+                    maxLength={8000}
                     placeholder="Describe what you observed, any messages or ransom notes, and actions already taken."
                     value={form.description}
                     onChange={(event) => setField("description", event.target.value)}
-                    className={inputClass}
+                    aria-invalid={Boolean(fieldErrors.description)}
+                    className={fieldErrors.description ? inputErrorClass : inputClass}
                   />
+                  {fieldErrors.description ? (
+                    <p role="alert" className="mt-1.5 text-xs text-red-300">
+                      {fieldErrors.description}
+                    </p>
+                  ) : null}
                 </div>
 
-                <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/75">
-                  <input
-                    type="checkbox"
-                    checked={form.confirmed}
-                    onChange={(event) => setField("confirmed", event.target.checked)}
-                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-[var(--accent-color)]"
-                  />
-                  I confirm the information is accurate to the best of my
-                  knowledge and agree to iRES processing it to respond to this
-                  incident.
-                </label>
+                <div>
+                  <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/75">
+                    <input
+                      type="checkbox"
+                      checked={form.confirmed}
+                      onChange={(event) => setField("confirmed", event.target.checked)}
+                      aria-invalid={Boolean(fieldErrors.confirmed)}
+                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-[var(--accent-color)]"
+                    />
+                    <span>
+                      I confirm the information is accurate to the best of my
+                      knowledge and agree to iRES processing it to respond to this
+                      incident.
+                      <RequiredMark />
+                    </span>
+                  </label>
+                  {fieldErrors.confirmed ? (
+                    <p role="alert" className="mt-1.5 text-xs text-red-300">
+                      {fieldErrors.confirmed}
+                    </p>
+                  ) : null}
+                </div>
 
                 {error ? (
                   <p role="alert" className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-300 ring-1 ring-red-400/30">
@@ -588,10 +734,10 @@ export default function ReportIncident() {
 
                 <Button
                   type="submit"
-                  disabled={!canSubmit || isSubmitting || submitted}
+                  disabled={isSubmitting || submitted}
                   className="w-full rounded-full px-6 py-3 disabled:opacity-40 sm:w-auto"
                 >
-                  {submitted ? "Report sent" : "Submit incident report"}
+                  {submitted ? "Report sent" : isSubmitting ? "Sending..." : "Submit incident report"}
                 </Button>
                 {submitted ? (
                   <p className="text-sm text-white/55">
