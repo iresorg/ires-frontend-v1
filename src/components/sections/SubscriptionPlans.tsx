@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/auth";
 import { useSubscriptionStore } from "@/store/subscription";
@@ -104,6 +105,10 @@ export default function SubscriptionPlansPage() {
   const subscriptionExpired =
     !!subscription && new Date(subscription.currentPeriodEnd) < new Date();
   const hasAccess = entitlement?.hasAccess ?? false;
+  const incidentsPath =
+    user?.role === "organization"
+      ? "/dashboard/organization/incidents"
+      : "/dashboard/incidents";
 
   const getCallbackUrl = () =>
     process.env.NEXT_PUBLIC_PAYSTACK_CALLBACK_URL ||
@@ -272,6 +277,20 @@ export default function SubscriptionPlansPage() {
             )}
           </div>
         )}
+        {hasAccess ? (
+          <div className="mt-4 flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-white/75">
+              Your cover is active. You can create an incident whenever you need a response.
+            </p>
+            <Link
+              href={incidentsPath}
+              className="inline-flex cursor-pointer justify-center rounded-full px-5 py-2.5 text-sm font-medium text-white"
+              style={{ background: "var(--btn-bg)" }}
+            >
+              Create an incident
+            </Link>
+          </div>
+        ) : null}
       </div>
 
       {actionError && (

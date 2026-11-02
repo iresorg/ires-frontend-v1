@@ -204,14 +204,23 @@ export default function AccountSettings() {
 
     setPasswordSaving(true);
     try {
-      await profileService.changePassword({
+      const result = await profileService.changePassword({
         currentPassword: passwordForm.currentPassword,
         newPassword: passwordForm.newPassword,
       });
-      // Server invalidates all sessions on password change
-      clearUser();
-      clearClientSession();
-      router.push("/login");
+      if (!result.token) {
+        clearUser();
+        clearClientSession();
+        router.push("/login");
+        return;
+      }
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      await fetchUser({ silent: true });
+      setPasswordMessage("Password changed successfully");
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response
         ?.status;

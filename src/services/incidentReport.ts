@@ -19,6 +19,8 @@ export interface IncidentReportRequest {
 
 export interface IncidentReportResponse {
   message?: string;
+  incidentReference?: string;
+  accountCreated?: boolean;
 }
 
 export const incidentReportService = {

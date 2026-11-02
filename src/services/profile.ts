@@ -1,4 +1,5 @@
 import api from "@/lib/api";
+import { setAccessToken } from "@/lib/accessToken";
 
 export type CompanySize =
   | "1-10"
@@ -29,6 +30,7 @@ export interface UserProfile {
   emailVerifiedAt: string | null;
   lastLoginAt: string | null;
   createdAt: string;
+  mustChangePassword?: boolean;
   individualProfile?: {
     firstName: string;
     lastName: string;
@@ -195,11 +197,17 @@ export const profileService = {
 
   changePassword: async (
     data: ChangePasswordPayload,
-  ): Promise<{ message: string }> => {
-    const response = await api.post<{ message: string }>(
-      "/accounts/auth/change-password",
-      data,
-    );
+  ): Promise<{ message: string; mustChangePassword?: boolean; token?: string }> => {
+    const response = await api.post<{
+      message: string;
+      mustChangePassword?: boolean;
+      token?: string;
+    }>("/accounts/auth/change-password", data);
+
+    if (response.data.token) {
+      setAccessToken(response.data.token);
+    }
+
     return response.data;
   },
 

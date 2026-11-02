@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
-import { incidentReportService } from "@/services/incidentReport";
+import {
+  incidentReportService,
+  type IncidentReportResponse,
+} from "@/services/incidentReport";
 import { newsletterService } from "@/services/newsletter";
 import { SUPPORT_PHONES } from "@/lib/supportContact";
 import type { AxiosError } from "axios";
@@ -184,6 +187,7 @@ export default function ReportIncident() {
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [reportResult, setReportResult] = useState<IncidentReportResponse | null>(null);
   const [formKey, setFormKey] = useState(0);
   const [email, setEmail] = useState("");
   const [subscribeState, setSubscribeState] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -233,7 +237,7 @@ export default function ReportIncident() {
 
     setIsSubmitting(true);
     try {
-      await incidentReportService.submit({
+      const result = await incidentReportService.submit({
         severity: severity.value,
         incidentType: form.incidentType,
         ongoing,
@@ -246,6 +250,7 @@ export default function ReportIncident() {
         description: form.description,
         confirmed: true,
       });
+      setReportResult(result);
       setForm(emptyForm);
       setOpenField(null);
       setSubmitted(false);
@@ -700,11 +705,32 @@ export default function ReportIncident() {
             <h2 id="report-success-title" className="mt-3 text-2xl font-semibold text-white">
               An incident handler will call you
             </h2>
+            {reportResult?.incidentReference ? (
+              <p className="mt-3 text-sm font-semibold text-white">
+                Reference {reportResult.incidentReference}
+              </p>
+            ) : null}
             <p className="mt-3 text-sm leading-relaxed text-white/70">
-              You only need to send this report once. Wait for our support team
-              to reply. Sending the same incident again will not speed up the
-              response.
+              {reportResult?.accountCreated
+                ? "We created an account for this email. Open the message titled “Your iRES account is ready”, then sign in with the temporary password. You will be asked to choose a new one."
+                : reportResult?.accountCreated === false
+                  ? "This report was added to the account for this email. Sign in to follow it."
+                  : "You only need to send this report once. Wait for our support team to reply. Sending the same incident again will not speed up the response."}
             </p>
+            {reportResult?.accountCreated !== undefined ? (
+              <p className="mt-3 text-sm leading-relaxed text-white/55">
+                You only need to send this report once. Sending it again will not
+                speed up the response.
+              </p>
+            ) : null}
+            {reportResult?.accountCreated !== undefined ? (
+              <Link
+                href="/login"
+                className="mt-4 inline-flex cursor-pointer text-sm font-semibold text-[#9ec5ff]"
+              >
+                Sign in
+              </Link>
+            ) : null}
             <p className="mt-3 text-sm leading-relaxed text-white/50">
               If operations are stopped, call the hotline now. Keep affected
               systems isolated and do not delete evidence.

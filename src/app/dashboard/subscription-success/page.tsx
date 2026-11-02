@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useAuthStore } from "@/store/auth";
@@ -47,11 +48,16 @@ export default function SubscriptionSuccess() {
     }
   }, [fetchSubscriptionStatus]);
 
+  const plansRoute =
+    user?.role === "organization"
+      ? "/dashboard/organization/subscription-plans"
+      : "/dashboard/subscription-plans";
+  const incidentsRoute =
+    user?.role === "organization"
+      ? "/dashboard/organization/incidents"
+      : "/dashboard/incidents";
+
   const handleBackToPlans = () => {
-    const plansRoute =
-      user?.role === "organization"
-        ? "/dashboard/organization/subscription-plans"
-        : "/dashboard/subscription-plans";
     router.push(plansRoute);
   };
 
@@ -196,10 +202,24 @@ export default function SubscriptionSuccess() {
             )}
           </div>
 
+          {hasAccess ? (
+            <div className="space-y-3 text-center">
+              <p className="text-sm text-white/80">
+                You can start an incident now. It will be attached to this account.
+              </p>
+              <Link
+                href={incidentsRoute}
+                className="inline-flex w-full cursor-pointer items-center justify-center rounded-xl px-4 py-2.5 text-xs font-medium text-white sm:px-6 sm:py-3 sm:text-sm"
+                style={{ background: "var(--btn-bg)" }}
+              >
+                Create an incident
+              </Link>
+            </div>
+          ) : null}
+
           <button
             onClick={handleBackToPlans}
-            className="w-full cursor-pointer rounded-xl px-4 py-2.5 text-xs font-medium text-white transition-opacity hover:opacity-90 sm:px-6 sm:py-3 sm:text-sm"
-            style={{ background: "var(--btn-bg)" }}
+            className="w-full cursor-pointer rounded-xl px-4 py-2.5 text-xs font-medium text-white/90 ring-1 ring-white/15 transition hover:bg-white/5 sm:px-6 sm:py-3 sm:text-sm"
           >
             Back to subscription plans
           </button>

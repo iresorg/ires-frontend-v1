@@ -34,12 +34,17 @@ function LoginForm() {
     setShowError(false);
 
     try {
-      await authService.login({
+      const session = await authService.login({
         email: data.email,
         password: data.password,
       });
 
       const currentUser = useAuthStore.getState().user;
+      if (session.mustChangePassword || currentUser?.mustChangePassword) {
+        router.push("/change-password");
+        return;
+      }
+
       const redirect = searchParams.get("redirect");
 
       if (redirect && redirect.startsWith("/")) {
