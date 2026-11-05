@@ -72,7 +72,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
             width={16}
             height={16}
           />
-          Back to incidents
+          Back to ticket history
         </Link>
         <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-10 text-center">
           <p className="text-red-300">
@@ -99,7 +99,7 @@ export default function TicketDetailView({ listPath }: TicketDetailViewProps) {
               width={16}
               height={16}
             />
-            Back to incidents
+            Back to ticket history
           </Link>
           <h1 className="text-xl font-semibold text-white sm:text-2xl">
             {ticket.title}

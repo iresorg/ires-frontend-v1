@@ -143,7 +143,7 @@ export default function TicketIncidentHistory({
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            My incidents
+            Ticket Incident History
           </h1>
           <p className="mt-1 text-sm text-white/50">
             Track tickets opened for your account. Read-only — updates arrive by
@@ -172,7 +172,7 @@ export default function TicketIncidentHistory({
               height={40}
               className="mx-auto mb-3 opacity-70"
             />
-            <p className="text-gray-300">No incidents found.</p>
+            <p className="text-gray-300">No tickets found.</p>
             <p className="mt-1 text-sm text-white/50">
               When our team opens a ticket for you, it will appear here.
             </p>
