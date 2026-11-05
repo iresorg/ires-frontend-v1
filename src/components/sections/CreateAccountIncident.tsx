@@ -8,7 +8,11 @@ import {
   incidentsService,
   type CreateAccountIncidentResponse,
 } from "@/services/incidents";
-import type { IncidentOngoing, IncidentSeverity } from "@/services/incidentReport";
+import {
+  INCIDENT_TYPES,
+  type IncidentOngoing,
+  type IncidentSeverity,
+} from "@/services/incidentReport";
 
 const SEVERITIES: IncidentSeverity[] = ["Critical", "High", "Medium", "Low"];
 const ONGOING: IncidentOngoing[] = ["Yes", "No", "Not sure"];
@@ -124,10 +128,7 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
   const validate = (): FieldErrors => {
     const next: FieldErrors = {};
     if (!severity) next.severity = "Select a severity.";
-    if (!incidentType.trim()) next.incidentType = "Incident type is required.";
-    else if (incidentType.trim().length > 200) {
-      next.incidentType = "Incident type must be 200 characters or fewer.";
-    }
+    if (!incidentType.trim()) next.incidentType = "Select an incident type.";
     if (!ongoing) next.ongoing = "Select whether the incident is ongoing.";
     if (!name.trim()) next.name = "Name is required.";
     else if (name.trim().length > 120) next.name = "Name must be 120 characters or fewer.";
@@ -288,17 +289,22 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                       <label className="text-xs text-white/50 sm:col-span-2">
                         Incident type
                         <RequiredMark />
-                        <input
-                          maxLength={200}
+                        <select
                           value={incidentType}
                           onChange={(event) => {
                             setIncidentType(event.target.value);
                             clearFieldError("incidentType");
                           }}
-                          placeholder="Ransomware, phishing, data breach..."
                           aria-invalid={Boolean(fieldErrors.incidentType)}
                           className={fieldErrors.incidentType ? fieldErrorClass : fieldClass}
-                        />
+                        >
+                          <option value="">Select an option</option>
+                          {INCIDENT_TYPES.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
                         {fieldErrors.incidentType ? (
                           <p role="alert" className="mt-1 text-xs text-red-300">{fieldErrors.incidentType}</p>
                         ) : null}

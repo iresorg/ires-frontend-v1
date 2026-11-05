@@ -5,6 +5,7 @@ import Link from "next/link";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import {
+  INCIDENT_TYPES,
   incidentReportService,
   type IncidentReportResponse,
 } from "@/services/incidentReport";
@@ -18,19 +19,6 @@ const SEVERITY_OPTIONS = [
   { value: "High", hint: "Major impact" },
   { value: "Medium", hint: "Contained impact" },
   { value: "Low", hint: "Suspicious activity" },
-] as const;
-
-const INCIDENT_TYPES = [
-  "Ransomware",
-  "Phishing or business email compromise",
-  "Data breach or data leak",
-  "Malware infection",
-  "Account compromise",
-  "Denial of service",
-  "Insider threat",
-  "Fraud or financial loss",
-  "Website defacement",
-  "Other or not sure",
 ] as const;
 
 const ONGOING_OPTIONS = ["Yes", "No", "Not sure"] as const;
