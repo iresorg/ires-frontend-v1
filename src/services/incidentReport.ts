@@ -3,6 +3,21 @@ import api from "@/lib/api";
 export type IncidentSeverity = "Critical" | "High" | "Medium" | "Low";
 export type IncidentOngoing = "Yes" | "No" | "Not sure";
 
+export const INCIDENT_TYPES = [
+  "Ransomware",
+  "Phishing or business email compromise",
+  "Data breach or data leak",
+  "Malware infection",
+  "Account compromise",
+  "Denial of service",
+  "Insider threat",
+  "Fraud or financial loss",
+  "Website defacement",
+  "Other or not sure",
+] as const;
+
+export type IncidentTypeOption = (typeof INCIDENT_TYPES)[number];
+
 export interface IncidentReportRequest {
   severity: IncidentSeverity;
   incidentType: string;
