@@ -177,12 +177,17 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
       setDescription("");
       setConfirmed(false);
       setFieldErrors({});
+      setOpen(false);
       onCreated();
     } catch (err) {
       setError(apiMessage(err));
     } finally {
       setSaving(false);
     }
+  };
+
+  const closeSuccess = () => {
+    setResult(null);
   };
 
   const reference =
@@ -198,6 +203,51 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
       >
         Create incident
       </button>
+
+      {mounted && result
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[230] flex items-center justify-center bg-[#0b0b16]/80 px-4 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="create-incident-success-title"
+              onClick={closeSuccess}
+            >
+              <div
+                className="w-full max-w-md rounded-3xl bg-[#141327] p-6 text-center shadow-2xl ring-1 ring-white/10 sm:p-8"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                  Incident received
+                </p>
+                <h2
+                  id="create-incident-success-title"
+                  className="mt-3 text-2xl font-semibold text-white"
+                >
+                  An incident handler will call you
+                </h2>
+                {reference ? (
+                  <p className="mt-3 text-sm font-semibold text-white">
+                    Reference {reference}
+                  </p>
+                ) : null}
+                <p className="mt-3 text-sm leading-relaxed text-white/70">
+                  This was saved on your signed-in account. You only need to send it
+                  once — sending again will not speed up the response.
+                </p>
+                <button
+                  type="button"
+                  onClick={closeSuccess}
+                  className="mt-6 cursor-pointer rounded-full px-6 py-2.5 text-sm font-medium text-white"
+                  style={{ background: "var(--btn-bg)" }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
 
       {mounted && open
         ? createPortal(
@@ -414,12 +464,6 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                       ) : null}
                     </div>
                     {error ? <p className="text-sm text-red-300">{error}</p> : null}
-                    {result ? (
-                      <p className="text-sm text-emerald-300">
-                        Incident received{reference ? ` · ${reference}` : ""}. A handler
-                        will call you. You only need to send it once.
-                      </p>
-                    ) : null}
                   </div>
 
                   <div className="flex shrink-0 flex-wrap items-center justify-end gap-3 border-t border-white/10 px-5 py-4 sm:px-6">
@@ -429,7 +473,7 @@ export default function CreateAccountIncident({ onCreated }: { onCreated: () => 
                       disabled={saving}
                       className="cursor-pointer rounded-full px-5 py-2.5 text-sm font-medium text-white/80 ring-1 ring-white/15 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                      {result ? "Done" : "Cancel"}
+                      Cancel
                     </button>
                     <button
                       type="submit"
