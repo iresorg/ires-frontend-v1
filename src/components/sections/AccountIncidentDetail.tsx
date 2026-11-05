@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
@@ -9,6 +9,7 @@ import {
   type Incident,
 } from "@/services/incidents";
 import type { IncidentOngoing } from "@/services/incidentReport";
+import SuccessToast from "@/components/sections/SucessToast";
 
 const ONGOING: IncidentOngoing[] = ["Yes", "No", "Not sure"];
 
@@ -76,6 +77,7 @@ export default function AccountIncidentDetail({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState("");
   const [formError, setFormError] = useState("");
+  const toastTimerRef = useRef<number | null>(null);
   const [form, setForm] = useState({
     ongoing: "Not sure" as IncidentOngoing,
     phone: "",
@@ -87,7 +89,22 @@ export default function AccountIncidentDetail({
 
   useEffect(() => {
     setMounted(true);
+    return () => {
+      if (toastTimerRef.current != null) window.clearTimeout(toastTimerRef.current);
+    };
   }, []);
+
+  const showSavedToast = (message: string) => {
+    setSaved(message);
+    if (toastTimerRef.current != null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => setSaved(""), 5000);
+  };
+
+  const dismissSavedToast = () => {
+    if (toastTimerRef.current != null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = null;
+    setSaved("");
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -146,7 +163,7 @@ export default function AccountIncidentDetail({
       description: incident.description,
     });
     setFormError("");
-    setSaved("");
+    dismissSavedToast();
     setModalOpen(true);
   };
 
@@ -158,7 +175,7 @@ export default function AccountIncidentDetail({
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!incident || saving) return;
-    setSaved("");
+    dismissSavedToast();
     setFormError("");
     setSaving(true);
     try {
@@ -171,8 +188,8 @@ export default function AccountIncidentDetail({
       });
       setIncident(updated);
       setCanEdit(incidentCanBeEdited(updated));
-      setSaved("Incident updated");
       setModalOpen(false);
+      showSavedToast("Incident updated");
     } catch (err) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 409) {
@@ -273,9 +290,17 @@ export default function AccountIncidentDetail({
       ) : null}
 
       {error ? <p className="mt-4 text-sm text-red-300">{error}</p> : null}
-      {saved && !modalOpen ? (
-        <p className="mt-4 text-sm text-emerald-300">{saved}</p>
-      ) : null}
+
+      {mounted && saved
+        ? createPortal(
+            <div className="pointer-events-none fixed inset-0 z-[230]">
+              <div className="pointer-events-auto">
+                <SuccessToast onClose={dismissSavedToast} message={saved} />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
 
       {mounted && modalOpen
         ? createPortal(
