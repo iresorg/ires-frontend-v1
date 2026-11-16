@@ -44,10 +44,22 @@ const teamMembers: {
     linkedin: "https://www.linkedin.com/in/dr-usman-bakare-626a1136",
   },
   {
+    name: "Ayorinde Abdulafeez",
+    role: "Head of Technologies",
+    image: "/images/ayorinde.jpeg",
+    linkedin: "https://www.linkedin.com/in/ayorinde-abdulafeez-32b56318b",
+  },
+  {
     name: "Abdulmalik Lawal",
     role: "Cybersecurity Engineer",
     image: "/images/malik.jpeg",
     linkedin: "https://www.linkedin.com/in/abdulmaliklawal225",
+  },
+  {
+    name: "Mojisola Aramide",
+    role: "Full Stack Developer",
+    image: "/images/moj.png",
+    linkedin: "https://www.linkedin.com/in/mojisola-aramide/",
   },
 ];
 
